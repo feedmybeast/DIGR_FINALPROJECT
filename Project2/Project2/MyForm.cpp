@@ -2,10 +2,22 @@
 #include "MyForm.h"
 #include <msclr\marshal_cppstd.h>
 #include <fstream>
+#include<iostream>
+using namespace std;
 using namespace System;
 using namespace System::Windows::Forms;
 using namespace System::Drawing;
-
+/// <summary>
+///  TESTING alo alo alo
+/// fsdfdsfsdfs
+/// fffff
+/// 
+//
+/// </summary>fdfdf
+void Debug(int x)//    test
+{
+	cout << x <<    endl;
+}
 namespace Project2 {
 
     void MyForm::InitializeComponent(void)

@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\trant\\source\\repos\\DIGR_FINALPROJECT\\Project2\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D5790374-58F9-4215-8E50-63D1B2289D77}|Project2\\Project2.vcxproj|C:\\Users\\trant\\source\\repos\\DIGR_FINALPROJECT\\Project2\\Project2\\MyForm.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D5790374-58F9-4215-8E50-63D1B2289D77}|Project2\\Project2.vcxproj|solutionrelative:Project2\\MyForm.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MyForm.cpp",
+              "DocumentMoniker": "C:\\Users\\trant\\source\\repos\\DIGR_FINALPROJECT\\Project2\\Project2\\MyForm.cpp",
+              "RelativeDocumentMoniker": "Project2\\MyForm.cpp",
+              "ToolTip": "C:\\Users\\trant\\source\\repos\\DIGR_FINALPROJECT\\Project2\\Project2\\MyForm.cpp",
+              "RelativeToolTip": "Project2\\MyForm.cpp",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAA0AAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-11-09T03:48:56.539Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

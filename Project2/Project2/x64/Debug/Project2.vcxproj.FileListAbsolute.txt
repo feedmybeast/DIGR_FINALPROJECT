@@ -1,3 +1,6 @@
 C:\Users\Admin\source\repos\Project2\Project2\x64\Debug\Project2.vcxproj.AssemblyReference.cache
 C:\Users\Admin\source\repos\Project2\Project2\x64\Debug\Project2.MyForm.resources
 C:\Users\Admin\source\repos\Project2\Project2\x64\Debug\Project2.vcxproj.GenerateResource.cache
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\x64\Debug\Project2.vcxproj.AssemblyReference.cache
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\x64\Debug\Project2.MyForm.resources
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\x64\Debug\Project2.vcxproj.GenerateResource.cache
