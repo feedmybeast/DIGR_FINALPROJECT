@@ -1,0 +1,5 @@
+﻿  MyForm.cpp
+C:\Users\Admin\source\repos\Project2\Project2\MyForm.cpp(411,112): warning C4129: '{': unrecognized character escape sequence
+C:\Users\Admin\source\repos\Project2\Project2\MyForm.cpp(411,112): warning C4129: '}': unrecognized character escape sequence
+  MyForm.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
+  Project2.vcxproj -> C:\Users\Admin\source\repos\Project2\x64\Debug\Project2.exe
