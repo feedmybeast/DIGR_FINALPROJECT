@@ -1,29 +1,65 @@
 #pragma once
-#include <vector>
-#include "Vertex.h"
-#include "Edge.h"
 
-class Graph {
+using namespace System;
+using namespace System::Collections::Generic;
+
+ref class Vertex;
+ref class Edge;
+
+public ref class Graph
+{
+public:
+    Graph() : vertices(gcnew List<Vertex^>()), edges(gcnew List<Edge^>()) {}
+
+    property List<Vertex^>^ Vertices {
+        List<Vertex^>^ get() { return vertices; }
+    }
+
+    property List<Edge^>^ Edges {
+        List<Edge^>^ get() { return edges; }
+    }
+
+    void AddVertex(Vertex^ vertex) {
+        vertices->Add(vertex);
+    }
+
+    void AddEdge(Edge^ edge) {
+        edges->Add(edge);
+    }
+
+    void RemoveVertex(Vertex^ vertex) {
+        vertices->Remove(vertex);
+        edges->RemoveAll(gcnew Predicate<Edge^>(this, &Graph::EdgeContainsVertex));
+        vertexToRemove = vertex;
+    }
+
+    void RemoveEdge(Edge^ edge) {
+        edges->Remove(edge);
+    }
+
+    Vertex^ GetVertexById(int id) {
+        idToFind = id;
+        return vertices->Find(gcnew Predicate<Vertex^>(this, &Graph::VertexIdPredicate));
+    }
+
 private:
-    std::vector<Vertex> vertices;
-    std::vector<Edge> edges;
+    bool EdgeContainsVertex(Edge^ e) {
+        return e->Start == vertexToRemove || e->End == vertexToRemove;
+    }
+
+    bool VertexIdPredicate(Vertex^ v) {
+        return v->Id == idToFind;
+    }
 
 public:
-    Graph();
-    void addVertex(const Vertex& vertex);
-    void addEdge(const Edge& edge);
-    void removeVertex(int id);
-    void removeEdge(int id);
-    std::vector<Vertex> getVertices() const;
-    std::vector<Edge> getEdges() const;
+    void Clear() {
+        vertices->Clear();
+        edges->Clear();
+    }
 
-    // Advanced features
-    std::vector<int> shortestPath(int startId, int endId) const; // Dijkstra's algorithm
-    bool isConnected() const; // Check if the graph is connected
-    std::vector<int> findEulerCircuit() const; // Find Euler circuit if it exists
-    std::vector<Edge> minimumSpanningTree() const; // Kruskal's algorithm
-
-    // Helper methods
-    int getVertexIndex(int id) const;
-    void updateVertexDegrees();
+private:
+    List<Vertex^>^ vertices;
+    List<Edge^>^ edges;
+    Vertex^ vertexToRemove;
+    int idToFind;
 };
