@@ -1,6 +1,10 @@
 
 #pragma once
 
+#include "Vertex.h"
+#include "Edge.h"
+#include "Graph.h"
+
 namespace Project2 {
 
 	using namespace System;
@@ -10,82 +14,6 @@ namespace Project2 {
 	using namespace System::Data;
 	using namespace System::Drawing;
 	using namespace System::Collections::Generic;
-
-	public ref class Vertex
-	{
-	public:
-		Vertex(int id, String^ name, int x, int y) : id(id), name(name), x(x), y(y), degree(0) {}
-		property int Id { int get() { return id; } }
-		property String^ Name { String^ get() { return name; } void set(String^ value) { name = value; } }
-		property int X { int get() { return x; } void set(int value) { x = value; } }
-		property int Y { int get() { return y; } void set(int value) { y = value; } }
-		property int Degree { int get() { return degree; } void set(int value) { degree = value; } }
-	private:
-		int id;
-		String^ name;
-		int x, y;
-		int degree;
-	};
-
-	public ref class Edge
-	{
-	public:
-		Edge(int id, Vertex^ start, Vertex^ end, int weight, String^ color) : id(id), start(start), end(end), weight(weight), color(color) {}
-		property int Id { int get() { return id; } }
-		property Vertex^ Start { Vertex^ get() { return start; } }
-		property Vertex^ End { Vertex^ get() { return end; } }
-		property int Weight { int get() { return weight; } void set(int value) { weight = value; } }
-		property String^ Color { String^ get() { return color; } void set(String^ value) { color = value; } }
-	private:
-		int id;
-		Vertex^ start;
-		Vertex^ end;
-		int weight;
-		String^ color;
-	};
-
-	public ref class Graph
-	{
-	public:
-		Graph() : vertices(gcnew List<Vertex^>()), edges(gcnew List<Edge^>()) {}
-
-		void AddVertex(Vertex^ vertex) { vertices->Add(vertex); }
-		void AddEdge(Edge^ edge) { edges->Add(edge); }
-
-		void RemoveVertex(int id)
-		{
-			this->id = id; // Set the id to be used in the predicate
-			vertices->RemoveAll(gcnew Predicate<Vertex^>(this, &Graph::VertexIdPredicate));
-		}
-
-		void RemoveEdge(int id)
-		{
-			this->id = id; // Set the id to be used in the predicate
-			edges->RemoveAll(gcnew Predicate<Edge^>(this, &Graph::EdgeIdPredicate));
-		}
-
-		property List<Vertex^>^ Vertices { List<Vertex^>^ get() { return vertices; } }
-		property List<Edge^>^ Edges { List<Edge^>^ get() { return edges; } }
-
-	private:
-		List<Vertex^>^ vertices;
-		List<Edge^>^ edges;
-
-		// Store the id to be used in the predicates
-		int id;
-
-		// Predicate method for vertices
-		bool VertexIdPredicate(Vertex^ v)
-		{
-			return v->Id == id;
-		}
-
-		// Predicate method for edges
-		bool EdgeIdPredicate(Edge^ e)
-		{
-			return e->Id == id;
-		}
-	};
 
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
@@ -99,17 +27,8 @@ namespace Project2 {
 			currentEdgeColor = Color::Black;
 		}
 
-	protected:
-		~MyForm()
-		{
-			if (components)
-			{
-				delete components;
-			}
-		}
-
 	private:
-		System::ComponentModel::Container ^components;
+		System::ComponentModel::Container^ components;
 		System::Windows::Forms::PictureBox^ pictureBox1;
 		System::Windows::Forms::TextBox^ infoPanel;
 		System::Windows::Forms::MenuStrip^ menuStrip1;
@@ -118,12 +37,36 @@ namespace Project2 {
 		System::Windows::Forms::ToolStripMenuItem^ loadToolStripMenuItem;
 		System::Windows::Forms::ToolStripMenuItem^ editToolStripMenuItem;
 		System::Windows::Forms::ToolStripMenuItem^ changeEdgeColorToolStripMenuItem;
-
+		System::Windows::Forms::ToolStripButton^ addEdgeButton;
+		System::Windows::Forms::ToolStripButton^ showGridButton;
+		System::Windows::Forms::ToolStripButton^ deleteEdgeButton;
+		System::Windows::Forms::ToolStripButton^ saveButton;
+		System::Windows::Forms::ToolStripButton^ loadButton;
+		System::Windows::Forms::ToolStripButton^ runDijkstraButton;
+		System::Windows::Forms::ToolStrip^ toolStrip1;
+		String^ PromptForVertexName();
 		Graph^ graph;
 		Vertex^ selectedVertex;
+		Vertex^ draggingVertex;
 		bool isDrawingEdge;
-		Color currentEdgeColor;
+		static Drawing::Color currentEdgeColor = Drawing::Color::Black;
 
+	private:
+		System::Void ShowGridButton_Click(System::Object^ sender, System::EventArgs^ e);
+		System::Void AddEdgeButton_Click(System::Object^ sender, System::EventArgs^ e);
+		System::Void DeleteEdgeButton_Click(System::Object^ sender, System::EventArgs^ e);
+		System::Void RunDijkstraButton_Click(System::Object^ sender, System::EventArgs^ e);
+		void RunDijkstra(Vertex^ start, Vertex^ end);
+
+	protected:
+		~MyForm()
+		{
+			if (components)
+			{
+				delete components;
+			}
+		}
+		bool showGrid = false;
 		void InitializeComponent(void);
 		void DrawGraph(Graphics^ g);
 		Vertex^ FindVertexAtPoint(int x, int y);
