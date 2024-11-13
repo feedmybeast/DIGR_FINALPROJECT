@@ -20,6 +20,7 @@ namespace Project2 {
         this->addEdgeButton = (gcnew System::Windows::Forms::ToolStripButton());
         this->deleteEdgeButton = (gcnew System::Windows::Forms::ToolStripButton());
         this->showGridButton = (gcnew System::Windows::Forms::ToolStripButton());
+        
         // The buttons are now added directly to the toolStrip1 in the Items->AddRange call
 
         // Set form properties
@@ -28,9 +29,9 @@ namespace Project2 {
         this->ClientSize = System::Drawing::Size(800, 600);
         this->Controls->Add(this->pictureBox1);
         this->Controls->Add(this->infoPanel);
-        this->Controls->Add(this->menuStrip1);
+        //this->Controls->Add(this->menuStrip1);
         this->Controls->Add(this->toolStrip1);
-        this->MainMenuStrip = this->menuStrip1;
+        //this->MainMenuStrip = this->menuStrip1;
         this->Name = L"MyForm";
         this->Text = L"Graph Editor";
         this->ResumeLayout(false);
@@ -51,7 +52,7 @@ namespace Project2 {
         this->pictureBox1->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::pictureBox1_MouseMove);
         this->pictureBox1->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::pictureBox1_MouseDown);
         this->pictureBox1->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::pictureBox1_MouseUp);
-
+        this->pictureBox1->Dock = System::Windows::Forms::DockStyle::Fill;
         // infoPanel
         this->infoPanel->Location = System::Drawing::Point(12, 425);
         this->infoPanel->Multiline = true;
@@ -61,7 +62,7 @@ namespace Project2 {
         this->infoPanel->TabIndex = 1;
 
         // menuStrip1
-        this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+       /* this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
             this->fileToolStripMenuItem,
                 this->editToolStripMenuItem
         });
@@ -69,16 +70,16 @@ namespace Project2 {
         this->menuStrip1->Name = L"menuStrip1";
         this->menuStrip1->Size = System::Drawing::Size(582, 24);
         this->menuStrip1->TabIndex = 2;
-        this->menuStrip1->Text = L"menuStrip1";
+        this->menuStrip1->Text = L"menuStrip1";*/
 
         // fileToolStripMenuItem
-        this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+        /*this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
             this->saveToolStripMenuItem,
                 this->loadToolStripMenuItem
         });
         this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
         this->fileToolStripMenuItem->Size = System::Drawing::Size(37, 20);
-        this->fileToolStripMenuItem->Text = L"File";
+        this->fileToolStripMenuItem->Text = L"File";*/
 
         // saveToolStripMenuItem
         this->saveToolStripMenuItem->Name = L"saveToolStripMenuItem";
@@ -93,10 +94,10 @@ namespace Project2 {
         this->loadToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::LoadGraph);
 
         // editToolStripMenuItem
-        this->editToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->changeEdgeColorToolStripMenuItem });
+        /*this->editToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->changeEdgeColorToolStripMenuItem });
         this->editToolStripMenuItem->Name = L"editToolStripMenuItem";
         this->editToolStripMenuItem->Size = System::Drawing::Size(39, 20);
-        this->editToolStripMenuItem->Text = L"Edit";
+        this->editToolStripMenuItem->Text = L"Edit";*/
 
         // changeEdgeColorToolStripMenuItem
         this->changeEdgeColorToolStripMenuItem->Name = L"changeEdgeColorToolStripMenuItem";
@@ -146,7 +147,7 @@ namespace Project2 {
         this->ClientSize = System::Drawing::Size(582, 511);
         this->Controls->Add(this->infoPanel);
         this->Controls->Add(this->pictureBox1);
-        this->Controls->Add(this->menuStrip1);
+        //this->Controls->Add(this->menuStrip1);
         this->Controls->Add(this->toolStrip1);
         this->MainMenuStrip = this->menuStrip1;
         this->Name = L"MyForm";
@@ -156,8 +157,9 @@ namespace Project2 {
         this->menuStrip1->ResumeLayout(false);
         this->menuStrip1->PerformLayout();
         this->ResumeLayout(false);
-        this->PerformLayout();
+        this->PerformLayout(); 
     }
+    
     // Helper function to show an input box
     String^ ShowInputBox(String^ prompt, String^ title, String^ defaultValue) {
         Form^ inputBox = gcnew Form();
@@ -589,7 +591,6 @@ namespace Project2 {
             if (clickedVertex != nullptr)
             {
                 String^ newVertexName = PromptForVertexName();
-
                 if (!String::IsNullOrEmpty(newVertexName))
                 {
                     bool isNameExist = false;
@@ -613,7 +614,6 @@ namespace Project2 {
             else if (draggingVertex == nullptr)
             {
                 String^ vertexName = PromptForVertexName();
-
                 if (!String::IsNullOrEmpty(vertexName))
                 {
                     bool isNameExist = false;
@@ -658,15 +658,12 @@ namespace Project2 {
                     graph->RemoveEdge(clickedEdge);
                 }
             }
-
             pictureBox1->Invalidate();
         }
-
         UpdateInfoPanel();
     }
-
-
-    String^ MyForm::PromptForVertexName() {
+    String^ MyForm::PromptForVertexName() 
+    {
         Form^ inputForm = gcnew Form();
         inputForm->Text = "Enter Vertex Name";
         inputForm->Size = System::Drawing::Size(250, 150);
@@ -697,9 +694,8 @@ namespace Project2 {
             return nullptr;
         }
     }
-
-
-    System::Void MyForm::pictureBox1_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+    System::Void MyForm::pictureBox1_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) 
+    {
         Vertex^ hoveredVertex = FindVertexAtPoint(e->X, e->Y);
         Edge^ hoveredEdge = FindEdgeAtPoint(e->X, e->Y);
 
@@ -713,14 +709,14 @@ namespace Project2 {
             this->Cursor = Cursors::Default;
         }
     }
-
-    System::Void MyForm::pictureBox1_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+    System::Void MyForm::pictureBox1_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) 
+    {
         if (e->Button == System::Windows::Forms::MouseButtons::Left) {
             draggingVertex = FindVertexAtPoint(e->X, e->Y);
         }
     }
-
-    System::Void MyForm::pictureBox1_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+    System::Void MyForm::pictureBox1_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) 
+    {
         if (draggingVertex != nullptr) {
             draggingVertex->X = e->X;
             draggingVertex->Y = e->Y;
@@ -728,13 +724,12 @@ namespace Project2 {
             pictureBox1->Invalidate();
         }
     }
-
-    System::Void MyForm::SaveGraph(System::Object^ sender, System::EventArgs^ e) {
+    System::Void MyForm::SaveGraph(System::Object^ sender, System::EventArgs^ e) 
+    {
         SaveFileDialog^ saveFileDialog1 = gcnew SaveFileDialog();
         saveFileDialog1->Filter = "Text File|*.txt";
         saveFileDialog1->Title = "Save Graph";
         saveFileDialog1->ShowDialog();
-
         if (saveFileDialog1->FileName != "") {
             System::IO::StreamWriter^ sw = gcnew System::IO::StreamWriter(saveFileDialog1->FileName);
             sw->WriteLine(graph->Vertices->Count);
@@ -748,10 +743,11 @@ namespace Project2 {
             sw->Close();
         }
     }
-
-    System::Void MyForm::ChangeEdgeColor(System::Object^ sender, System::EventArgs^ e) {
+    System::Void MyForm::ChangeEdgeColor(System::Object^ sender, System::EventArgs^ e) 
+    {
         ColorDialog^ colorDialog1 = gcnew ColorDialog();
-        if (colorDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+        if (colorDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+        {
             currentEdgeColor = colorDialog1->Color;
             for each (Edge ^ edge in graph->Edges) {
                 edge->Color = currentEdgeColor;
