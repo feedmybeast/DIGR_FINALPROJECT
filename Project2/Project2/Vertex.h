@@ -1,21 +1,19 @@
 #pragma once
-#include <string>
 
-class Vertex {
+using namespace System;
+
+public ref class Vertex
+{
+public:
+    Vertex(int id, String^ name, int x, int y) : id(id), name(name), x(x), y(y), degree(0) {}
+    property int Id { int get() { return id; } }
+    property String^ Name { String^ get() { return name; } void set(String^ value) { name = value; } }
+    property int X { int get() { return x; } void set(int value) { x = value; } }
+    property int Y { int get() { return y; } void set(int value) { y = value; } }
+    property int Degree { int get() { return degree; } void set(int value) { degree = value; } }
 private:
     int id;
-    std::string name;
+    String^ name;
     int x, y;
     int degree;
-
-public:
-    Vertex(int id, const std::string& name, int x, int y);
-    int getId() const;
-    std::string getName() const;
-    void setName(const std::string& name);
-    int getX() const;
-    int getY() const;
-    void setPosition(int x, int y);
-    int getDegree() const;
-    void setDegree(int degree);
 };

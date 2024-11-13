@@ -1,23 +1,28 @@
 #pragma once
-#include "Vertex.h"
 
-#include <string>
+using namespace System;
+using namespace System::Drawing;
 
-class Edge {
-private:
-    int id;
-    Vertex* start;
-    Vertex* end;
-    int weight;
-    std::string color;
+ref class Vertex; // Forward declaration
 
+public ref class Edge
+{
 public:
-    Edge(int id, Vertex* start, Vertex* end, int weight = 1, const std::string& color = "black");
-    int getId() const;
-    Vertex* getStart() const;
-    Vertex* getEnd() const;
-    int getWeight() const;
-    void setWeight(int weight);
-    std::string getColor() const;
-    void setColor(const std::string& color);
+    property int Id;
+    property Vertex^ Start;
+    property Vertex^ End;
+    property int Weight;
+    property System::Drawing::Color Color;
+
+    Edge(int id, Vertex^ start, Vertex^ end, int weight, System::Drawing::Color color)
+    {
+        Id = id;
+        Start = start;
+        End = end;
+        Weight = weight;
+        Color = color;
+    }
+
+    Edge(Vertex^ start, Vertex^ end, int weight)
+        : Edge(0, start, end, weight, System::Drawing::Color::Black) {}
 };

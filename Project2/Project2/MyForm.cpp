@@ -221,7 +221,7 @@ namespace Project2 {
         }
         return nullptr;
     }
-    
+
     void MyForm::AddEdge(Vertex^ start, Vertex^ end) {
         if (start != end) {
             int newId = graph->Edges->Count + 1;
@@ -253,7 +253,7 @@ namespace Project2 {
         if (showGrid) {
             Pen^ gridPen = gcnew Pen(Color::LightGray);
             for (int i = 0; i < pictureBox1->Width; i += 20) {
-                g->DrawLine(gridPen, i, 0, i, pictureBox1->Height); 
+                g->DrawLine(gridPen, i, 0, i, pictureBox1->Height);
             }
             for (int j = 0; j < pictureBox1->Height; j += 20) {
                 g->DrawLine(gridPen, 0, j, pictureBox1->Width, j);
@@ -398,10 +398,10 @@ namespace Project2 {
     }
 
 
-    
+
 
     void MyForm::DrawGraph(Graphics^ g)
-    {   
+    {
         //Improve animation qualifications
         g->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::AntiAlias;
         g->TextRenderingHint = System::Drawing::Text::TextRenderingHint::AntiAliasGridFit;
@@ -429,7 +429,7 @@ namespace Project2 {
             g->DrawString(degreeStr, this->Font, Brushes::Red, vertex->X - 15, vertex->Y - 30);
         }
     }
-   
+
     System::Void MyForm::AddEdgeButton_Click(System::Object^ sender, System::EventArgs^ e)
     {
         // Create a new form to get user input for the edge
@@ -438,7 +438,7 @@ namespace Project2 {
         inputForm->Size = System::Drawing::Size(180, 250);
         inputForm->StartPosition = FormStartPosition::CenterParent;
         inputForm->FormBorderStyle = Windows::Forms::FormBorderStyle::FixedDialog;
-        inputForm->MaximizeBox = false;  
+        inputForm->MaximizeBox = false;
         inputForm->MinimizeBox = false;
 
         Label^ startLabel = gcnew Label();
@@ -474,8 +474,8 @@ namespace Project2 {
         Button^ okButton = gcnew Button();
         okButton->Text = "OK";
         okButton->DialogResult = System::Windows::Forms::DialogResult::OK;
-        okButton->Location = System::Drawing::Point(10, 160);  
-        okButton->Size = System::Drawing::Size(75, 30);  
+        okButton->Location = System::Drawing::Point(10, 160);
+        okButton->Size = System::Drawing::Size(75, 30);
         inputForm->Controls->Add(okButton);
 
         // Populate the combo boxes with vertex names
@@ -555,7 +555,7 @@ namespace Project2 {
             {
                 // Remove the selected edge from the graph
                 Edge^ edgeToRemove = graph->Edges[edgeComboBox->SelectedIndex];
-graph->RemoveEdge(edgeToRemove);
+                graph->RemoveEdge(edgeToRemove);
 
                 // Redraw the graph
                 pictureBox1->Invalidate();
@@ -581,10 +581,10 @@ graph->RemoveEdge(edgeToRemove);
     System::Void MyForm::pictureBox1_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
         if (e->Button == System::Windows::Forms::MouseButtons::Left) {
             if (draggingVertex == nullptr) {
-                
+
                 String^ vertexName = PromptForVertexName();//Box for name the vertex
 
-                
+
                 if (!String::IsNullOrEmpty(vertexName)) {
                     int newId = graph->Vertices->Count + 1;
                     Vertex^ newVertex = gcnew Vertex(newId, vertexName, e->X, e->Y);
@@ -645,12 +645,14 @@ graph->RemoveEdge(edgeToRemove);
     System::Void MyForm::pictureBox1_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
         Vertex^ hoveredVertex = FindVertexAtPoint(e->X, e->Y);
         Edge^ hoveredEdge = FindEdgeAtPoint(e->X, e->Y);
-        
+
         if (hoveredVertex != nullptr) {
             this->Cursor = Cursors::Hand;
-        } else if (hoveredEdge != nullptr) {
+        }
+        else if (hoveredEdge != nullptr) {
             this->Cursor = Cursors::Cross;
-        } else {
+        }
+        else {
             this->Cursor = Cursors::Default;
         }
     }
@@ -679,11 +681,11 @@ graph->RemoveEdge(edgeToRemove);
         if (saveFileDialog1->FileName != "") {
             System::IO::StreamWriter^ sw = gcnew System::IO::StreamWriter(saveFileDialog1->FileName);
             sw->WriteLine(graph->Vertices->Count);
-            for each (Vertex^ v in graph->Vertices) {
+            for each (Vertex ^ v in graph->Vertices) {
                 sw->WriteLine(v->Id + " " + v->X + " " + v->Y);
             }
             sw->WriteLine(graph->Edges->Count);
-            for each (Edge^ e in graph->Edges) {
+            for each (Edge ^ e in graph->Edges) {
                 sw->WriteLine(e->Start->Id + " " + e->End->Id + " " + e->Weight);
             }
             sw->Close();
@@ -694,7 +696,7 @@ graph->RemoveEdge(edgeToRemove);
         ColorDialog^ colorDialog1 = gcnew ColorDialog();
         if (colorDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
             currentEdgeColor = colorDialog1->Color;
-            for each (Edge^ edge in graph->Edges) {
+            for each (Edge ^ edge in graph->Edges) {
                 edge->Color = currentEdgeColor;
             }
             pictureBox1->Invalidate();
