@@ -250,13 +250,16 @@ namespace Project2 {
 
     System::Void MyForm::pictureBox1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
         Graphics^ g = e->Graphics;
+        int width = pictureBox1->Width;
+        int height = pictureBox1->Height;
         if (showGrid) {
             Pen^ gridPen = gcnew Pen(Color::LightGray);
-            for (int i = 0; i < pictureBox1->Width; i += 20) {
-                g->DrawLine(gridPen, i, 0, i, pictureBox1->Height);
+            int gridSpacing = 20;
+            for (int i = 0; i < width; i += gridSpacing) {
+                g->DrawLine(gridPen, i, 0, i, height);
             }
-            for (int j = 0; j < pictureBox1->Height; j += 20) {
-                g->DrawLine(gridPen, 0, j, pictureBox1->Width, j);
+            for (int j = 0; j < height; j += gridSpacing) {
+                g->DrawLine(gridPen, 0, j, width, j);
             }
         }
         for each (Edge ^ edge in graph->Edges) {
@@ -271,7 +274,7 @@ namespace Project2 {
         }
         for each (Vertex ^ v in graph->Vertices) {
             g->FillEllipse(Brushes::Blue, static_cast<float>(v->X - 5), static_cast<float>(v->Y - 5), 10.0f, 10.0f);
-            g->DrawString(v->Id.ToString(), this->Font, Brushes::Black,
+            g->DrawString(v->Name, this->Font, Brushes::Black,
                 static_cast<float>(v->X + 5), static_cast<float>(v->Y + 5));
         }
     }
@@ -578,36 +581,90 @@ namespace Project2 {
         return 0;
     }
 
-    System::Void MyForm::pictureBox1_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-        if (e->Button == System::Windows::Forms::MouseButtons::Left) {
-            if (draggingVertex == nullptr) {
+    System::Void MyForm::pictureBox1_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
+    {
+        if (e->Button == System::Windows::Forms::MouseButtons::Left)
+        {
+            Vertex^ clickedVertex = FindVertexAtPoint(e->X, e->Y);
+            if (clickedVertex != nullptr)
+            {
+                String^ newVertexName = PromptForVertexName();
 
-                String^ vertexName = PromptForVertexName();//Box for name the vertex
+                if (!String::IsNullOrEmpty(newVertexName))
+                {
+                    bool isNameExist = false;
+                    for each (Vertex ^ v in graph->Vertices)
+                    {
+                        if (v->Name == newVertexName)
+                        {
+                            isNameExist = true;
+                            break;
+                        }
+                    }
+                    if (isNameExist){
+                        MessageBox::Show("The name already exists. Please choose another name.", "Duplicate Name", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                    }
+                    else {
+                        clickedVertex->Name = newVertexName;
+                        pictureBox1->Invalidate();
+                    }
+                }
+            }
+            else if (draggingVertex == nullptr)
+            {
+                String^ vertexName = PromptForVertexName();
 
+                if (!String::IsNullOrEmpty(vertexName))
+                {
+                    bool isNameExist = false;
 
-                if (!String::IsNullOrEmpty(vertexName)) {
-                    int newId = graph->Vertices->Count + 1;
-                    Vertex^ newVertex = gcnew Vertex(newId, vertexName, e->X, e->Y);
-                    graph->AddVertex(newVertex);
-                    pictureBox1->Invalidate();
+                    for each (Vertex ^ v in graph->Vertices)
+                    {
+                        if (v->Name == vertexName)
+                        {
+                            isNameExist = true;
+                            break;
+                        }
+                    }
+
+                    if (isNameExist)
+                    {
+                        MessageBox::Show("The name already exists. Please choose another name.", "Duplicate Name", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                    }
+                    else
+                    {
+                        int newId = graph->Vertices->Count + 1;
+                        Vertex^ newVertex = gcnew Vertex(newId, vertexName, e->X, e->Y);
+                        graph->AddVertex(newVertex);
+                        pictureBox1->Invalidate();
+                    }
                 }
             }
         }
-        else if (e->Button == System::Windows::Forms::MouseButtons::Right) {
+        else if (e->Button == System::Windows::Forms::MouseButtons::Right)
+        {
             Vertex^ clickedVertex = FindVertexAtPoint(e->X, e->Y);
-            if (clickedVertex != nullptr) {
+
+            if (clickedVertex != nullptr)
+            {
                 graph->RemoveVertex(clickedVertex);
             }
-            else {
+            else
+            {
                 Edge^ clickedEdge = FindEdgeAtPoint(e->X, e->Y);
-                if (clickedEdge != nullptr) {
+
+                if (clickedEdge != nullptr)
+                {
                     graph->RemoveEdge(clickedEdge);
                 }
             }
+
             pictureBox1->Invalidate();
         }
+
         UpdateInfoPanel();
     }
+
 
     String^ MyForm::PromptForVertexName() {
         Form^ inputForm = gcnew Form();
