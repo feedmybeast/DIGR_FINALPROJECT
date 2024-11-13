@@ -250,7 +250,7 @@ namespace Project2 {
 
     System::Void MyForm::pictureBox1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
         Graphics^ g = e->Graphics;
-        if (showGrid) {
+        if (showGrid) {//Show Grid
             Pen^ gridPen = gcnew Pen(Color::LightGray);
             for (int i = 0; i < pictureBox1->Width; i += 20) {
                 g->DrawLine(gridPen, i, 0, i, pictureBox1->Height);
@@ -259,20 +259,28 @@ namespace Project2 {
                 g->DrawLine(gridPen, 0, j, pictureBox1->Width, j);
             }
         }
+        // Calculate the nearest intersection point
+        for each (Vertex ^ v in graph->Vertices) {
+            int nearestX = (v->X / 20) * 20; // Round down to the nearest multiple of 20 for x coordinate
+            int nearestY = (v->Y / 20) * 20; // Round down to the nearest multiple of 20 for y coordinate
+            g->FillEllipse(Brushes::Blue, static_cast<float>(nearestX - 5), static_cast<float>(nearestY - 5), 10.0f, 10.0f);
+            g->DrawString(v->Name, this->Font, Brushes::Black,
+                static_cast<float>(nearestX + 5), static_cast<float>(nearestY + 5));
+        }
+        // Draw edges
         for each (Edge ^ edge in graph->Edges) {
             Pen^ pen = gcnew Pen(edge->Color.IsEmpty ? currentEdgeColor : edge->Color);
-            g->DrawLine(pen, static_cast<float>(edge->Start->X), static_cast<float>(edge->Start->Y),
-                static_cast<float>(edge->End->X), static_cast<float>(edge->End->Y));
+            int nearestStartX = (edge->Start->X / 20) * 20;
+            int nearestStartY = (edge->Start->Y / 20) * 20;
+            int nearestEndX = (edge->End->X / 20) * 20;
+            int nearestEndY = (edge->End->Y / 20) * 20;
+            g->DrawLine(pen, static_cast<float>(nearestStartX), static_cast<float>(nearestStartY),
+                static_cast<float>(nearestEndX), static_cast<float>(nearestEndY));
             // Draw weight
-            int midX = (edge->Start->X + edge->End->X) / 2;
-            int midY = (edge->Start->Y + edge->End->Y) / 2;
+            int midX = (nearestStartX + nearestEndX) / 2;
+            int midY = (nearestStartY + nearestEndY) / 2;
             g->DrawString(edge->Weight.ToString(), this->Font, Brushes::Red,
                 static_cast<float>(midX), static_cast<float>(midY));
-        }
-        for each (Vertex ^ v in graph->Vertices) {
-            g->FillEllipse(Brushes::Blue, static_cast<float>(v->X - 5), static_cast<float>(v->Y - 5), 10.0f, 10.0f);
-            g->DrawString(v->Id.ToString(), this->Font, Brushes::Black,
-                static_cast<float>(v->X + 5), static_cast<float>(v->Y + 5));
         }
     }
 
