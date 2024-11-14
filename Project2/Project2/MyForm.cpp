@@ -321,11 +321,11 @@ namespace Project2 {
         DrawGraph(g);
         // Calculate the nearest intersection point
         for each (Vertex ^ v in graph->Vertices) {
-            int nearestX = (v->X / 20) * 20; // Round down to the nearest multiple of 20 for x coordinate
-            int nearestY = (v->Y / 20) * 20; // Round down to the nearest multiple of 20 for y coordinate
-            g->FillEllipse(Brushes::Blue, static_cast<float>(nearestX - 5), static_cast<float>(nearestY - 5), 10.0f, 10.0f);
-            g->DrawString(v->Name, this->Font, Brushes::Black,
-                static_cast<float>(nearestX + 5), static_cast<float>(nearestY + 5));
+            int gridSize = 20;
+            int nearestX = static_cast<int>(std::round(v->X / gridSize) * gridSize);
+            int nearestY = static_cast<int>(std::round(v->Y / gridSize) * gridSize);
+            g->FillEllipse(Brushes::Blue, static_cast<float>(nearestX - 5) * zoomFactor, static_cast<float>(nearestY - 5) * zoomFactor, 10.0f * zoomFactor, 10.0f * zoomFactor);
+            g->DrawString(v->Name, this->Font, Brushes::Black, static_cast<float>(nearestX + 5) * zoomFactor, static_cast<float>(nearestY + 5) * zoomFactor);
         }
         // Draw edges
         for each (Edge ^ edge in graph->Edges) {
@@ -343,6 +343,15 @@ namespace Project2 {
                 static_cast<float>(midX), static_cast<float>(midY));
         }
         g->ResetTransform();
+    }
+    void MyForm::AdjustVerticesToGrid()
+    {
+        int gridSize = 20;
+        for each (Vertex ^ vertex in graph->Vertices)
+        {
+            vertex->X = static_cast<int>(std::round(vertex->X / (gridSize * zoomFactor)) * gridSize * zoomFactor);
+            vertex->Y = static_cast<int>(std::round(vertex->Y / (gridSize * zoomFactor)) * gridSize * zoomFactor);
+        }
     }
 
     System::Void MyForm::RunDijkstraButton_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -872,6 +881,7 @@ namespace Project2 {
     System::Void MyForm::ZoomIn(System::Object^ sender, System::EventArgs^ e)
     {
         zoomFactor *= 1.1f;
+        AdjustVerticesToGrid();
         pictureBox1->Invalidate();
     }
 
@@ -879,6 +889,7 @@ namespace Project2 {
     {
         zoomFactor /= 1.1f;
         if (zoomFactor < 0.1f) zoomFactor = 0.1f;
+        AdjustVerticesToGrid();
         pictureBox1->Invalidate();
     }
 
@@ -887,5 +898,19 @@ namespace Project2 {
         zoomFactor = 1.0f;
         pictureBox1->Invalidate();
     }
+    void Project2::MyForm::ZoomInButton_Click(System::Object^ sender, System::EventArgs^ e)
+    {
+        zoomFactor *= 1.1f; // Increase zoom factor by 10%
+        AdjustVerticesToGrid();
+        pictureBox1->Invalidate();
+    }
+
+    void Project2::MyForm::ZoomOutButton_Click(System::Object^ sender, System::EventArgs^ e)
+    {
+        zoomFactor /= 1.1f; // Decrease zoom factor by 10%
+        AdjustVerticesToGrid();
+        pictureBox1->Invalidate();
+    }
+
 
 }

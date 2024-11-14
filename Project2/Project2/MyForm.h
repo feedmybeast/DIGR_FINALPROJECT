@@ -62,6 +62,13 @@ namespace Project2 {
 		bool isDrawingEdge;
 		System::Drawing::Color currentEdgeColor;
 
+		void AdjustVerticesToGrid();
+		System::Void pictureBox1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e);
+		System::Void pictureBox1_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
+		System::Void ZoomInButton_Click(System::Object^ sender, System::EventArgs^ e);
+		System::Void ZoomOutButton_Click(System::Object^ sender, System::EventArgs^ e);
+
+
 	private:
 		System::Void ShowGridButton_Click(System::Object^ sender, System::EventArgs^ e);
 		System::Void AddEdgeButton_Click(System::Object^ sender, System::EventArgs^ e);
@@ -88,6 +95,7 @@ namespace Project2 {
 		void DeleteVertex(Vertex^ vertex);
 		void DeleteEdge(Edge^ edge);
 		void UpdateInfoPanel();
+	
 	protected:
 		virtual void WndProc(System::Windows::Forms::Message% m) override {
 			//const int WM_MOUSEWHEEL = 0x020A;
@@ -101,8 +109,8 @@ namespace Project2 {
 			}
 			System::Windows::Forms::Form::WndProc(m);
 		}
-		System::Void pictureBox1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e);
-		System::Void pictureBox1_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
+		//System::Void pictureBox1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e);
+		//System::Void pictureBox1_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
 		System::Void pictureBox1_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
 		System::Void pictureBox1_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
 		System::Void pictureBox1_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
