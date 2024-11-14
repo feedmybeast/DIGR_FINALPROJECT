@@ -35,6 +35,7 @@ namespace Project2 {
 		void SomeFunction();
 	private:
 		PointF offset;
+		System::Windows::Forms::Timer^ clickTimer;
 		System::ComponentModel::Container^ components;
 		System::Windows::Forms::PictureBox^ pictureBox1;
 		System::Windows::Forms::TextBox^ infoPanel;
@@ -61,7 +62,7 @@ namespace Project2 {
 
 		System::Windows::Forms::ToolStrip^ toolStrip1;
 		String^ PromptForVertexName();
-		PointF ScreenToWorld(Point screenPoint); //
+		//PointF^ ScreenToWorld(Point screenPoint);
 		Graph^ graph;
 		float zoomFactor;
 		Vertex^ selectedVertex;
@@ -69,18 +70,24 @@ namespace Project2 {
 		bool isDrawingEdge;
 		System::Drawing::Color currentEdgeColor;
 
+
 		float viewOffsetX;
 		float viewOffsetY;
 
 		bool isPanning;
 		Point lastMousePos;
 
+		bool single_Click = true;
+
 		void AdjustVerticesToGrid();
 		System::Void pictureBox1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e);
 		System::Void pictureBox1_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
 		System::Void ZoomInButton_Click(System::Object^ sender, System::EventArgs^ e);
 		System::Void ZoomOutButton_Click(System::Object^ sender, System::EventArgs^ e);
-
+		System::Void pictureBox1_MouseDoubleClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
+		int mouseX;
+		int mouseY;
+		
 
 	private:
 		System::Void ShowGridButton_Click(System::Object^ sender, System::EventArgs^ e);
@@ -129,9 +136,12 @@ namespace Project2 {
 		System::Void pictureBox1_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
 		System::Void pictureBox1_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
 		System::Void pictureBox1_MouseWheel(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
+		System::Void clickTimer_Tick(System::Object^ sender, System::EventArgs^ e);
 		System::Void SaveGraph(System::Object^ sender, System::EventArgs^ e);
 		System::Void LoadGraph(System::Object^ sender, System::EventArgs^ e);
 		System::Void ChangeEdgeColor(System::Object^ sender, System::EventArgs^ e);
+		
+
 
 	};
 }
