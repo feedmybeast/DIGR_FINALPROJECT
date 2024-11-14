@@ -20,6 +20,7 @@ public:
             edges->Add(reverseEdge);
         }
     }
+
     property List<Vertex^>^ Vertices {
         List<Vertex^>^ get() { return vertices; }
     }
