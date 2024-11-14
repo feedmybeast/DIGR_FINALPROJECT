@@ -798,6 +798,11 @@ namespace Project2 {
                 String^ newVertexName = PromptForVertexName();
                 if (!String::IsNullOrEmpty(newVertexName))
                 {
+                    if (newVertexName->Length >= 10)
+                    {
+                        MessageBox::Show("The name too long (exceed 10 digits). Please name it again!","The name is too long", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                        return;
+                    }
                     bool isNameExist = false;
                     for each (Vertex ^ v in graph->Vertices)
                     {
@@ -821,6 +826,11 @@ namespace Project2 {
                 String^ vertexName = PromptForVertexName();
                 if (!String::IsNullOrEmpty(vertexName))
                 {
+                    if (vertexName->Length >= 10)
+                    { MessageBox::Show("The name is too long. Please choose a name with fewer than 10 characters.", "Name Too Long", MessageBoxButtons::OK, MessageBoxIcon::Error); 
+                        return; 
+                    }
+                    
                     bool isNameExist = false;
 
                     for each (Vertex ^ v in graph->Vertices)
@@ -876,6 +886,7 @@ namespace Project2 {
         inputForm->Text = "Enter Vertex Name";
         inputForm->Size = System::Drawing::Size(250, 150);
         inputForm->StartPosition = FormStartPosition::CenterParent;
+        inputForm->Icon = gcnew System::Drawing::Icon("digr.ico");
 
         Label^ nameLabel = gcnew Label();
         nameLabel->Text = "Vertex Name:";
