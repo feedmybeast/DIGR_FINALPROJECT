@@ -60,7 +60,7 @@ namespace Project2 {
         this->pictureBox1->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::pictureBox1_MouseUp);
         this->pictureBox1->Dock = System::Windows::Forms::DockStyle::Fill;
         this->pictureBox1->MouseWheel += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::pictureBox1_MouseWheel);
-
+        this->pictureBox1->MouseDoubleClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::pictureBox1_MouseDoubleClick);
         // infoPanel
         //this->infoPanel->Location = System::Drawing::Point(12, 425);
         //this->infoPanel->Multiline = true;
@@ -74,6 +74,10 @@ namespace Project2 {
         this->infoPanel->Size = System::Drawing::Size(558, 392);
         this->infoPanel->TabIndex = 0;
         this->infoPanel->TabStop = false;
+        //CLick timer (for diff between single and double click)
+        this->clickTimer = (gcnew System::Windows::Forms::Timer());
+        this->clickTimer->Interval = SystemInformation::DoubleClickTime;
+        this->clickTimer->Tick += gcnew System::EventHandler(this, &MyForm::clickTimer_Tick);
 
         // menuStrip1
        /* this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
@@ -787,7 +791,8 @@ namespace Project2 {
     {
             //int adjustedX = e->X;
             //int adjustedY = e->Y;
-            int adjustedX = static_cast<int>(std::round(e->X * zoomFactor));
+        this->mouseX = e->X; this->mouseY = e->Y; this->single_Click = true; this->clickTimer->Start();
+            /*int adjustedX = static_cast<int>(std::round(e->X * zoomFactor));
             int adjustedY = static_cast<int>(std::round(e->Y * zoomFactor));
         if (e->Button == System::Windows::Forms::MouseButtons::Left)
         {
@@ -800,8 +805,10 @@ namespace Project2 {
                 {
                     if (newVertexName->Length >= 10)
                     {
-                        MessageBox::Show("The name too long (exceed 10 digits). Please name it again!","The name is too long", MessageBoxButtons::OK, MessageBoxIcon::Error);
-                        return;
+                        if (newVertexName->Length > 10) { 
+                            MessageBox::Show("The name is too long. Please choose a name with fewer than 10 characters.", "Name Too Long", MessageBoxButtons::OK, MessageBoxIcon::Error); 
+                            return; 
+                        }
                     }
                     bool isNameExist = false;
                     for each (Vertex ^ v in graph->Vertices)
@@ -813,7 +820,8 @@ namespace Project2 {
                         }
                     }
                     if (isNameExist){
-                        MessageBox::Show("The name already exists. Please choose another name.", "Duplicate Name", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                        MessageBox::Show("The name already exists. Please choose another name.", "Duplicate Name",
+                            MessageBoxButtons::OK, MessageBoxIcon::Error);
                     }
                     else {
                         clickedVertex->Name = newVertexName;
@@ -876,9 +884,9 @@ namespace Project2 {
             pictureBox1->Invalidate();
         }
         UpdateInfoPanel();
-    }
-    PointF MyForm::ScreenToWorld(Point screenPoint) {
-        return PointF((screenPoint.X / zoomFactor) - offset.X, (screenPoint.Y / zoomFactor) - offset.Y);
+    }*/
+    /*PointF MyForm::ScreenToWorld(Point screenPoint) {
+        return PointF((screenPoint.X / zoomFactor) - offset.X, (screenPoint.Y / zoomFactor) - offset.Y);*/
     }
     String^ MyForm::PromptForVertexName() 
     {
@@ -913,6 +921,80 @@ namespace Project2 {
             return nullptr;
         }
     }
+    System::Void MyForm::clickTimer_Tick(System::Object^ sender, System::EventArgs^ e)
+    {
+
+        this->clickTimer->Stop();
+        if (this->single_Click) {
+            int adjustedX = static_cast<int>(std::round(this->mouseX * zoomFactor));
+            int adjustedY = static_cast<int>(std::round(this->mouseY * zoomFactor));
+            
+            Vertex^ clickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
+            if (clickedVertex != nullptr) { String^ newVertexName = PromptForVertexName(); 
+            if (!String::IsNullOrEmpty(newVertexName)) { if (newVertexName->Length > 20) { MessageBox::Show("The name is too long. Please choose a name with fewer than 20 characters.", "Name Too Long", MessageBoxButtons::OK, MessageBoxIcon::Error); return; } bool isNameExist = false; for each (Vertex ^ v in graph->Vertices) { if (v->Name == newVertexName) { isNameExist = true; break; } } if (isNameExist) { MessageBox::Show("The name already exists. Please choose another name.", "Duplicate Name", MessageBoxButtons::OK, MessageBoxIcon::Error); } else { clickedVertex->Name = newVertexName; pictureBox1->Invalidate(); } } }
+            else if (draggingVertex == nullptr) 
+            {
+                String^ vertexName = PromptForVertexName(); 
+                if (!String::IsNullOrEmpty(vertexName)) 
+                { if (vertexName->Length > 10) { 
+                    MessageBox::Show("The name is too long. Please choose a name with fewer than 10 characters.", "Name Too Long", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                    return; 
+                } 
+                bool isNameExist = false; 
+                for each (Vertex ^ v in graph->Vertices) 
+                { 
+                    if (v->Name == vertexName) 
+                    { 
+                        isNameExist = true; 
+                        break; 
+                    } 
+                } if (isNameExist) 
+                { MessageBox::Show("The name already exists. Please choose another name.", "Duplicate Name", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                }
+                else { 
+                   int newId = graph->Vertices->Count + 1;
+                    Vertex^ newVertex = gcnew Vertex(newId, vertexName, adjustedX, adjustedY); 
+                    
+                    graph->AddVertex(newVertex); pictureBox1->Invalidate(); } } }
+        }
+        
+        /*PointF MyForm::ScreenToWorld(Point screenPoint) {
+            return PointF((screenPoint.X / zoomFactor) - offset.X, (screenPoint.Y / zoomFactor) - offset.Y);*/
+
+    }
+        
+    System::Void MyForm::pictureBox1_MouseDoubleClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
+    {
+        this->single_Click = false;
+        int adjustedX = static_cast<int>(std::round(e->X * zoomFactor));
+        int adjustedY = static_cast<int>(std::round(e->Y * zoomFactor));
+        Vertex^ doubleclickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
+        if (doubleclickedVertex != nullptr)
+        {
+            String^ newVertexName = PromptForVertexName();
+            if (!String::IsNullOrEmpty(newVertexName))
+            {
+                if (newVertexName->Length > 10) {
+                    MessageBox::Show("The name is too long. Please choose a name with fewer than 10 characters.", "Name Too Long",
+                        MessageBoxButtons::OK, MessageBoxIcon::Error);
+                    return;
+                }
+                bool isName = false;
+                for each (Vertex ^ v in graph->Vertices) {
+                    if (v->Name == newVertexName)
+                    {
+                        isName = true;
+                        break;
+                    }
+                }
+                if (isName) { MessageBox::Show("The name already exists. Please choose another name.", "Duplicate Name", MessageBoxButtons::OK, MessageBoxIcon::Error); }
+                pictureBox1->Invalidate();
+                
+            }
+        }
+    }
+
+    
     System::Void MyForm::pictureBox1_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) 
     {
         Vertex^ hoveredVertex = FindVertexAtPoint(e->X, e->Y);
@@ -1010,6 +1092,7 @@ namespace Project2 {
         AdjustVerticesToGrid();
         pictureBox1->Invalidate();
     }
+    
     //void MyForm::Zoom(float factor) {
     //    Point cursorPos = pictureBox1->PointToClient(Cursor->Position);
     //    PointF cursorPosF = PointF(cursorPos.X / zoomFactor - offset.X, cursorPos.Y / zoomFactor - offset.Y);
