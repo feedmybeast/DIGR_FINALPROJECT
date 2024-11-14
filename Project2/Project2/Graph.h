@@ -1,16 +1,25 @@
 #pragma once
-
+#include "Vertex.h"
+#include "Edge.h"
+#include <vector>
 using namespace System;
 using namespace System::Collections::Generic;
-
-ref class Vertex;
-ref class Edge;
 
 public ref class Graph
 {
 public:
-    Graph() : vertices(gcnew List<Vertex^>()), edges(gcnew List<Edge^>()) {}
-
+    Graph();
+    void Graph::AddEdge(Vertex^ start, Vertex^ end, Color color, bool directed)
+    {
+        Edge^ edge = gcnew Edge(start, end, 0, color, directed);
+        edges->Add(edge);
+        if (!directed)
+        {
+            //add the reverse edge for undirected graphs
+            Edge^ reverseEdge = gcnew Edge(end, start, 0, color, directed);
+            edges->Add(reverseEdge);
+        }
+    }
     property List<Vertex^>^ Vertices {
         List<Vertex^>^ get() { return vertices; }
     }
