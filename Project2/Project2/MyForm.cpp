@@ -302,6 +302,7 @@ namespace Project2 {
         Graphics^ g = e->Graphics;
         if (zoomFactor > 0 && !float::IsNaN(zoomFactor) && !float::IsInfinity(zoomFactor)) {
             g->ScaleTransform(zoomFactor, zoomFactor);
+            g->TranslateTransform(offset.X, offset.Y);
         }
         else {
             // Handle invalid zoomFactor case
@@ -319,28 +320,49 @@ namespace Project2 {
             }
         }
         DrawGraph(g);
-        // Calculate the nearest intersection point
+        // Calculate the nearest intersection point as well as while Zooming Out and In
         for each (Vertex ^ v in graph->Vertices) {
             int gridSize = 20;
             int nearestX = static_cast<int>(std::round(v->X / gridSize) * gridSize);
+
             int nearestY = static_cast<int>(std::round(v->Y / gridSize) * gridSize);
             g->FillEllipse(Brushes::Blue, static_cast<float>(nearestX - 5) * zoomFactor, static_cast<float>(nearestY - 5) * zoomFactor, 10.0f * zoomFactor, 10.0f * zoomFactor);
             g->DrawString(v->Name, this->Font, Brushes::Black, static_cast<float>(nearestX + 5) * zoomFactor, static_cast<float>(nearestY + 5) * zoomFactor);
+            //g->FillEllipse(Brushes::Blue, static_cast<float>(nearestX - 5), static_cast<float>(nearestY - 5), 10.0f, 10.0f);
+            //g->DrawString(v->Name, this->Font, Brushes::Black, static_cast<float>(nearestX + 5), static_cast<float>(nearestY + 5));
         }
         // Draw edges
+        //for each (Edge ^ edge in graph->Edges) {
+        //    Pen^ pen = gcnew Pen(edge->Color.IsEmpty ? currentEdgeColor : edge->Color);
+        //    int nearestStartX = (edge->Start->X / 20) * 20;
+        //    int nearestStartY = (edge->Start->Y / 20) * 20;
+        //    int nearestEndX = (edge->End->X / 20) * 20;
+        //    int nearestEndY = (edge->End->Y / 20) * 20;
+        //    g->DrawLine(pen, static_cast<float>(nearestStartX), static_cast<float>(nearestStartY),
+        //        static_cast<float>(nearestEndX), static_cast<float>(nearestEndY));
+        //    // Draw weight
+        //    int midX = (nearestStartX + nearestEndX) / 2;
+        //    int midY = (nearestStartY + nearestEndY) / 2;
+        //    g->DrawString(edge->Weight.ToString(), this->Font, Brushes::Red,
+        //        static_cast<float>(midX), static_cast<float>(midY));
         for each (Edge ^ edge in graph->Edges) {
             Pen^ pen = gcnew Pen(edge->Color.IsEmpty ? currentEdgeColor : edge->Color);
-            int nearestStartX = (edge->Start->X / 20) * 20;
-            int nearestStartY = (edge->Start->Y / 20) * 20;
-            int nearestEndX = (edge->End->X / 20) * 20;
-            int nearestEndY = (edge->End->Y / 20) * 20;
-            g->DrawLine(pen, static_cast<float>(nearestStartX), static_cast<float>(nearestStartY),
-                static_cast<float>(nearestEndX), static_cast<float>(nearestEndY));
+            int gridSize = 20;
+            int nearestStartX = static_cast<int>(std::round(edge->Start->X / gridSize) * gridSize);
+            int nearestStartY = static_cast<int>(std::round(edge->Start->Y / gridSize) * gridSize);
+            int nearestEndX = static_cast<int>(std::round(edge->End->X / gridSize) * gridSize);
+            int nearestEndY = static_cast<int>(std::round(edge->End->Y / gridSize) * gridSize);
+            g->DrawLine(pen, static_cast<float>(nearestStartX) * zoomFactor, static_cast<float>(nearestStartY) * zoomFactor,
+                static_cast<float>(nearestEndX) * zoomFactor, static_cast<float>(nearestEndY) * zoomFactor);
+            //g->DrawLine(pen, static_cast<float>(nearestStartX), static_cast<float>(nearestStartY),
+                //static_cast<float>(nearestEndX), static_cast<float>(nearestEndY));
             // Draw weight
             int midX = (nearestStartX + nearestEndX) / 2;
             int midY = (nearestStartY + nearestEndY) / 2;
             g->DrawString(edge->Weight.ToString(), this->Font, Brushes::Red,
-                static_cast<float>(midX), static_cast<float>(midY));
+                static_cast<float>(midX) * zoomFactor, static_cast<float>(midY) * zoomFactor);
+            //g->DrawString(edge->Weight.ToString(), this->Font, Brushes::Red,
+            //    static_cast<float>(midX), static_cast<float>(midY));
         }
         g->ResetTransform();
     }
@@ -608,12 +630,12 @@ namespace Project2 {
 
                 if (startVertex != nullptr && endVertex != nullptr)
                 {
-                    //// Create a new edge and add it to the graph
-                    //Edge^ newEdge = gcnew Edge(graph->Edges->Count + 1, startVertex, endVertex, weight, currentEdgeColor);
-                    //graph->AddEdge(newEdge);
-                    //pictureBox1->Invalidate();
-                    graph->AddEdge(startVertex, endVertex, currentEdgeColor, directedRadioButton->Checked);
+                    // Create a new edge and add it to the graph
+                    Edge^ newEdge = gcnew Edge(graph->Edges->Count + 1, startVertex, endVertex, weight, currentEdgeColor);
+                    graph->AddEdge(newEdge);
                     pictureBox1->Invalidate();
+                    //graph->AddEdge(startVertex, endVertex, currentEdgeColor, directedRadioButton->Checked);
+                    //pictureBox1->Invalidate();
                 }
             }
         }
@@ -706,11 +728,14 @@ namespace Project2 {
 
     System::Void MyForm::pictureBox1_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
     {
+            //int adjustedX = e->X;
+            //int adjustedY = e->Y;
+            int adjustedX = static_cast<int>(std::round(e->X * zoomFactor));
+            int adjustedY = static_cast<int>(std::round(e->Y * zoomFactor));
         if (e->Button == System::Windows::Forms::MouseButtons::Left)
         {
-            int adjustedX = static_cast<int>(e->X / zoomFactor);
-            int adjustedY = static_cast<int>(e->Y / zoomFactor);
-            Vertex^ clickedVertex = FindVertexAtPoint(e->X, e->Y);
+            PointF worldPoint = ScreenToWorld(e->Location);
+            Vertex^ clickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
             if (clickedVertex != nullptr)
             {
                 String^ newVertexName = PromptForVertexName();
@@ -757,7 +782,7 @@ namespace Project2 {
                     else
                     {
                         int newId = graph->Vertices->Count + 1;
-                        Vertex^ newVertex = gcnew Vertex(newId, vertexName, adjustedX, adjustedY);
+                        Vertex^ newVertex = gcnew Vertex(newId, vertexName, worldPoint.X, worldPoint.Y);
                         graph->AddVertex(newVertex);
                         pictureBox1->Invalidate();
                     }
@@ -766,7 +791,7 @@ namespace Project2 {
         }
         else if (e->Button == System::Windows::Forms::MouseButtons::Right)
         {
-            Vertex^ clickedVertex = FindVertexAtPoint(e->X, e->Y);
+            Vertex^ clickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
 
             if (clickedVertex != nullptr)
             {
@@ -774,7 +799,7 @@ namespace Project2 {
             }
             else
             {
-                Edge^ clickedEdge = FindEdgeAtPoint(e->X, e->Y);
+                Edge^ clickedEdge = FindEdgeAtPoint(adjustedX, adjustedY);
 
                 if (clickedEdge != nullptr)
                 {
@@ -784,6 +809,9 @@ namespace Project2 {
             pictureBox1->Invalidate();
         }
         UpdateInfoPanel();
+    }
+    PointF MyForm::ScreenToWorld(Point screenPoint) {
+        return PointF((screenPoint.X / zoomFactor) - offset.X, (screenPoint.Y / zoomFactor) - offset.Y);
     }
     String^ MyForm::PromptForVertexName() 
     {
@@ -880,6 +908,9 @@ namespace Project2 {
     }
     System::Void MyForm::ZoomIn(System::Object^ sender, System::EventArgs^ e)
     {
+        Point cursorPos = pictureBox1->PointToClient(Cursor->Position);
+        PointF cursorPosF = PointF(cursorPos.X / zoomFactor - offset.X, cursorPos.Y / zoomFactor - offset.Y);
+
         zoomFactor *= 1.1f;
         AdjustVerticesToGrid();
         pictureBox1->Invalidate();
@@ -900,17 +931,25 @@ namespace Project2 {
     }
     void Project2::MyForm::ZoomInButton_Click(System::Object^ sender, System::EventArgs^ e)
     {
-        zoomFactor *= 1.1f; // Increase zoom factor by 10%
+        zoomFactor *= 1.1f; 
         AdjustVerticesToGrid();
         pictureBox1->Invalidate();
     }
 
     void Project2::MyForm::ZoomOutButton_Click(System::Object^ sender, System::EventArgs^ e)
     {
-        zoomFactor /= 1.1f; // Decrease zoom factor by 10%
+        zoomFactor /= 1.1f; 
         AdjustVerticesToGrid();
         pictureBox1->Invalidate();
     }
+    void MyForm::Zoom(float factor) {
+        Point cursorPos = pictureBox1->PointToClient(Cursor->Position);
+        PointF cursorPosF = PointF(cursorPos.X / zoomFactor - offset.X, cursorPos.Y / zoomFactor - offset.Y);
 
+        zoomFactor *= factor;
+        offset = PointF(cursorPosF.X - cursorPos.X / zoomFactor, cursorPosF.Y - cursorPos.Y / zoomFactor);
+
+        pictureBox1->Invalidate();
+    }
 
 }

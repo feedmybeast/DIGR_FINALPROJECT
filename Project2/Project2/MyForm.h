@@ -26,9 +26,11 @@ namespace Project2 {
 			isDrawingEdge = false;
 			currentEdgeColor = System::Drawing::Color::Black;
 			zoomFactor = 1.0f;
+			offset = PointF(0, 0);
 		}
 		void SomeFunction();
 	private:
+		PointF offset;
 		System::ComponentModel::Container^ components;
 		System::Windows::Forms::PictureBox^ pictureBox1;
 		System::Windows::Forms::TextBox^ infoPanel;
@@ -55,6 +57,8 @@ namespace Project2 {
 
 		System::Windows::Forms::ToolStrip^ toolStrip1;
 		String^ PromptForVertexName();
+		PointF ScreenToWorld(Point screenPoint); //
+		void Zoom(float factor);
 		Graph^ graph;
 		float zoomFactor;
 		Vertex^ selectedVertex;
@@ -95,7 +99,6 @@ namespace Project2 {
 		void DeleteVertex(Vertex^ vertex);
 		void DeleteEdge(Edge^ edge);
 		void UpdateInfoPanel();
-	
 	protected:
 		virtual void WndProc(System::Windows::Forms::Message% m) override {
 			//const int WM_MOUSEWHEEL = 0x020A;
