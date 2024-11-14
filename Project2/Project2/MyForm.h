@@ -58,7 +58,6 @@ namespace Project2 {
 		System::Windows::Forms::ToolStrip^ toolStrip1;
 		String^ PromptForVertexName();
 		PointF ScreenToWorld(Point screenPoint); //
-		void Zoom(float factor);
 		Graph^ graph;
 		float zoomFactor;
 		Vertex^ selectedVertex;
@@ -96,6 +95,8 @@ namespace Project2 {
 		Vertex^ FindVertexAtPoint(int x, int y);
 		Edge^ FindEdgeAtPoint(int x, int y);
 		void AddEdge(Vertex^ start, Vertex^ end);
+		void MyForm::AddEdge(Vertex^ start, Vertex^ end, bool isDirected);
+		void MyForm::DrawArrow(Graphics^ g, Pen^ pen, PointF start, PointF end);
 		void DeleteVertex(Vertex^ vertex);
 		void DeleteEdge(Edge^ edge);
 		void UpdateInfoPanel();

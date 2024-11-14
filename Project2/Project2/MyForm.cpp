@@ -22,7 +22,9 @@ namespace Project2 {
         this->addEdgeButton = (gcnew System::Windows::Forms::ToolStripButton());
         this->deleteEdgeButton = (gcnew System::Windows::Forms::ToolStripButton());
         this->showGridButton = (gcnew System::Windows::Forms::ToolStripButton());
-        
+        this->undirectedRadioButton = (gcnew System::Windows::Forms::RadioButton());
+        this->directedRadioButton = (gcnew System::Windows::Forms::RadioButton());
+
         // The buttons are now added directly to the toolStrip1 in the Items->AddRange call
 
         // Set form properties
@@ -31,6 +33,8 @@ namespace Project2 {
         this->ClientSize = System::Drawing::Size(800, 600);
         this->Controls->Add(this->pictureBox1);
         this->Controls->Add(this->infoPanel);
+        this->Controls->Add(this->undirectedRadioButton);
+        this->Controls->Add(this->directedRadioButton);
         //this->Controls->Add(this->menuStrip1);
         this->Controls->Add(this->toolStrip1);
         //this->MainMenuStrip = this->menuStrip1;
@@ -180,20 +184,22 @@ namespace Project2 {
                 this->resetZoomButton
         });
         //  undirectedRadioButton
-        this->undirectedRadioButton = (gcnew System::Windows::Forms::RadioButton());
-        this->undirectedRadioButton->Location = System::Drawing::Point(600, 30);
+        this->undirectedRadioButton->Location = System::Drawing::Point(600, 50);
         this->undirectedRadioButton->Name = L"undirectedRadioButton";
         this->undirectedRadioButton->Size = System::Drawing::Size(100, 20);
+        this->undirectedRadioButton->TabIndex = 4;
+        this->undirectedRadioButton->TabStop = true;
         this->undirectedRadioButton->Text = L"Undirected";
-        this->undirectedRadioButton->Checked = true; 
-        this->Controls->Add(this->undirectedRadioButton);
+        this->undirectedRadioButton->UseVisualStyleBackColor = true;
+
         //  directedRadioButton
-        this->directedRadioButton = (gcnew System::Windows::Forms::RadioButton());
-        this->directedRadioButton->Location = System::Drawing::Point(600, 60);
+        this->directedRadioButton->Location = System::Drawing::Point(600, 80);
         this->directedRadioButton->Name = L"directedRadioButton";
         this->directedRadioButton->Size = System::Drawing::Size(100, 20);
+        this->directedRadioButton->TabIndex = 5;
+        this->directedRadioButton->TabStop = true;
         this->directedRadioButton->Text = L"Directed";
-        this->Controls->Add(this->directedRadioButton);
+        this->directedRadioButton->UseVisualStyleBackColor = true;
 
         //  directionComboBox
         this->directionComboBox = (gcnew System::Windows::Forms::ComboBox());
@@ -277,6 +283,16 @@ namespace Project2 {
             graph->AddEdge(newEdge);
             UpdateInfoPanel();
             pictureBox1->Invalidate();
+        }
+    }
+    void MyForm::AddEdge(Vertex^ start, Vertex^ end, bool isDirected)
+    {
+        Edge^ newEdge = gcnew Edge(start, end, currentEdgeColor);
+        graph->Edges->Add(newEdge);
+        if (!isDirected)
+        {
+            Edge^ reverseEdge = gcnew Edge(end, start, currentEdgeColor);
+            graph->Edges->Add(reverseEdge);
         }
     }
     void MyForm::SomeFunction() {
@@ -363,6 +379,13 @@ namespace Project2 {
                 static_cast<float>(midX) * zoomFactor, static_cast<float>(midY) * zoomFactor);
             //g->DrawString(edge->Weight.ToString(), this->Font, Brushes::Red,
             //    static_cast<float>(midX), static_cast<float>(midY));
+            // Draw arrow for directed edges
+            //if (directedRadioButton->Checked) {
+            //    AdjustableArrowCap^ arrowCap = gcnew AdjustableArrowCap();
+            //    pen->CustomEndCap = arrowCap;
+            //    g->DrawArrow(pen, PointF(static_cast<float>(nearestStartX) * zoomFactor, static_cast<float>(nearestStartY) * zoomFactor),
+            //        PointF(static_cast<float>(nearestEndX) * zoomFactor, static_cast<float>(nearestEndY) * zoomFactor));
+            //}
         }
         g->ResetTransform();
     }
@@ -375,19 +398,28 @@ namespace Project2 {
             vertex->Y = static_cast<int>(std::round(vertex->Y / (gridSize * zoomFactor)) * gridSize * zoomFactor);
         }
     }
-
+    void MyForm::DrawArrow(Graphics^ g, Pen^ pen, PointF start, PointF end)
+    {
+        g->DrawLine(pen, start, end);
+        float dx = end.X - start.X;
+        float dy = end.Y - start.Y;
+        float length = sqrt(dx * dx + dy * dy);
+        dx /= length;
+        dy /= length;
+        float arrowSize = 10.0f;
+        PointF arrowPoint1(end.X - arrowSize * (dx - dy), end.Y - arrowSize * (dy + dx));
+        PointF arrowPoint2(end.X - arrowSize * (dx + dy), end.Y - arrowSize * (dy - dx));
+        g->DrawLine(pen, end, arrowPoint1);
+        g->DrawLine(pen, end, arrowPoint2);
+    }
     System::Void MyForm::RunDijkstraButton_Click(System::Object^ sender, System::EventArgs^ e) {
         if (graph->Vertices->Count < 2) {
             MessageBox::Show("Please add at least two vertices to run Dijkstra's algorithm.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
             return;
         }
-
-        // Reset edge colors
         for each (Edge ^ edge in graph->Edges) {
             edge->Color = Color::Empty;
         }
-
-        // Prompt user to select start and end vertices
         int startId, endId;
         String^ startIdStr = ShowInputBox("Enter the ID of the start vertex:", "Start Vertex", "1");
         String^ endIdStr = ShowInputBox("Enter the ID of the end vertex:", "End Vertex", "2");
@@ -557,7 +589,7 @@ namespace Project2 {
         // Create a new form to get user input for the edge
         Form^ inputForm = gcnew Form();
         inputForm->Text = "Add Edge";
-        inputForm->Size = System::Drawing::Size(180, 250);
+        inputForm->Size = System::Drawing::Size(180, 300);
         inputForm->StartPosition = FormStartPosition::CenterParent;
         inputForm->FormBorderStyle = Windows::Forms::FormBorderStyle::FixedDialog;
         inputForm->MaximizeBox = false;
@@ -593,10 +625,29 @@ namespace Project2 {
         weightTextBox->Size = System::Drawing::Size(100, 20);
         inputForm->Controls->Add(weightTextBox);
 
+
+        // Add RadioButtons for edge type
+        Label^ edgeTypeLabel = gcnew Label();
+        edgeTypeLabel->Text = "Edge Type:";
+        edgeTypeLabel->Location = System::Drawing::Point(10, 160);
+        inputForm->Controls->Add(edgeTypeLabel);
+
+        RadioButton^ undirectedRadioButton = gcnew RadioButton();
+        undirectedRadioButton->Text = "Undirected";
+        undirectedRadioButton->Location = System::Drawing::Point(10, 180);
+        undirectedRadioButton->Checked = true; // Default to undirected
+        inputForm->Controls->Add(undirectedRadioButton);
+
+        RadioButton^ directedRadioButton = gcnew RadioButton();
+        directedRadioButton->Text = "Directed";
+        directedRadioButton->Location = System::Drawing::Point(10, 200);
+        inputForm->Controls->Add(directedRadioButton);
+
+        // Adjust OK button position
         Button^ okButton = gcnew Button();
         okButton->Text = "OK";
         okButton->DialogResult = System::Windows::Forms::DialogResult::OK;
-        okButton->Location = System::Drawing::Point(10, 160);
+        okButton->Location = System::Drawing::Point(10, 230);
         okButton->Size = System::Drawing::Size(75, 30);
         inputForm->Controls->Add(okButton);
 
@@ -613,6 +664,7 @@ namespace Project2 {
             String^ startVertexName = startComboBox->SelectedItem->ToString();
             String^ endVertexName = endComboBox->SelectedItem->ToString();
             int weight;
+            bool isDirected = directedRadioButton->Checked;
 
             if (Int32::TryParse(weightTextBox->Text, weight))
             {
@@ -631,7 +683,7 @@ namespace Project2 {
                 if (startVertex != nullptr && endVertex != nullptr)
                 {
                     // Create a new edge and add it to the graph
-                    Edge^ newEdge = gcnew Edge(graph->Edges->Count + 1, startVertex, endVertex, weight, currentEdgeColor);
+                    Edge^ newEdge = gcnew Edge(graph->Edges->Count + 1, startVertex, endVertex, weight, currentEdgeColor, directedRadioButton->Checked);
                     graph->AddEdge(newEdge);
                     pictureBox1->Invalidate();
                     //graph->AddEdge(startVertex, endVertex, currentEdgeColor, directedRadioButton->Checked);
@@ -641,6 +693,11 @@ namespace Project2 {
         }
         if (selectedVertex != nullptr && draggingVertex != nullptr)
         {
+            bool isDirected = directedRadioButton->Checked;
+            AddEdge(selectedVertex, draggingVertex, isDirected);
+            selectedVertex = nullptr;
+            draggingVertex = nullptr;
+            pictureBox1->Invalidate();
             if (undirectedRadioButton->Checked)
             {
                 //undirected edge
@@ -774,7 +831,7 @@ namespace Project2 {
                             break;
                         }
                     }
-
+                            
                     if (isNameExist)
                     {
                         MessageBox::Show("The name already exists. Please choose another name.", "Duplicate Name", MessageBoxButtons::OK, MessageBoxIcon::Error);
@@ -782,7 +839,7 @@ namespace Project2 {
                     else
                     {
                         int newId = graph->Vertices->Count + 1;
-                        Vertex^ newVertex = gcnew Vertex(newId, vertexName, worldPoint.X, worldPoint.Y);
+                        Vertex^ newVertex = gcnew Vertex(newId, vertexName, adjustedX, adjustedY);
                         graph->AddVertex(newVertex);
                         pictureBox1->Invalidate();
                     }
@@ -908,8 +965,8 @@ namespace Project2 {
     }
     System::Void MyForm::ZoomIn(System::Object^ sender, System::EventArgs^ e)
     {
-        Point cursorPos = pictureBox1->PointToClient(Cursor->Position);
-        PointF cursorPosF = PointF(cursorPos.X / zoomFactor - offset.X, cursorPos.Y / zoomFactor - offset.Y);
+        //Point cursorPos = pictureBox1->PointToClient(Cursor->Position);
+        //PointF cursorPosF = PointF(cursorPos.X / zoomFactor - offset.X, cursorPos.Y / zoomFactor - offset.Y);
 
         zoomFactor *= 1.1f;
         AdjustVerticesToGrid();
@@ -942,14 +999,14 @@ namespace Project2 {
         AdjustVerticesToGrid();
         pictureBox1->Invalidate();
     }
-    void MyForm::Zoom(float factor) {
-        Point cursorPos = pictureBox1->PointToClient(Cursor->Position);
-        PointF cursorPosF = PointF(cursorPos.X / zoomFactor - offset.X, cursorPos.Y / zoomFactor - offset.Y);
+    //void MyForm::Zoom(float factor) {
+    //    Point cursorPos = pictureBox1->PointToClient(Cursor->Position);
+    //    PointF cursorPosF = PointF(cursorPos.X / zoomFactor - offset.X, cursorPos.Y / zoomFactor - offset.Y);
 
-        zoomFactor *= factor;
-        offset = PointF(cursorPosF.X - cursorPos.X / zoomFactor, cursorPosF.Y - cursorPos.Y / zoomFactor);
+    //    zoomFactor *= factor;
+    //    offset = PointF(cursorPosF.X - cursorPos.X / zoomFactor, cursorPosF.Y - cursorPos.Y / zoomFactor);
 
-        pictureBox1->Invalidate();
-    }
+    //    pictureBox1->Invalidate();
+    //}
 
 }

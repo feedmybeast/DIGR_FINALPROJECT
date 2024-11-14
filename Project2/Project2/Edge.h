@@ -42,9 +42,18 @@ public:
         Color = color;
         Directed = false;
     }
+    Edge(Vertex^ start, Vertex^ end, System::Drawing::Color color)
+    {
+        Start = start;
+        End = end;
+        Color = color;
+        Directed = false;
+    }
     //Edge(Vertex^ start, Vertex^ end, int weight)
     //    : Edge(0, start, end, weight, System::Drawing::Color::Black) {}
 
     Edge(Vertex^ start, Vertex^ end, int weight)
         : Edge(start, end, weight, System::Drawing::Color::Black, false) {}
+    Edge(Vertex^ start, Vertex^ end, bool directed)
+        : Edge(start, end,System::Drawing::Color::Black) {}
 };
