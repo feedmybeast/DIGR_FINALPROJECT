@@ -38,8 +38,8 @@ namespace Project2 {
         this->ClientSize = System::Drawing::Size(800, 600);
         this->Controls->Add(this->pictureBox1);
         this->Controls->Add(this->infoPanel);
-        this->Controls->Add(this->undirectedRadioButton);
-        this->Controls->Add(this->directedRadioButton);
+        //this->Controls->Add(this->undirectedRadioButton);
+        //this->Controls->Add(this->directedRadioButton);
         //this->Controls->Add(this->menuStrip1);
         this->Controls->Add(this->toolStrip1);
         //this->MainMenuStrip = this->menuStrip1;
@@ -330,7 +330,8 @@ namespace Project2 {
         Graphics^ g = e->Graphics;
         if (zoomFactor > 0 && !float::IsNaN(zoomFactor) && !float::IsInfinity(zoomFactor)) {
             g->ScaleTransform(zoomFactor, zoomFactor);
-            g->TranslateTransform(offset.X, offset.Y);
+            g->TranslateTransform(viewOffsetX, viewOffsetY);
+            //g->TranslateTransform(offset.X, offset.Y);
         }
         else {
             // Handle invalid zoomFactor case
@@ -405,9 +406,9 @@ namespace Project2 {
                 float iconSize = 10.0f; // Size of the "<" icon
                 PointF point1(static_cast<float>(nearestEndX) * zoomFactor, static_cast<float>(nearestEndY) * zoomFactor);
                 PointF point2(static_cast<float>(nearestEndX) * zoomFactor - iconSize * cosf(angle + static_cast<float>(M_PI) / 6),
-                    static_cast<float>(nearestEndY) * zoomFactor - iconSize * sinf(angle + static_cast<float>(M_PI) / 6));
+                              static_cast<float>(nearestEndY) * zoomFactor - iconSize * sinf(angle + static_cast<float>(M_PI) / 6));
                 PointF point3(static_cast<float>(nearestEndX) * zoomFactor - iconSize * cosf(angle - static_cast<float>(M_PI) / 6),
-                    static_cast<float>(nearestEndY) * zoomFactor - iconSize * sinf(angle - static_cast<float>(M_PI) / 6));
+                              static_cast<float>(nearestEndY) * zoomFactor - iconSize * sinf(angle - static_cast<float>(M_PI) / 6));
 
                 g->DrawLine(pen2, point1, point2);
                 g->DrawLine(pen2, point1, point3); 
@@ -557,13 +558,25 @@ namespace Project2 {
 
 
     void MyForm::pictureBox1_MouseWheel(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+        Point cursorPos = e->Location;
+        float zoomIncrement = 0.1f;
         if (e->Delta > 0) {
-            zoomFactor *= 1.1f; // Zoom in
+            zoomFactor += zoomIncrement;
         }
         else {
-            zoomFactor /= 1.1f; // Zoom out
+            zoomFactor -= zoomIncrement;
+            if (zoomFactor < zoomIncrement) {
+                zoomFactor = zoomIncrement;  
+            }
         }
         zoomFactor = Math::Max(0.1f, Math::Min(zoomFactor, 10.0f));
+        pictureBox1->Invalidate();
+        float newCenterX = (cursorPos.X - viewOffsetX) / zoomFactor;
+        float newCenterY = (cursorPos.Y - viewOffsetY) / zoomFactor;
+
+        viewOffsetX = cursorPos.X - newCenterX * zoomFactor;
+        viewOffsetY = cursorPos.Y - newCenterY * zoomFactor;
+
         pictureBox1->Invalidate();
     }
 
@@ -932,7 +945,13 @@ namespace Project2 {
     {
         Vertex^ hoveredVertex = FindVertexAtPoint(e->X, e->Y);
         Edge^ hoveredEdge = FindEdgeAtPoint(e->X, e->Y);
-
+        if (isPanning) {
+            Point currentMousePos = e->Location;
+            viewOffsetX += currentMousePos.X - lastMousePos.X;
+            viewOffsetY += currentMousePos.Y - lastMousePos.Y;
+            lastMousePos = currentMousePos;
+            pictureBox1->Invalidate();
+        }
         if (hoveredVertex != nullptr) {
             this->Cursor = Cursors::Hand;
         }
@@ -948,6 +967,10 @@ namespace Project2 {
         if (e->Button == System::Windows::Forms::MouseButtons::Left) {
             draggingVertex = FindVertexAtPoint(e->X, e->Y);
         }
+        if (e->Button == System::Windows::Forms::MouseButtons::Middle) {
+            isPanning = true;
+            lastMousePos = e->Location;
+        }
     }
     System::Void MyForm::pictureBox1_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) 
     {
@@ -956,6 +979,9 @@ namespace Project2 {
             draggingVertex->Y = e->Y;
             draggingVertex = nullptr;
             pictureBox1->Invalidate();
+        }
+        if (e->Button == System::Windows::Forms::MouseButtons::Middle) {
+            isPanning = false;
         }
     }
     System::Void MyForm::SaveGraph(System::Object^ sender, System::EventArgs^ e) 
