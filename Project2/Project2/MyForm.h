@@ -27,6 +27,10 @@ namespace Project2 {
 			currentEdgeColor = System::Drawing::Color::Black;
 			zoomFactor = 1.0f;
 			offset = PointF(0, 0);
+			zoomFactor = 1.0f;
+			viewOffsetX = 0.0f;
+			viewOffsetY = 0.0f;
+			isPanning = false;
 		}
 		void SomeFunction();
 	private:
@@ -65,7 +69,17 @@ namespace Project2 {
 		Vertex^ draggingVertex;
 		bool isDrawingEdge;
 		System::Drawing::Color currentEdgeColor;
+
+
+		float viewOffsetX;
+		float viewOffsetY;
+
+		bool isPanning;
+		Point lastMousePos;
+
+
 		bool single_Click = true;
+
 		void AdjustVerticesToGrid();
 		System::Void pictureBox1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e);
 		System::Void pictureBox1_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
