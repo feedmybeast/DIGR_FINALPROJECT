@@ -7,3 +7,6 @@ D:\Download_D\DIGR_FINALPROJECT-master\DIGR_FINALPROJECT-master\Project2\x64\Deb
 C:\Users\HP\source\repos\DIGR_FINALPROJECT\Project2\Project2\x64\Debug\Project2.vcxproj.AssemblyReference.cache
 C:\Users\HP\source\repos\DIGR_FINALPROJECT\Project2\Project2\x64\Debug\Project2.MyForm.resources
 C:\Users\HP\source\repos\DIGR_FINALPROJECT\Project2\Project2\x64\Debug\Project2.vcxproj.GenerateResource.cache
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\x64\Debug\Project2.vcxproj.AssemblyReference.cache
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\x64\Debug\Project2.MyForm.resources
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\x64\Debug\Project2.vcxproj.GenerateResource.cache

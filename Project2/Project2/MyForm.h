@@ -1,10 +1,9 @@
-
 #pragma once
-
+#include <cstdint>
 #include "Vertex.h"
 #include "Edge.h"
 #include "Graph.h"
-
+#define WM_MOUSEWHEEL 0x020A
 namespace Project2 {
 
 	using namespace System;
@@ -23,10 +22,12 @@ namespace Project2 {
 			InitializeComponent();
 			graph = gcnew Graph();
 			selectedVertex = nullptr;
+			draggingVertex = nullptr;
 			isDrawingEdge = false;
-			currentEdgeColor = Color::Black;
+			currentEdgeColor = System::Drawing::Color::Black;
+			zoomFactor = 1.0f;
 		}
-
+		void SomeFunction();
 	private:
 		System::ComponentModel::Container^ components;
 		System::Windows::Forms::PictureBox^ pictureBox1;
@@ -43,13 +44,23 @@ namespace Project2 {
 		System::Windows::Forms::ToolStripButton^ saveButton;
 		System::Windows::Forms::ToolStripButton^ loadButton;
 		System::Windows::Forms::ToolStripButton^ runDijkstraButton;
+		System::Windows::Forms::ToolStripButton^ zoomInButton;
+		System::Windows::Forms::ToolStripButton^ zoomOutButton;
+		System::Windows::Forms::ToolStripButton^ resetZoomButton;
+
+		System::Void ZoomIn(System::Object^ sender, System::EventArgs^ e);
+		System::Void ZoomOut(System::Object^ sender, System::EventArgs^ e);
+		System::Void ResetZoom(System::Object^ sender, System::EventArgs^ e);
+
+
 		System::Windows::Forms::ToolStrip^ toolStrip1;
 		String^ PromptForVertexName();
 		Graph^ graph;
+		float zoomFactor;
 		Vertex^ selectedVertex;
 		Vertex^ draggingVertex;
 		bool isDrawingEdge;
-		static Drawing::Color currentEdgeColor = Drawing::Color::Black;
+		System::Drawing::Color currentEdgeColor;
 
 	private:
 		System::Void ShowGridButton_Click(System::Object^ sender, System::EventArgs^ e);
@@ -57,7 +68,9 @@ namespace Project2 {
 		System::Void DeleteEdgeButton_Click(System::Object^ sender, System::EventArgs^ e);
 		System::Void RunDijkstraButton_Click(System::Object^ sender, System::EventArgs^ e);
 		void RunDijkstra(Vertex^ start, Vertex^ end);
-
+		System::Windows::Forms::RadioButton^ undirectedRadioButton;
+		System::Windows::Forms::RadioButton^ directedRadioButton;
+		System::Windows::Forms::ComboBox^ directionComboBox;
 	protected:
 		~MyForm()
 		{
@@ -75,14 +88,28 @@ namespace Project2 {
 		void DeleteVertex(Vertex^ vertex);
 		void DeleteEdge(Edge^ edge);
 		void UpdateInfoPanel();
-
+	protected:
+		virtual void WndProc(System::Windows::Forms::Message% m) override {
+			//const int WM_MOUSEWHEEL = 0x020A;
+			if (m.Msg == WM_MOUSEWHEEL) {
+				int64_t lParam = m.LParam.ToInt64();
+				int64_t wParam = m.WParam.ToInt64();
+				int xPos = static_cast<int>(lParam & 0xFFFF);
+				int yPos = static_cast<int>((lParam >> 16) & 0xFFFF);
+				int delta = static_cast<int>((wParam >> 16) & 0xFFFF);
+				this->OnMouseWheel(gcnew System::Windows::Forms::MouseEventArgs(System::Windows::Forms::MouseButtons::None,0,xPos,yPos,delta));
+			}
+			System::Windows::Forms::Form::WndProc(m);
+		}
 		System::Void pictureBox1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e);
 		System::Void pictureBox1_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
 		System::Void pictureBox1_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
 		System::Void pictureBox1_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
 		System::Void pictureBox1_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
+		System::Void pictureBox1_MouseWheel(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
 		System::Void SaveGraph(System::Object^ sender, System::EventArgs^ e);
 		System::Void LoadGraph(System::Object^ sender, System::EventArgs^ e);
 		System::Void ChangeEdgeColor(System::Object^ sender, System::EventArgs^ e);
+
 	};
 }

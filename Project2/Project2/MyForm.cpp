@@ -2,6 +2,8 @@
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include "MyForm.h"
+#include "Graph.h"
+
 #include <msclr\marshal_cppstd.h>
 #include <fstream>
 #using <Microsoft.VisualBasic.dll>
@@ -53,13 +55,21 @@ namespace Project2 {
         this->pictureBox1->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::pictureBox1_MouseDown);
         this->pictureBox1->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::pictureBox1_MouseUp);
         this->pictureBox1->Dock = System::Windows::Forms::DockStyle::Fill;
+        this->pictureBox1->MouseWheel += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::pictureBox1_MouseWheel);
+
         // infoPanel
-        this->infoPanel->Location = System::Drawing::Point(12, 425);
-        this->infoPanel->Multiline = true;
+        //this->infoPanel->Location = System::Drawing::Point(12, 425);
+        //this->infoPanel->Multiline = true;
+        //this->infoPanel->Name = L"infoPanel";
+        //this->infoPanel->ReadOnly = true;
+        //this->infoPanel->Size = System::Drawing::Size(558, 74);
+        //this->infoPanel->TabIndex = 1;
+        // infoPanel 2
+        this->infoPanel->Location = System::Drawing::Point(12, 27);
         this->infoPanel->Name = L"infoPanel";
-        this->infoPanel->ReadOnly = true;
-        this->infoPanel->Size = System::Drawing::Size(558, 74);
-        this->infoPanel->TabIndex = 1;
+        this->infoPanel->Size = System::Drawing::Size(558, 392);
+        this->infoPanel->TabIndex = 0;
+        this->infoPanel->TabStop = false;
 
         // menuStrip1
        /* this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
@@ -158,8 +168,44 @@ namespace Project2 {
         this->menuStrip1->PerformLayout();
         this->ResumeLayout(false);
         this->PerformLayout(); 
+        		// toolStrip1
+		// Zoom In Zoom Out Button
+        this->zoomInButton = (gcnew System::Windows::Forms::ToolStripButton("Zoom In", nullptr, gcnew System::EventHandler(this, &MyForm::ZoomIn)));
+        this->zoomOutButton = (gcnew System::Windows::Forms::ToolStripButton("Zoom Out", nullptr, gcnew System::EventHandler(this, &MyForm::ZoomOut)));
+        this->resetZoomButton = (gcnew System::Windows::Forms::ToolStripButton("Reset Zoom", nullptr, gcnew System::EventHandler(this, &MyForm::ResetZoom)));
+
+        this->toolStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+            this->zoomInButton,
+                this->zoomOutButton,
+                this->resetZoomButton
+        });
+        //  undirectedRadioButton
+        this->undirectedRadioButton = (gcnew System::Windows::Forms::RadioButton());
+        this->undirectedRadioButton->Location = System::Drawing::Point(600, 30);
+        this->undirectedRadioButton->Name = L"undirectedRadioButton";
+        this->undirectedRadioButton->Size = System::Drawing::Size(100, 20);
+        this->undirectedRadioButton->Text = L"Undirected";
+        this->undirectedRadioButton->Checked = true; 
+        this->Controls->Add(this->undirectedRadioButton);
+        //  directedRadioButton
+        this->directedRadioButton = (gcnew System::Windows::Forms::RadioButton());
+        this->directedRadioButton->Location = System::Drawing::Point(600, 60);
+        this->directedRadioButton->Name = L"directedRadioButton";
+        this->directedRadioButton->Size = System::Drawing::Size(100, 20);
+        this->directedRadioButton->Text = L"Directed";
+        this->Controls->Add(this->directedRadioButton);
+
+        //  directionComboBox
+        this->directionComboBox = (gcnew System::Windows::Forms::ComboBox());
+        this->directionComboBox->Location = System::Drawing::Point(600, 90);
+        this->directionComboBox->Name = L"directionComboBox";
+        this->directionComboBox->Size = System::Drawing::Size(100, 20);
+        this->directionComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Start to End", L"End to Start" });
+        this->directionComboBox->SelectedIndex = 0;
+        this->Controls->Add(this->directionComboBox);
+
     }
-    
+
     // Helper function to show an input box
     String^ ShowInputBox(String^ prompt, String^ title, String^ defaultValue) {
         Form^ inputBox = gcnew Form();
@@ -204,7 +250,7 @@ namespace Project2 {
     }
 
     Vertex^ MyForm::FindVertexAtPoint(int x, int y) {
-        for each (Vertex ^ v in graph->Vertices) {
+        for each (Vertex ^ v in graph->Vertices) {          
             if (Math::Abs(v->X - x) < 10 && Math::Abs(v->Y - y) < 10) {
                 return v;
             }
@@ -233,7 +279,9 @@ namespace Project2 {
             pictureBox1->Invalidate();
         }
     }
-
+    void MyForm::SomeFunction() {
+    graph->AddEdge(selectedVertex, draggingVertex, currentEdgeColor, true);
+    }
     void MyForm::DeleteVertex(Vertex^ vertex) {
         graph->RemoveVertex(vertex);
         UpdateInfoPanel();
@@ -252,18 +300,25 @@ namespace Project2 {
 
     System::Void MyForm::pictureBox1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
         Graphics^ g = e->Graphics;
+        if (zoomFactor > 0 && !float::IsNaN(zoomFactor) && !float::IsInfinity(zoomFactor)) {
+            g->ScaleTransform(zoomFactor, zoomFactor);
+        }
+        else {
+            // Handle invalid zoomFactor case
+        }
         int width = pictureBox1->Width;
         int height = pictureBox1->Height;
         if (showGrid) {
             Pen^ gridPen = gcnew Pen(Color::LightGray);
-            int gridSpacing = 20;
-            for (int i = 0; i < width; i += gridSpacing) {
-                g->DrawLine(gridPen, i, 0, i, height);
+            int gridSize = static_cast<int>(20 * zoomFactor);  
+            for (int x = 0; x <= pictureBox1->Width; x += gridSize) {
+                g->DrawLine(gridPen, static_cast<float>(x), 0.0f, static_cast<float>(x), static_cast<float>(pictureBox1->Height));
             }
-            for (int j = 0; j < height; j += gridSpacing) {
-                g->DrawLine(gridPen, 0, j, width, j);
+            for (int y = 0; y <= pictureBox1->Height; y += gridSize) {
+                g->DrawLine(gridPen, 0.0f, static_cast<float>(y), static_cast<float>(pictureBox1->Width), static_cast<float>(y));
             }
         }
+        DrawGraph(g);
         // Calculate the nearest intersection point
         for each (Vertex ^ v in graph->Vertices) {
             int nearestX = (v->X / 20) * 20; // Round down to the nearest multiple of 20 for x coordinate
@@ -287,6 +342,7 @@ namespace Project2 {
             g->DrawString(edge->Weight.ToString(), this->Font, Brushes::Red,
                 static_cast<float>(midX), static_cast<float>(midY));
         }
+        g->ResetTransform();
     }
 
     System::Void MyForm::RunDijkstraButton_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -411,36 +467,58 @@ namespace Project2 {
     }
 
 
+    void MyForm::pictureBox1_MouseWheel(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+        if (e->Delta > 0) {
+            zoomFactor *= 1.1f; // Zoom in
+        }
+        else {
+            zoomFactor /= 1.1f; // Zoom out
+        }
+        zoomFactor = Math::Max(0.1f, Math::Min(zoomFactor, 10.0f));
+        pictureBox1->Invalidate();
+    }
 
 
     void MyForm::DrawGraph(Graphics^ g)
     {
+        // Draw grid if showGrid is true
+        if (showGrid) {
+            Pen^ gridPen = gcnew Pen(Color::LightGray);
+            int gridSize = static_cast<int>(20 * zoomFactor); 
+            for (int x = 0; x < static_cast<int>(pictureBox1->Width / zoomFactor); x += gridSize) {
+                g->DrawLine(gridPen, static_cast<float>(x), 0.0f, static_cast<float>(x), static_cast<float>(pictureBox1->Height / zoomFactor));
+            }
+            for (int y = 0; y < static_cast<int>(pictureBox1->Height / zoomFactor); y += gridSize) {
+                g->DrawLine(gridPen, 0.0f, static_cast<float>(y), static_cast<float>(pictureBox1->Width / zoomFactor), static_cast<float>(y));
+            }
+        }
         //Improve animation qualifications
         g->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::AntiAlias;
         g->TextRenderingHint = System::Drawing::Text::TextRenderingHint::AntiAliasGridFit;
+
         // Draw edges
-        for each (Edge ^ edge in graph->Edges)
-        {
-            Vertex^ start = edge->Start;
-            Vertex^ end = edge->End;
-            Point startCenter = Point(start->X, start->Y);
-            Point endCenter = Point(end->X, end->Y);
-            Pen^ pen = gcnew Pen(edge->Color, 2);
-            g->DrawLine(pen, startCenter, endCenter);
-            int midX = (startCenter.X + endCenter.X) / 2;
-            int midY = (startCenter.Y + endCenter.Y) / 2;
-            g->DrawString(edge->Weight.ToString(), this->Font, Brushes::Black, midX, midY);
-        }
+        //for each (Edge ^ edge in graph->Edges)
+        //{
+        //    Vertex^ start = edge->Start;
+        //    Vertex^ end = edge->End;
+        //    Point startCenter = Point(start->X, start->Y);
+        //    Point endCenter = Point(end->X, end->Y);
+        //    Pen^ pen = gcnew Pen(edge->Color, 2);
+        //    g->DrawLine(pen, startCenter, endCenter);
+        //    int midX = (startCenter.X + endCenter.X) / 2;
+        //    int midY = (startCenter.Y + endCenter.Y) / 2;
+        //    g->DrawString(edge->Weight.ToString(), this->Font, Brushes::Black, midX, midY);
+        //}
         // Draw vertices
-        for each (Vertex ^ vertex in graph->Vertices)
-        {
-            g->FillEllipse(Brushes::White, vertex->X - 15, vertex->Y - 15, 30, 30);
-            g->DrawEllipse(Pens::Black, vertex->X - 15, vertex->Y - 15, 30, 30);
-            g->DrawString(vertex->Name, this->Font, Brushes::Black, vertex->X - 5, vertex->Y - 7);
-            // Draw the vertex degree
-            String^ degreeStr = vertex->Degree.ToString();
-            g->DrawString(degreeStr, this->Font, Brushes::Red, vertex->X - 15, vertex->Y - 30);
-        }
+        //for each (Vertex ^ vertex in graph->Vertices)
+        //{
+        //    g->FillEllipse(Brushes::White, vertex->X - 15, vertex->Y - 15, 30, 30);
+        //    g->DrawEllipse(Pens::Black, vertex->X - 15, vertex->Y - 15, 30, 30);
+        //    g->DrawString(vertex->Name, this->Font, Brushes::Black, vertex->X - 5, vertex->Y - 7);
+        //    // Draw the vertex degree
+        //    String^ degreeStr = vertex->Degree.ToString();
+        //    g->DrawString(degreeStr, this->Font, Brushes::Red, vertex->X - 15, vertex->Y - 30);
+        //}
     }
 
     System::Void MyForm::AddEdgeButton_Click(System::Object^ sender, System::EventArgs^ e)
@@ -521,13 +599,39 @@ namespace Project2 {
 
                 if (startVertex != nullptr && endVertex != nullptr)
                 {
-                    // Create a new edge and add it to the graph
-                    Edge^ newEdge = gcnew Edge(graph->Edges->Count + 1, startVertex, endVertex, weight, currentEdgeColor);
-                    graph->AddEdge(newEdge);
+                    //// Create a new edge and add it to the graph
+                    //Edge^ newEdge = gcnew Edge(graph->Edges->Count + 1, startVertex, endVertex, weight, currentEdgeColor);
+                    //graph->AddEdge(newEdge);
+                    //pictureBox1->Invalidate();
+                    graph->AddEdge(startVertex, endVertex, currentEdgeColor, directedRadioButton->Checked);
                     pictureBox1->Invalidate();
                 }
             }
         }
+        if (selectedVertex != nullptr && draggingVertex != nullptr)
+        {
+            if (undirectedRadioButton->Checked)
+            {
+                //undirected edge
+                graph->AddEdge(selectedVertex, draggingVertex, currentEdgeColor, false);
+            }
+            else if (directedRadioButton->Checked)
+            {
+                //directed edge
+                if (directionComboBox->SelectedIndex == 0)
+                {
+                    // Start to End
+                    graph->AddEdge(selectedVertex, draggingVertex, currentEdgeColor, true);
+                }
+                else
+                {
+                    // Nguoc lai
+                    graph->AddEdge(draggingVertex, selectedVertex, currentEdgeColor, true);
+                }
+            }
+            pictureBox1->Invalidate();
+        }
+
     }
 
     System::Void MyForm::DeleteEdgeButton_Click(System::Object^ sender, System::EventArgs^ e)
@@ -595,6 +699,8 @@ namespace Project2 {
     {
         if (e->Button == System::Windows::Forms::MouseButtons::Left)
         {
+            int adjustedX = static_cast<int>(e->X / zoomFactor);
+            int adjustedY = static_cast<int>(e->Y / zoomFactor);
             Vertex^ clickedVertex = FindVertexAtPoint(e->X, e->Y);
             if (clickedVertex != nullptr)
             {
@@ -642,7 +748,7 @@ namespace Project2 {
                     else
                     {
                         int newId = graph->Vertices->Count + 1;
-                        Vertex^ newVertex = gcnew Vertex(newId, vertexName, e->X, e->Y);
+                        Vertex^ newVertex = gcnew Vertex(newId, vertexName, adjustedX, adjustedY);
                         graph->AddVertex(newVertex);
                         pictureBox1->Invalidate();
                     }
@@ -763,4 +869,23 @@ namespace Project2 {
             pictureBox1->Invalidate();
         }
     }
+    System::Void MyForm::ZoomIn(System::Object^ sender, System::EventArgs^ e)
+    {
+        zoomFactor *= 1.1f;
+        pictureBox1->Invalidate();
+    }
+
+    System::Void MyForm::ZoomOut(System::Object^ sender, System::EventArgs^ e)
+    {
+        zoomFactor /= 1.1f;
+        if (zoomFactor < 0.1f) zoomFactor = 0.1f;
+        pictureBox1->Invalidate();
+    }
+
+    System::Void MyForm::ResetZoom(System::Object^ sender, System::EventArgs^ e)
+    {
+        zoomFactor = 1.0f;
+        pictureBox1->Invalidate();
+    }
+
 }
