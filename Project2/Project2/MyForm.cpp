@@ -3,9 +3,14 @@
 #include <Windows.h>
 #include "MyForm.h"
 #include "Graph.h"
+#include <cmath> 
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 #include <msclr\marshal_cppstd.h>
 #include <fstream>
+using namespace System::Drawing::Drawing2D;
 #using <Microsoft.VisualBasic.dll>
 namespace Project2 {
     void MyForm::InitializeComponent(void)
@@ -193,14 +198,21 @@ namespace Project2 {
         this->undirectedRadioButton->UseVisualStyleBackColor = true;
 
         //  directedRadioButton
-        this->directedRadioButton->Location = System::Drawing::Point(600, 80);
+        //this->directedRadioButton->Location = System::Drawing::Point(600, 80);
+        //this->directedRadioButton->Name = L"directedRadioButton";
+        //this->directedRadioButton->Size = System::Drawing::Size(100, 20);
+        //this->directedRadioButton->TabIndex = 5;
+        //this->directedRadioButton->TabStop = true;
+        //this->directedRadioButton->Text = L"Directed";
+        //this->directedRadioButton->UseVisualStyleBackColor = true;
+        this->directedRadioButton->Location = System::Drawing::Point(12, 425);
         this->directedRadioButton->Name = L"directedRadioButton";
-        this->directedRadioButton->Size = System::Drawing::Size(100, 20);
-        this->directedRadioButton->TabIndex = 5;
+        this->directedRadioButton->Size = System::Drawing::Size(104, 24);
+        this->directedRadioButton->TabIndex = 1;
         this->directedRadioButton->TabStop = true;
         this->directedRadioButton->Text = L"Directed";
         this->directedRadioButton->UseVisualStyleBackColor = true;
-
+        this->Controls->Add(this->directedRadioButton);
         //  directionComboBox
         this->directionComboBox = (gcnew System::Windows::Forms::ComboBox());
         this->directionComboBox->Location = System::Drawing::Point(600, 90);
@@ -336,7 +348,7 @@ namespace Project2 {
             }
         }
         DrawGraph(g);
-        // Calculate the nearest intersection point as well as while Zooming Out and In
+        // calculate the nearest intersection point as well as while Zooming Out and In
         for each (Vertex ^ v in graph->Vertices) {
             int gridSize = 20;
             int nearestX = static_cast<int>(std::round(v->X / gridSize) * gridSize);
@@ -380,12 +392,26 @@ namespace Project2 {
             //g->DrawString(edge->Weight.ToString(), this->Font, Brushes::Red,
             //    static_cast<float>(midX), static_cast<float>(midY));
             // Draw arrow for directed edges
-            //if (directedRadioButton->Checked) {
-            //    AdjustableArrowCap^ arrowCap = gcnew AdjustableArrowCap();
-            //    pen->CustomEndCap = arrowCap;
-            //    g->DrawArrow(pen, PointF(static_cast<float>(nearestStartX) * zoomFactor, static_cast<float>(nearestStartY) * zoomFactor),
-            //        PointF(static_cast<float>(nearestEndX) * zoomFactor, static_cast<float>(nearestEndY) * zoomFactor));
-            //}
+            pen = gcnew Pen(Color::Black, 2.0f);  
+            Pen^ pen2 = gcnew Pen(Color::Red, 2.0f);
+            // Draw the line
+            g->DrawLine(pen,
+                PointF(static_cast<float>(nearestStartX) * zoomFactor, static_cast<float>(nearestStartY) * zoomFactor),
+                PointF(static_cast<float>(nearestEndX) * zoomFactor, static_cast<float>(nearestEndY) * zoomFactor));
+
+            // Draw the "<" icon at the end vertex if directedRadioButton is checked
+            if (directedRadioButton->Checked) {
+                float angle = atan2f(static_cast<float>(nearestEndY - nearestStartY), static_cast<float>(nearestEndX - nearestStartX));
+                float iconSize = 10.0f; // Size of the "<" icon
+                PointF point1(static_cast<float>(nearestEndX) * zoomFactor, static_cast<float>(nearestEndY) * zoomFactor);
+                PointF point2(static_cast<float>(nearestEndX) * zoomFactor - iconSize * cosf(angle + static_cast<float>(M_PI) / 6),
+                    static_cast<float>(nearestEndY) * zoomFactor - iconSize * sinf(angle + static_cast<float>(M_PI) / 6));
+                PointF point3(static_cast<float>(nearestEndX) * zoomFactor - iconSize * cosf(angle - static_cast<float>(M_PI) / 6),
+                    static_cast<float>(nearestEndY) * zoomFactor - iconSize * sinf(angle - static_cast<float>(M_PI) / 6));
+
+                g->DrawLine(pen2, point1, point2);
+                g->DrawLine(pen2, point1, point3); 
+            }
         }
         g->ResetTransform();
     }
