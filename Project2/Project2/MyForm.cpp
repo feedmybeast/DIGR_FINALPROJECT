@@ -983,77 +983,187 @@ void MyForm::UpdateInfoPanel() {
             return nullptr;
         }
     }
+    String^ MyForm::PromptForEditVertex(String^ title)
+    {
+        Form^ inputForm = gcnew Form();
+        inputForm->Text = title;
+        inputForm->Size = System::Drawing::Size(250, 150);
+        inputForm->StartPosition = FormStartPosition::CenterParent;
+        inputForm->Icon = gcnew System::Drawing::Icon("digr.ico");
+        inputForm->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedDialog;
+        inputForm->MaximizeBox = false;
+        inputForm->MinimizeBox = false;
+
+        Label^ nameLabel = gcnew Label();
+        nameLabel->Text = "Rename Vertex:";
+        nameLabel->Location = System::Drawing::Point(10, 10);
+        inputForm->Controls->Add(nameLabel);
+
+        TextBox^ nameTextBox = gcnew TextBox();
+        nameTextBox->Location = System::Drawing::Point(10, 30);
+        nameTextBox->Size = System::Drawing::Size(200, 20);
+        inputForm->Controls->Add(nameTextBox);
+
+        Button^ okButton = gcnew Button();
+        okButton->Text = "OK";
+        okButton->DialogResult = System::Windows::Forms::DialogResult::OK;
+        okButton->Location = System::Drawing::Point(70, 60);
+        inputForm->Controls->Add(okButton);
+        inputForm->AcceptButton = okButton;
+
+        if (inputForm->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+        {
+            return nameTextBox->Text;
+        }
+        else
+        {
+            return nullptr;
+        }
+    }
     System::Void MyForm::clickTimer_Tick(System::Object^ sender, System::EventArgs^ e)
     {
+        this->clickTimer->Stop();
+        int adjustedX = static_cast<int>(std::round(this->mouseX * zoomFactor));
+        int adjustedY = static_cast<int>(std::round(this->mouseY * zoomFactor));
+        if (this->single_Click && !this->doubleClickOccured)
+        {
+            if (this->mouseButtonClicked == System::Windows::Forms::MouseButtons::Left)
+            {
+                Vertex^ clickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
+                if (clickedVertex != nullptr)
+                {
+                    String^ newVertexName = PromptForVertexName();
+                    if (!String::IsNullOrEmpty(newVertexName))
+                    {
+                        if (newVertexName->Length > 10)
+                        {
+                            MessageBox::Show("The name is too long. Please choose a name with fewer than 10 characters.",
+                                "Name Too Long", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                            return;
+                        }
 
-        //this->clickTimer->Stop();
-        //if (this->single_Click) {
-        //    int adjustedX = static_cast<int>(std::round(this->mouseX * zoomFactor));
-        //    int adjustedY = static_cast<int>(std::round(this->mouseY * zoomFactor));
-        //    
-        //    Vertex^ clickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
-        //    if (clickedVertex != nullptr) { String^ newVertexName = PromptForVertexName(); 
-        //    if (!String::IsNullOrEmpty(newVertexName)) { if (newVertexName->Length > 20) { MessageBox::Show("The name is too long. Please choose a name with fewer than 20 characters.", "Name Too Long", MessageBoxButtons::OK, MessageBoxIcon::Error); return; } bool isNameExist = false; for each (Vertex ^ v in graph->Vertices) { if (v->Name == newVertexName) { isNameExist = true; break; } } if (isNameExist) { MessageBox::Show("The name already exists. Please choose another name.", "Duplicate Name", MessageBoxButtons::OK, MessageBoxIcon::Error); } else { clickedVertex->Name = newVertexName; pictureBox1->Invalidate(); } } }
-        //    else if (draggingVertex == nullptr) 
-        //    {
-        //        String^ vertexName = PromptForVertexName(); 
-        //        if (!String::IsNullOrEmpty(vertexName)) 
-        //        { if (vertexName->Length > 10) { 
-        //            MessageBox::Show("The name is too long. Please choose a name with fewer than 10 characters.", "Name Too Long", MessageBoxButtons::OK, MessageBoxIcon::Error);
-        //            return; 
-        //        } 
-        //        bool isNameExist = false; 
-        //        for each (Vertex ^ v in graph->Vertices) 
-        //        { 
-        //            if (v->Name == vertexName) 
-        //            { 
-        //                isNameExist = true; 
-        //                break; 
-        //            } 
-        //        } if (isNameExist) 
-        //        { MessageBox::Show("The name already exists. Please choose another name.", "Duplicate Name", MessageBoxButtons::OK, MessageBoxIcon::Error);
-        //        }
-        //        else { 
-        //           int newId = graph->Vertices->Count + 1;
-        //            Vertex^ newVertex = gcnew Vertex(newId, vertexName, adjustedX, adjustedY); 
-        //            
-        //            graph->AddVertex(newVertex); pictureBox1->Invalidate(); } } }
-        //}
-        
-        /*PointF MyForm::ScreenToWorld(Point screenPoint) {
-            return PointF((screenPoint.X / zoomFactor) - offset.X, (screenPoint.Y / zoomFactor) - offset.Y);*/
+                        bool isNameExist = false;
+                        for each (Vertex ^ v in graph->Vertices)
+                        {
+                            if (v->Name == newVertexName)
+                            {
+                                isNameExist = true;
+                                break;
+                            }
+                        }
 
+                        if (isNameExist)
+                        {
+                            MessageBox::Show("The name already exists. Please choose another name.",
+                                "Duplicate Name", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                        }
+                    }
+                }
+                else if (draggingVertex == nullptr)
+                {
+                    String^ vertexName = PromptForVertexName();
+                    if (!String::IsNullOrEmpty(vertexName))
+                    {
+                        if (vertexName->Length > 10)
+                        {
+                            MessageBox::Show("The name is too long. Please choose a name with fewer than 10 characters.",
+                                "Name Too Long", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                            return;
+                        }
+
+                        bool isNameExist = false;
+                        for each (Vertex ^ v in graph->Vertices)
+                        {
+                            if (v->Name == vertexName)
+                            {
+                                isNameExist = true;
+                                break;
+                            }
+                        }
+
+                        if (isNameExist)
+                        {
+                            MessageBox::Show("The name already exists. Please choose another name.",
+                                "Duplicate Name", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                        }
+                        else
+                        {
+                            int newId = graph->Vertices->Count + 1;
+                            Vertex^ newVertex = gcnew Vertex(newId, vertexName, adjustedX, adjustedY);
+                            graph->AddVertex(newVertex);
+                            pictureBox1->Invalidate();
+                        }
+                    }
+                }
+            }
+            else if (this->mouseButtonClicked == System::Windows::Forms::MouseButtons::Right)
+            {
+                Vertex^ clickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
+                if (clickedVertex != nullptr)
+                {
+                    graph->RemoveVertex(clickedVertex);
+                }
+                else
+                {
+                    Edge^ clickedEdge = FindEdgeAtPoint(adjustedX, adjustedY);
+                    if (clickedEdge != nullptr)
+                    {
+                        graph->RemoveEdge(clickedEdge);
+                    }
+                }
+                pictureBox1->Invalidate();
+            }
+        }
+        this->doubleClickOccured = false;
+        UpdateInfoPanel();
     }
         
     System::Void MyForm::pictureBox1_MouseDoubleClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
     {
-        //this->single_Click = false;
-        //int adjustedX = static_cast<int>(std::round(e->X * zoomFactor));
-        //int adjustedY = static_cast<int>(std::round(e->Y * zoomFactor));
-        //Vertex^ doubleclickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
-        //if (doubleclickedVertex != nullptr)
-        //{
-        //    String^ newVertexName = PromptForVertexName();
-        //    if (!String::IsNullOrEmpty(newVertexName))
-        //    {
-        //        if (newVertexName->Length > 10) {
-        //            MessageBox::Show("The name is too long. Please choose a name with fewer than 10 characters.", "Name Too Long",
-        //                MessageBoxButtons::OK, MessageBoxIcon::Error);
-        //            return;
-        //        }
-        //        bool isName = false;
-        //        for each (Vertex ^ v in graph->Vertices) {
-        //            if (v->Name == newVertexName)
-        //            {
-        //                isName = true;
-        //                break;
-        //            }
-        //        }
-        //        if (isName) { MessageBox::Show("The name already exists. Please choose another name.", "Duplicate Name", MessageBoxButtons::OK, MessageBoxIcon::Error); }
-        //        pictureBox1->Invalidate();
-        //        
-        //    }
-        //}
+        if (e->Button == System::Windows::Forms::MouseButtons::Left)
+        {
+            this->single_Click = false;
+            this->doubleClickOccured = true;
+            this->clickTimer->Stop();
+            int adjustedX = static_cast<int>(std::round(e->X * zoomFactor));
+            int adjustedY = static_cast<int>(std::round(e->Y * zoomFactor));
+
+            Vertex^ doubleclickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
+            if (doubleclickedVertex != nullptr)
+            {
+                String^ newVertexName = PromptForEditVertex("Edit Vertex");
+                if (!String::IsNullOrEmpty(newVertexName))
+                {
+                    if (newVertexName->Length > 10)
+                    {
+                        MessageBox::Show("The name is too long. Please choose a name with fewer than 10 characters.",
+                            "Name Too Long", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                        return;
+                    }
+
+                    bool isNameExist = false;
+                    for each (Vertex ^ v in graph->Vertices)
+                    {
+                        if (v->Name == newVertexName)
+                        {
+                            isNameExist = true;
+                            break;
+                        }
+                    }
+
+                    if (isNameExist)
+                    {
+                        MessageBox::Show("The name already exists. Please choose another name.",
+                            "Duplicate Name", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                    }
+                    else
+                    {
+                        doubleclickedVertex->Name = newVertexName;
+                        pictureBox1->Invalidate();
+                    }
+                }
+            }
+        }
     }
 
     

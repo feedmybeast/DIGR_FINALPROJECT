@@ -30,6 +30,9 @@ namespace Project2 {
 			viewOffsetX = 0.0f;
 			viewOffsetY = 0.0f;
 			isPanning = false;
+			gridWidth = 1000; // Initial grid width
+			gridHeight = 1000; // Initial grid height
+			needsGridExpansion = false;
 		}
 		//void SomeFunction();
 	private:
@@ -53,6 +56,7 @@ namespace Project2 {
 		System::Windows::Forms::ToolStripButton^ zoomInButton;
 		System::Windows::Forms::ToolStripButton^ zoomOutButton;
 		System::Windows::Forms::ToolStripButton^ resetZoomButton;
+		System::Windows::Forms::MouseButtons mouseButtonClicked;
 
 		System::Void ZoomIn(System::Object^ sender, System::EventArgs^ e);
 		System::Void ZoomOut(System::Object^ sender, System::EventArgs^ e);
@@ -60,7 +64,10 @@ namespace Project2 {
 
 
 		System::Windows::Forms::ToolStrip^ toolStrip1;
+
 		String^ PromptForVertexName();
+		String^ PromptForEditVertex(String^ title);
+
 		//PointF^ ScreenToWorld(Point screenPoint);
 		void MyForm::AddVertexAtCursor(Point cursorPosition);
 		Graph^ graph;
@@ -78,6 +85,8 @@ namespace Project2 {
 		Point lastMousePos;
 
 		bool single_Click = true;
+		bool doubleClickOccured = false;
+		bool isDragging = false;
 
 		void AdjustVerticesToGrid();
 		System::Void pictureBox1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e);
@@ -88,6 +97,9 @@ namespace Project2 {
 		int mouseX;
 		int mouseY;
 		
+		int gridWidth;
+		int gridHeight;
+		bool needsGridExpansion;
 
 	private:
 		System::Void ShowGridButton_Click(System::Object^ sender, System::EventArgs^ e);
