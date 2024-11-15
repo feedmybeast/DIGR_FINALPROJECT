@@ -33,6 +33,7 @@ namespace Project2 {
 			gridWidth = 1000; // Initial grid width
 			gridHeight = 1000; // Initial grid height
 			needsGridExpansion = false;
+			gridSize = 20;
 		}
 		//void SomeFunction();
 	private:
@@ -100,7 +101,7 @@ namespace Project2 {
 		int gridWidth;
 		int gridHeight;
 		bool needsGridExpansion;
-
+		int gridSize;
 	private:
 		System::Void ShowGridButton_Click(System::Object^ sender, System::EventArgs^ e);
 		System::Void AddEdgeButton_Click(System::Object^ sender, System::EventArgs^ e);

@@ -1173,7 +1173,7 @@ void MyForm::UpdateInfoPanel() {
         //Edge^ hoveredEdge = FindEdgeAtPoint(e->X, e->Y);
 
         if (draggingVertex != nullptr) {
-            int gridSize = 20;
+            //int gridSize = 20;
             float adjustedX = (e->X - viewOffsetX) / zoomFactor;
             float adjustedY = (e->Y - viewOffsetY) / zoomFactor;
             //float adjustedX = static_cast<int>(std::round(draggingVertex->X / (gridSize * zoomFactor)) * gridSize * zoomFactor);
