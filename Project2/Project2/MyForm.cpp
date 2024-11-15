@@ -176,7 +176,7 @@ namespace Project2 {
         this->Controls->Add(this->toolStrip1);
         this->MainMenuStrip = this->menuStrip1;
         this->Name = L"MyForm";
-        this->Text = L"Graph Drawing";
+        this->Text = L"DIGR_TEAM09 _VISUAL GRAPH DRAWING";
         this->Icon = gcnew System::Drawing::Icon("digr.ico");
         (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
         this->menuStrip1->ResumeLayout(false);
@@ -274,7 +274,7 @@ namespace Project2 {
         return inputBox->ShowDialog() == System::Windows::Forms::DialogResult::OK ? textBox->Text : "";
     }
 
-    Vertex^ MyForm::FindVertexAtPoint(int x, int y) {
+    Vertex^ MyForm::FindVertexAtPoint(float x, float y) {
         for each (Vertex ^ v in graph->Vertices) {          
             if (Math::Abs(v->X - x) < 10 && Math::Abs(v->Y - y) < 10) {
                 return v;
@@ -285,7 +285,7 @@ namespace Project2 {
 
     Edge^ MyForm::FindEdgeAtPoint(int x, int y) {
         for each (Edge ^ e in graph->Edges) {
-            int x1 = e->Start->X, y1 = e->Start->Y, x2 = e->End->X, y2 = e->End->Y;
+            float x1 = e->Start->X, y1 = e->Start->Y, x2 = e->End->X, y2 = e->End->Y;
             double distance = Math::Abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1) /
                 Math::Sqrt(Math::Pow(y2 - y1, 2) + Math::Pow(x2 - x1, 2));
             if (distance < 5) {
@@ -344,25 +344,33 @@ void MyForm::UpdateInfoPanel() {
         else {
             // Handle invalid zoomFactor case
         }
-        int width = pictureBox1->Width;
-        int height = pictureBox1->Height;
+        if (needsGridExpansion) {
+            gridWidth += 500;
+            gridHeight += 500;
+            needsGridExpansion = false;
+        }
+        //int width = pictureBox1->Width;
+        //int height = pictureBox1->Height;
         if (showGrid) {
             Pen^ gridPen = gcnew Pen(Color::LightGray);
             int gridSize = static_cast<int>(20 * zoomFactor);  
-            for (int x = 0; x <= pictureBox1->Width; x += gridSize) {
-                g->DrawLine(gridPen, static_cast<float>(x), 0.0f, static_cast<float>(x), static_cast<float>(pictureBox1->Height));
+            for (int x = 0; x < pictureBox1->Width; x += gridSize) {
+                g->DrawLine(gridPen, static_cast<float>(x), 0.0f, static_cast<float>(x), static_cast<float>(pictureBox1->Width));
             }
-            for (int y = 0; y <= pictureBox1->Height; y += gridSize) {
-                g->DrawLine(gridPen, 0.0f, static_cast<float>(y), static_cast<float>(pictureBox1->Width), static_cast<float>(y));
+            for (int y = 0; y < pictureBox1->Height; y += gridSize) {
+                g->DrawLine(gridPen, 0.0f, static_cast<float>(y), static_cast<float>(pictureBox1->Height), static_cast<float>(y));
             }
         }
         DrawGraph(g);
         // calculate the nearest intersection point as well as while Zooming Out and In
         for each (Vertex ^ v in graph->Vertices) {
             int gridSize = 20;
-            int nearestX = static_cast<int>(std::round(v->X / gridSize) * gridSize);
-
-            int nearestY = static_cast<int>(std::round(v->Y / gridSize) * gridSize);
+            float nearestX = static_cast<int>(std::round(v->X / gridSize) * gridSize);
+            float nearestY = static_cast<int>(std::round(v->Y / gridSize) * gridSize);
+            //float nearestX = static_cast<int>((v->X / gridSize) * gridSize);
+            //float nearestY = static_cast<int>((v->Y / gridSize) * gridSize);
+            //float nearestX = ((v->X / gridSize) * gridSize);
+            //float nearestY = ((v->Y / gridSize) * gridSize);
             g->FillEllipse(Brushes::Blue, static_cast<float>(nearestX - 5) * zoomFactor, static_cast<float>(nearestY - 5) * zoomFactor, 10.0f * zoomFactor, 10.0f * zoomFactor);
             g->DrawString(v->Name, this->Font, Brushes::Black, static_cast<float>(nearestX + 5) * zoomFactor, static_cast<float>(nearestY + 5) * zoomFactor);
             //g->FillEllipse(Brushes::Blue, static_cast<float>(nearestX - 5), static_cast<float>(nearestY - 5), 10.0f, 10.0f);
@@ -451,8 +459,12 @@ void MyForm::UpdateInfoPanel() {
         int gridSize = 20;
         for each (Vertex ^ vertex in graph->Vertices)
         {
-            vertex->X = static_cast<int>(std::round(vertex->X / (gridSize * zoomFactor)) * gridSize * zoomFactor);
-            vertex->Y = static_cast<int>(std::round(vertex->Y / (gridSize * zoomFactor)) * gridSize * zoomFactor);
+            float adjustedX = (vertex->X * zoomFactor + offset.X) / gridSize;
+            float adjustedY = (vertex->Y * zoomFactor + offset.Y) / gridSize;
+            vertex->X = round(adjustedX) * gridSize / zoomFactor - offset.X / zoomFactor;
+            vertex->Y = round(adjustedY) * gridSize / zoomFactor - offset.Y / zoomFactor;
+            //vertex->X = round(vertex->X / gridSize) * gridSize;
+            //vertex->Y = round(vertex->Y / gridSize) * gridSize;
         }
 
     }
@@ -523,7 +535,7 @@ void MyForm::UpdateInfoPanel() {
                 int id = System::Int32::Parse(parts[0]);
                 int x = System::Int32::Parse(parts[1]);
                 int y = System::Int32::Parse(parts[2]);
-                graph->AddVertex(gcnew Vertex(id, "V" + id, x, y));
+                graph->AddVertex(gcnew Vertex(id, "V" + id, static_cast<float>(x), static_cast<float>(y)));
             }
             int edgeCount = System::Int32::Parse(sr->ReadLine());
             for (int i = 0; i < edgeCount; i++) {
@@ -618,25 +630,30 @@ void MyForm::UpdateInfoPanel() {
 
     void MyForm::pictureBox1_MouseWheel(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
         Point cursorPos = e->Location;
-        float zoomIncrement = 0.1f;
+        //float zoomIncrement = 0.1f;
+        const float zoomStep = 0.1f;
+
         if (e->Delta > 0) {
-            zoomFactor += zoomIncrement;
+            //zoomFactor += zoomIncrement;
+            zoomFactor += zoomStep;
         }
         else {
-            zoomFactor -= zoomIncrement;
-            if (zoomFactor < zoomIncrement) {
-                zoomFactor = zoomIncrement;  
-            }
+            zoomFactor = Math::Max(zoomFactor - zoomStep, zoomStep);
+            //zoomFactor -= zoomIncrement;
+            //if (zoomFactor < zoomIncrement) {
+                //zoomFactor = zoomIncrement;  
+            //}
         }
-        zoomFactor = Math::Max(0.1f, Math::Min(zoomFactor, 10.0f));
+        //zoomFactor = Math::Max(0.1f, Math::Min(zoomFactor, 10.0f));
+        AdjustVerticesToGrid();
         pictureBox1->Invalidate();
-        float newCenterX = (cursorPos.X - viewOffsetX) / zoomFactor;
-        float newCenterY = (cursorPos.Y - viewOffsetY) / zoomFactor;
+        //float newCenterX = (cursorPos.X - viewOffsetX) / zoomFactor;
+        //float newCenterY = (cursorPos.Y - viewOffsetY) / zoomFactor;
 
-        viewOffsetX = cursorPos.X - newCenterX * zoomFactor;
-        viewOffsetY = cursorPos.Y - newCenterY * zoomFactor;
+        //viewOffsetX = cursorPos.X - newCenterX * zoomFactor;
+        //viewOffsetY = cursorPos.Y - newCenterY * zoomFactor;
 
-        pictureBox1->Invalidate();
+        //pictureBox1->Invalidate();
     }
     void MyForm::HandleTouchpadGesture(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
         //if (e->Button == System::Windows::Forms::MouseButtons::None && e->Delta != 0) {
@@ -1023,8 +1040,10 @@ void MyForm::UpdateInfoPanel() {
     System::Void MyForm::clickTimer_Tick(System::Object^ sender, System::EventArgs^ e)
     {
         this->clickTimer->Stop();
-        int adjustedX = static_cast<int>(std::round(this->mouseX * zoomFactor));
-        int adjustedY = static_cast<int>(std::round(this->mouseY * zoomFactor));
+        //int adjustedX = static_cast<int>(std::round(this->mouseX * zoomFactor));
+        //int adjustedY = static_cast<int>(std::round(this->mouseY * zoomFactor));
+        float adjustedX = static_cast<float>((this->mouseX * zoomFactor));
+        float adjustedY = static_cast<float>((this->mouseY * zoomFactor));
         if (this->single_Click && !this->doubleClickOccured)
         {
             if (this->mouseButtonClicked == System::Windows::Forms::MouseButtons::Left)
@@ -1125,9 +1144,10 @@ void MyForm::UpdateInfoPanel() {
             this->single_Click = false;
             this->doubleClickOccured = true;
             this->clickTimer->Stop();
-            int adjustedX = static_cast<int>(std::round(e->X * zoomFactor));
-            int adjustedY = static_cast<int>(std::round(e->Y * zoomFactor));
-
+            //int adjustedX = static_cast<int>(std::round(e->X * zoomFactor));
+            //int adjustedY = static_cast<int>(std::round(e->Y * zoomFactor));
+            float adjustedX = static_cast<float>((this->mouseX * zoomFactor));
+            float adjustedY = static_cast<float>((this->mouseY * zoomFactor));
             Vertex^ doubleclickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
             if (doubleclickedVertex != nullptr)
             {
@@ -1180,6 +1200,10 @@ void MyForm::UpdateInfoPanel() {
             //float adjustedY = static_cast<int>(std::round(draggingVertex->Y / (gridSize * zoomFactor)) * gridSize * zoomFactor);
             draggingVertex->X = adjustedX;
             draggingVertex->Y = adjustedY;
+            //Grid Dup
+            if (adjustedX > gridWidth - 50 || adjustedY > gridHeight - 50) {
+                needsGridExpansion = true;
+            }
             pictureBox1->Invalidate();
         } else if (isPanning) {
             viewOffsetX += (e->X - lastMousePos.X);
@@ -1216,7 +1240,7 @@ void MyForm::UpdateInfoPanel() {
         if (e->Button == System::Windows::Forms::MouseButtons::Middle) {
             isPanning = true;
             lastMousePos = e->Location;
-            pictureBox1->Invalidate();
+            //pictureBox1->Invalidate();
         }
         else if (e->Button == System::Windows::Forms::MouseButtons::Left) {
             Vertex^ vertex = graph->FindVertexAt((e->X - viewOffsetX) / zoomFactor, (e->Y - viewOffsetY) / zoomFactor);
@@ -1236,7 +1260,7 @@ void MyForm::UpdateInfoPanel() {
         }
         if (e->Button == System::Windows::Forms::MouseButtons::Middle) {
             isPanning = false;
-            pictureBox1->Invalidate();
+            //pictureBox1->Invalidate();
         }
         else if (e->Button == System::Windows::Forms::MouseButtons::Left && draggingVertex != nullptr) {
             draggingVertex = nullptr;

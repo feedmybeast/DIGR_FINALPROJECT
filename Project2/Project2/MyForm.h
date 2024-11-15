@@ -122,7 +122,7 @@ namespace Project2 {
 		bool showGrid = false;
 		void InitializeComponent(void);
 		void DrawGraph(Graphics^ g);
-		Vertex^ FindVertexAtPoint(int x, int y);
+		Vertex^ FindVertexAtPoint(float x, float y);
 		Edge^ FindEdgeAtPoint(int x, int y);
 		//void AddEdge(Vertex^ start, Vertex^ end);
 		//void MyForm::AddEdge(Vertex^ start, Vertex^ end, bool isDirected);
