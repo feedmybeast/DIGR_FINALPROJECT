@@ -27,12 +27,11 @@ namespace Project2 {
 			currentEdgeColor = System::Drawing::Color::Black;
 			zoomFactor = 1.0f;
 			offset = PointF(0, 0);
-			zoomFactor = 1.0f;
 			viewOffsetX = 0.0f;
 			viewOffsetY = 0.0f;
 			isPanning = false;
 		}
-		void SomeFunction();
+		//void SomeFunction();
 	private:
 		PointF offset;
 		System::Windows::Forms::Timer^ clickTimer;
@@ -63,16 +62,17 @@ namespace Project2 {
 		System::Windows::Forms::ToolStrip^ toolStrip1;
 		String^ PromptForVertexName();
 		//PointF^ ScreenToWorld(Point screenPoint);
+		void MyForm::AddVertexAtCursor(Point cursorPosition);
 		Graph^ graph;
 		float zoomFactor;
 		Vertex^ selectedVertex;
-		Vertex^ draggingVertex;
 		bool isDrawingEdge;
 		System::Drawing::Color currentEdgeColor;
 
 
 		float viewOffsetX;
 		float viewOffsetY;
+		Vertex^ draggingVertex;
 
 		bool isPanning;
 		Point lastMousePos;
@@ -111,8 +111,8 @@ namespace Project2 {
 		void DrawGraph(Graphics^ g);
 		Vertex^ FindVertexAtPoint(int x, int y);
 		Edge^ FindEdgeAtPoint(int x, int y);
-		void AddEdge(Vertex^ start, Vertex^ end);
-		void MyForm::AddEdge(Vertex^ start, Vertex^ end, bool isDirected);
+		//void AddEdge(Vertex^ start, Vertex^ end);
+		//void MyForm::AddEdge(Vertex^ start, Vertex^ end, bool isDirected);
 		void MyForm::DrawArrow(Graphics^ g, Pen^ pen, PointF start, PointF end);
 		void DeleteVertex(Vertex^ vertex);
 		void DeleteEdge(Edge^ edge);

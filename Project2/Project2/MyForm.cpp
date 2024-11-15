@@ -33,6 +33,7 @@ namespace Project2 {
         // The buttons are now added directly to the toolStrip1 in the Items->AddRange call
 
         // Set form properties
+
         this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
         this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
         this->ClientSize = System::Drawing::Size(800, 600);
@@ -200,6 +201,7 @@ namespace Project2 {
         this->undirectedRadioButton->TabStop = true;
         this->undirectedRadioButton->Text = L"Undirected";
         this->undirectedRadioButton->UseVisualStyleBackColor = true;
+        this->Controls->Add(this->undirectedRadioButton);
 
         //  directedRadioButton
         //this->directedRadioButton->Location = System::Drawing::Point(600, 80);
@@ -292,28 +294,28 @@ namespace Project2 {
         return nullptr;
     }
 
-    void MyForm::AddEdge(Vertex^ start, Vertex^ end) {
-        if (start != end) {
-            int newId = graph->Edges->Count + 1;
-            Edge^ newEdge = gcnew Edge(newId, start, end, 1, System::Drawing::Color::Black); // Default weight is 1, default color is Black
-            graph->AddEdge(newEdge);
-            UpdateInfoPanel();
-            pictureBox1->Invalidate();
-        }
-    }
-    void MyForm::AddEdge(Vertex^ start, Vertex^ end, bool isDirected)
-    {
-        Edge^ newEdge = gcnew Edge(start, end, currentEdgeColor);
-        graph->Edges->Add(newEdge);
-        if (!isDirected)
-        {
-            Edge^ reverseEdge = gcnew Edge(end, start, currentEdgeColor);
-            graph->Edges->Add(reverseEdge);
-        }
-    }
-    void MyForm::SomeFunction() {
-    graph->AddEdge(selectedVertex, draggingVertex, currentEdgeColor, true);
-    }
+    //void MyForm::AddEdge(Vertex^ start, Vertex^ end) {
+    //    if (start != end) {
+    //        int newId = graph->Edges->Count + 1;
+    //        Edge^ newEdge = gcnew Edge(newId, start, end, 1, System::Drawing::Color::Black); // Default weight is 1, default color is Black
+    //        graph->AddEdge(newEdge);
+    //        UpdateInfoPanel();
+    //        pictureBox1->Invalidate();
+    //    }
+    //}
+    //void MyForm::AddEdge(Vertex^ start, Vertex^ end, bool isDirected)
+    //{
+    //    Edge^ newEdge = gcnew Edge(start, end, currentEdgeColor);
+    //    graph->Edges->Add(newEdge);
+    //    if (!isDirected)
+    //    {
+    //        Edge^ reverseEdge = gcnew Edge(end, start, currentEdgeColor);
+    //        graph->Edges->Add(reverseEdge);
+    //    }
+    //}
+    //void MyForm::SomeFunction() {
+    //graph->AddEdge(selectedVertex, draggingVertex, currentEdgeColor, true);
+    //}
     void MyForm::DeleteVertex(Vertex^ vertex) {
         graph->RemoveVertex(vertex);
         UpdateInfoPanel();
@@ -326,9 +328,10 @@ namespace Project2 {
         pictureBox1->Invalidate();
     }
 
-    void MyForm::UpdateInfoPanel() {
-        infoPanel->Text = "Vertices: " + graph->Vertices->Count + ", Edges: " + graph->Edges->Count;
-    }
+void MyForm::UpdateInfoPanel() {
+    infoPanel->Text = "Vertices: " + graph->Vertices->Count + "\r\n";
+    infoPanel->Text += "Edges: " + graph->Edges->Count + "\r\n";
+}
 
     System::Void MyForm::pictureBox1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
         Graphics^ g = e->Graphics;
@@ -400,12 +403,14 @@ namespace Project2 {
             pen = gcnew Pen(Color::Black, 2.0f);  
             Pen^ pen2 = gcnew Pen(Color::Red, 2.0f);
             // Draw the line
-            g->DrawLine(pen,
-                PointF(static_cast<float>(nearestStartX) * zoomFactor, static_cast<float>(nearestStartY) * zoomFactor),
-                PointF(static_cast<float>(nearestEndX) * zoomFactor, static_cast<float>(nearestEndY) * zoomFactor));
-
+            //g->DrawLine(pen,
+            //    PointF(static_cast<float>(nearestStartX) * zoomFactor, static_cast<float>(nearestStartY) * zoomFactor),
+            //    PointF(static_cast<float>(nearestEndX) * zoomFactor, static_cast<float>(nearestEndY) * zoomFactor));
+            //g->DrawLine(pen,
+            //    PointF(static_cast<float>(nearestStartX), static_cast<float>(nearestStartY)),
+            //    PointF(static_cast<float>(nearestEndX), static_cast<float>(nearestEndY)));
             // Draw the "<" icon at the end vertex if directedRadioButton is checked
-            if (directedRadioButton->Checked) {
+            if (directedRadioButton->Checked && edge->Directed) {
                 float angle = atan2f(static_cast<float>(nearestEndY - nearestStartY), static_cast<float>(nearestEndX - nearestStartX));
                 float iconSize = 10.0f; // Size of the "<" icon
                 PointF point1(static_cast<float>(nearestEndX) * zoomFactor, static_cast<float>(nearestEndY) * zoomFactor);
@@ -417,6 +422,26 @@ namespace Project2 {
                 g->DrawLine(pen2, point1, point2);
                 g->DrawLine(pen2, point1, point3); 
             }
+            else {
+
+            }
+            //if (directedRadioButton->Checked) {
+            //    float angle = atan2f(static_cast<float>(nearestEndY - nearestStartY), static_cast<float>(nearestEndX - nearestStartX));
+            //    float iconSize = 10.0f; // Size of the "<" icon
+            //    PointF point1(static_cast<float>(nearestEndX), static_cast<float>(nearestEndY));
+            //    PointF point2(static_cast<float>(nearestEndX) - iconSize * cosf(angle + static_cast<float>(M_PI) / 6),
+            //        static_cast<float>(nearestEndY) - iconSize * sinf(angle + static_cast<float>(M_PI) / 6));
+            //    PointF point3(static_cast<float>(nearestEndX) - iconSize * cosf(angle - static_cast<float>(M_PI) / 6),
+            //        static_cast<float>(nearestEndY) - iconSize * sinf(angle - static_cast<float>(M_PI) / 6));
+
+            //    g->DrawLine(pen2, point1, point2);
+            //    g->DrawLine(pen2, point1, point3);
+            //}else 
+            //{
+            //                g->DrawLine(pen,
+            //    PointF(static_cast<float>(nearestStartX), static_cast<float>(nearestStartY)),
+            //    PointF(static_cast<float>(nearestEndX), static_cast<float>(nearestEndY)));
+            //}
         }
         g->ResetTransform();
     }
@@ -427,6 +452,16 @@ namespace Project2 {
         {
             vertex->X = static_cast<int>(std::round(vertex->X / (gridSize * zoomFactor)) * gridSize * zoomFactor);
             vertex->Y = static_cast<int>(std::round(vertex->Y / (gridSize * zoomFactor)) * gridSize * zoomFactor);
+        }
+    }
+    void MyForm::AddVertexAtCursor(Point cursorPosition) {
+        float adjustedX = (cursorPosition.X - viewOffsetX) / zoomFactor;
+        float adjustedY = (cursorPosition.Y - viewOffsetY) / zoomFactor;
+        String^ vertexName = PromptForVertexName();
+        if (!String::IsNullOrEmpty(vertexName)) {
+            Vertex^ newVertex = gcnew Vertex(graph->Vertices->Count + 1, vertexName, adjustedX, adjustedY);
+            graph->AddVertex(newVertex);
+            pictureBox1->Invalidate();
         }
     }
     void MyForm::DrawArrow(Graphics^ g, Pen^ pen, PointF start, PointF end)
@@ -592,9 +627,11 @@ namespace Project2 {
             Pen^ gridPen = gcnew Pen(Color::LightGray);
             int gridSize = static_cast<int>(20 * zoomFactor); 
             for (int x = 0; x < static_cast<int>(pictureBox1->Width / zoomFactor); x += gridSize) {
+                //g->DrawLine(gridPen, x, 0, x, pictureBox1->Height / zoomFactor);
                 g->DrawLine(gridPen, static_cast<float>(x), 0.0f, static_cast<float>(x), static_cast<float>(pictureBox1->Height / zoomFactor));
             }
             for (int y = 0; y < static_cast<int>(pictureBox1->Height / zoomFactor); y += gridSize) {
+                //g->DrawLine(gridPen, 0, y, pictureBox1->Width / zoomFactor, y);
                 g->DrawLine(gridPen, 0.0f, static_cast<float>(y), static_cast<float>(pictureBox1->Width / zoomFactor), static_cast<float>(y));
             }
         }
@@ -602,33 +639,29 @@ namespace Project2 {
         g->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::AntiAlias;
         g->TextRenderingHint = System::Drawing::Text::TextRenderingHint::AntiAliasGridFit;
 
-        // Draw edges
-        //for each (Edge ^ edge in graph->Edges)
-        //{
-        //    Vertex^ start = edge->Start;
-        //    Vertex^ end = edge->End;
-        //    Point startCenter = Point(start->X, start->Y);
-        //    Point endCenter = Point(end->X, end->Y);
-        //    Pen^ pen = gcnew Pen(edge->Color, 2);
-        //    g->DrawLine(pen, startCenter, endCenter);
-        //    int midX = (startCenter.X + endCenter.X) / 2;
-        //    int midY = (startCenter.Y + endCenter.Y) / 2;
-        //    g->DrawString(edge->Weight.ToString(), this->Font, Brushes::Black, midX, midY);
-        //}
-        // Draw vertices
-        //for each (Vertex ^ vertex in graph->Vertices)
-        //{
-        //    g->FillEllipse(Brushes::White, vertex->X - 15, vertex->Y - 15, 30, 30);
-        //    g->DrawEllipse(Pens::Black, vertex->X - 15, vertex->Y - 15, 30, 30);
-        //    g->DrawString(vertex->Name, this->Font, Brushes::Black, vertex->X - 5, vertex->Y - 7);
-        //    // Draw the vertex degree
-        //    String^ degreeStr = vertex->Degree.ToString();
-        //    g->DrawString(degreeStr, this->Font, Brushes::Red, vertex->X - 15, vertex->Y - 30);
-        //}
+        // // Draw edges
+        // for each (Edge ^ edge in graph->Edges) {
+        //     Vertex^ start = edge->Start;
+        //     Vertex^ end = edge->End;
+        //     PointF startCenter = PointF(start->X, start->Y);
+        //     PointF endCenter = PointF(end->X, end->Y);
+        //     Pen^ pen = gcnew Pen(edge->Color, 2);
+        //     g->DrawLine(pen, startCenter, endCenter);
+        //     int midX = (startCenter.X + endCenter.X) / 2;
+        //     int midY = (startCenter.Y + endCenter.Y) / 2;
+        //     g->DrawString(edge->Weight.ToString(), this->Font, Brushes::Black, midX, midY);
+        // }
+        // // Draw vertices
+        // for each (Vertex ^ vertex in graph->Vertices) {
+        //     g->FillEllipse(Brushes::White, vertex->X - 15, vertex->Y - 15, 30, 30);
+        //     g->DrawEllipse(Pens::Black, vertex->X - 15, vertex->Y - 15, 30, 30);
+        //     g->DrawString(vertex->Name, this->Font, Brushes::Black, vertex->X - 5, vertex->Y - 7);
+        //     // Draw the vertex degree
+        //     String^ degreeStr = vertex->Degree.ToString();
+        //     g->DrawString(degreeStr, this->Font, Brushes::Red, vertex->X - 15, vertex->Y - 30);
+        // }
     }
-
-    System::Void MyForm::AddEdgeButton_Click(System::Object^ sender, System::EventArgs^ e)
-    {
+    void MyForm::AddEdgeButton_Click(System::Object^ sender, System::EventArgs^ e) {
         // Create a new form to get user input for the edge
         Form^ inputForm = gcnew Form();
         inputForm->Text = "Add Edge";
@@ -668,7 +701,6 @@ namespace Project2 {
         weightTextBox->Size = System::Drawing::Size(100, 20);
         inputForm->Controls->Add(weightTextBox);
 
-
         // Add RadioButtons for edge type
         Label^ edgeTypeLabel = gcnew Label();
         edgeTypeLabel->Text = "Edge Type:";
@@ -695,74 +727,33 @@ namespace Project2 {
         inputForm->Controls->Add(okButton);
 
         // Populate the combo boxes with vertex names
-        for each (Vertex ^ vertex in graph->Vertices)
-        {
+        for each (Vertex ^ vertex in graph->Vertices) {
             startComboBox->Items->Add(vertex->Name);
             endComboBox->Items->Add(vertex->Name);
         }
 
         // Show the form and get the result
-        if (inputForm->ShowDialog() == System::Windows::Forms::DialogResult::OK)
-        {
-            String^ startVertexName = startComboBox->SelectedItem->ToString();
-            String^ endVertexName = endComboBox->SelectedItem->ToString();
-            int weight;
-            bool isDirected = directedRadioButton->Checked;
-
-            if (Int32::TryParse(weightTextBox->Text, weight))
-            {
-                Vertex^ startVertex = nullptr;
-                Vertex^ endVertex = nullptr;
-
-                // Find the selected vertices
-                for each (Vertex ^ vertex in graph->Vertices)
-                {
-                    if (vertex->Name == startVertexName)
-                        startVertex = vertex;
-                    if (vertex->Name == endVertexName)
-                        endVertex = vertex;
+        if (inputForm->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+            if (startComboBox->SelectedItem != nullptr && endComboBox->SelectedItem != nullptr) {
+                String^ startVertexName = startComboBox->SelectedItem->ToString();
+                String^ endVertexName = endComboBox->SelectedItem->ToString();
+                int weight;
+                if (Int32::TryParse(weightTextBox->Text, weight)) {
+                    if (undirectedRadioButton->Checked) {
+                        graph->AddEdge(startVertexName, endVertexName, weight); // false for undirected
+                    }
+                    else if (directedRadioButton->Checked) {
+                        graph->AddEdge(startVertexName, endVertexName, weight, true); // true for directed
+                    }
                 }
-
-                if (startVertex != nullptr && endVertex != nullptr)
-                {
-                    // Create a new edge and add it to the graph
-                    Edge^ newEdge = gcnew Edge(graph->Edges->Count + 1, startVertex, endVertex, weight, currentEdgeColor, directedRadioButton->Checked);
-                    graph->AddEdge(newEdge);
-                    pictureBox1->Invalidate();
-                    //graph->AddEdge(startVertex, endVertex, currentEdgeColor, directedRadioButton->Checked);
-                    //pictureBox1->Invalidate();
+                else {
+                    MessageBox::Show("Please enter a valid integer for the weight.");
                 }
+            }
+            else {
+                MessageBox::Show("Please select both start and end vertices.");
             }
         }
-        if (selectedVertex != nullptr && draggingVertex != nullptr)
-        {
-            bool isDirected = directedRadioButton->Checked;
-            AddEdge(selectedVertex, draggingVertex, isDirected);
-            selectedVertex = nullptr;
-            draggingVertex = nullptr;
-            pictureBox1->Invalidate();
-            if (undirectedRadioButton->Checked)
-            {
-                //undirected edge
-                graph->AddEdge(selectedVertex, draggingVertex, currentEdgeColor, false);
-            }
-            else if (directedRadioButton->Checked)
-            {
-                //directed edge
-                if (directionComboBox->SelectedIndex == 0)
-                {
-                    // Start to End
-                    graph->AddEdge(selectedVertex, draggingVertex, currentEdgeColor, true);
-                }
-                else
-                {
-                    // Nguoc lai
-                    graph->AddEdge(draggingVertex, selectedVertex, currentEdgeColor, true);
-                }
-            }
-            pictureBox1->Invalidate();
-        }
-
     }
 
     System::Void MyForm::DeleteEdgeButton_Click(System::Object^ sender, System::EventArgs^ e)
@@ -1039,13 +1030,19 @@ namespace Project2 {
     {
         Vertex^ hoveredVertex = FindVertexAtPoint(e->X, e->Y);
         Edge^ hoveredEdge = FindEdgeAtPoint(e->X, e->Y);
-        if (isPanning) {
-            Point currentMousePos = e->Location;
-            viewOffsetX += currentMousePos.X - lastMousePos.X;
-            viewOffsetY += currentMousePos.Y - lastMousePos.Y;
-            lastMousePos = currentMousePos;
+
+        if (draggingVertex != nullptr) {
+            float adjustedX = (e->X - viewOffsetX) / zoomFactor;
+            float adjustedY = (e->Y - viewOffsetY) / zoomFactor;
+            draggingVertex->X = adjustedX;
+            draggingVertex->Y = adjustedY;
             pictureBox1->Invalidate();
-        }
+        } else if (isPanning) {
+            viewOffsetX += (e->X - lastMousePos.X);
+            viewOffsetY += (e->Y - lastMousePos.Y);
+            lastMousePos = e->Location;
+            pictureBox1->Invalidate();
+        }//LookOver
         if (hoveredVertex != nullptr) {
             this->Cursor = Cursors::Hand;
         }
@@ -1058,13 +1055,17 @@ namespace Project2 {
     }
     System::Void MyForm::pictureBox1_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) 
     {
-        if (e->Button == System::Windows::Forms::MouseButtons::Left) {
-            draggingVertex = FindVertexAtPoint(e->X, e->Y);
-        }
         if (e->Button == System::Windows::Forms::MouseButtons::Middle) {
             isPanning = true;
             lastMousePos = e->Location;
         }
+        else if (e->Button == System::Windows::Forms::MouseButtons::Left) {
+            Vertex^ vertex = graph->FindVertexAt((e->X - viewOffsetX) / zoomFactor, (e->Y - viewOffsetY) / zoomFactor);
+            if (vertex != nullptr) {
+                draggingVertex = vertex;
+            }
+        }
+
     }
     System::Void MyForm::pictureBox1_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) 
     {
@@ -1076,6 +1077,9 @@ namespace Project2 {
         }
         if (e->Button == System::Windows::Forms::MouseButtons::Middle) {
             isPanning = false;
+        }
+        else if (e->Button == System::Windows::Forms::MouseButtons::Left && draggingVertex != nullptr) {
+            draggingVertex = nullptr;
         }
     }
     System::Void MyForm::SaveGraph(System::Object^ sender, System::EventArgs^ e) 

@@ -9,18 +9,11 @@ public ref class Graph
 {
 public:
     Graph();
-    void Graph::AddEdge(Vertex^ start, Vertex^ end, Color color, bool directed)
-    {
-        Edge^ edge = gcnew Edge(start, end, 0, color, directed);
-        edges->Add(edge);
-        if (!directed)
-        {
-            //add the reverse edge for undirected graphs
-            Edge^ reverseEdge = gcnew Edge(end, start, 0, color, directed);
-            edges->Add(reverseEdge);
-        }
-    }
-
+    Vertex^ FindVertexAt(float x, float y);
+    void AddEdge(String^ startVertexName, String^ endVertexName, int weight, bool isDirected);
+    void AddEdge(String^ startVertexName, String^ endVertexName, int weight);
+    //void AddEdge(Vertex^ start, Vertex^ end, Color color, bool directed);
+    Vertex^ FindVertexByName(String^ name);
     property List<Vertex^>^ Vertices {
         List<Vertex^>^ get() { return vertices; }
     }
