@@ -117,6 +117,8 @@ namespace Project2 {
 		void DeleteVertex(Vertex^ vertex);
 		void DeleteEdge(Edge^ edge);
 		void UpdateInfoPanel();
+		void HandleTouchpadGesture(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
+		void MyForm::ExpandGridArea();
 	protected:
 		virtual void WndProc(System::Windows::Forms::Message% m) override {
 			//const int WM_MOUSEWHEEL = 0x020A;

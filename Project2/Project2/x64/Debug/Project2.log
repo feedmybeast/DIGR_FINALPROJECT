@@ -1,15 +1,23 @@
 ﻿  MyForm.cpp
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\Vertex.h(17,13): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\Vertex.h(17,19): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   (compiling source file 'MyForm.cpp')
   
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\Vertex.h(18,13): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\Vertex.h(18,19): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   (compiling source file 'MyForm.cpp')
   
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(524,64): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(524,61): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(890,84): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(890,73): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(1037,33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(1038,33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(526,64): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(526,61): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(861,62): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(861,51): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(930,62): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(930,51): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(938,60): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(938,49): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(1071,33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(1072,33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(1080,107): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(1080,72): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(1081,101): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(1081,66): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   MyForm.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
   Project2.vcxproj -> C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\x64\Debug\Project2.exe

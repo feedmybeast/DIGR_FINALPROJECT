@@ -12,11 +12,11 @@ public:
     property int Degree { int get() { return degree; } void set(int value) { degree = value; } }
     float Radius;
     Vertex(int id, String^ name, float x, float y) {
-        Id = id;
-        Name = name;
-        X = x;
-        Y = y;
-        Radius = 10.0f;
+        this->Id = id;
+        this->Name = name;
+        this->X = x;
+        this->Y = y;
+        this->Radius = 10.0f;
     }
 private:
     int id;

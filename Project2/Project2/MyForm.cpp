@@ -67,6 +67,7 @@ namespace Project2 {
         this->pictureBox1->Dock = System::Windows::Forms::DockStyle::Fill;
         this->pictureBox1->MouseWheel += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::pictureBox1_MouseWheel);
         this->pictureBox1->MouseDoubleClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::pictureBox1_MouseDoubleClick);
+        this->pictureBox1->MouseWheel += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::HandleTouchpadGesture);
         // infoPanel
         //this->infoPanel->Location = System::Drawing::Point(12, 425);
         //this->infoPanel->Multiline = true;
@@ -453,6 +454,7 @@ void MyForm::UpdateInfoPanel() {
             vertex->X = static_cast<int>(std::round(vertex->X / (gridSize * zoomFactor)) * gridSize * zoomFactor);
             vertex->Y = static_cast<int>(std::round(vertex->Y / (gridSize * zoomFactor)) * gridSize * zoomFactor);
         }
+
     }
     void MyForm::AddVertexAtCursor(Point cursorPosition) {
         float adjustedX = (cursorPosition.X - viewOffsetX) / zoomFactor;
@@ -540,8 +542,8 @@ void MyForm::UpdateInfoPanel() {
     }
 
     void MyForm::RunDijkstra(Vertex^ start, Vertex^ end) {
+        bool isDirected = directedRadioButton->Checked;
         // Implementation of Dijkstra's algorithm
-        // This is a simplified version and might need to be adapted based on your Graph class implementation
         Dictionary<Vertex^, int>^ distances = gcnew Dictionary<Vertex^, int>();
         Dictionary<Vertex^, Vertex^>^ previous = gcnew Dictionary<Vertex^, Vertex^>();
         List<Vertex^>^ unvisited = gcnew List<Vertex^>();
@@ -578,23 +580,41 @@ void MyForm::UpdateInfoPanel() {
 
         // Highlight the shortest path
         Vertex^ current = end;
+        bool pathExists = true;
         while (current != nullptr) {
             Vertex^ prev = previous[current];
             if (prev != nullptr) {
+                bool edgeFound = false;
                 for each (Edge ^ edge in graph->Edges) {
                     if ((edge->Start == prev && edge->End == current) ||
-                        (edge->Start == current && edge->End == prev)) {
+                        (!isDirected && edge->Start == current && edge->End == prev)) {
                         edge->Color = Color::Red;
+                        edgeFound = true;
                         break;
                     }
+                }
+                if (!edgeFound) {
+                    pathExists = false;
+                    break;
                 }
             }
             current = prev;
         }
 
+        if (!pathExists) {
+            MessageBox::Show("No path found from start to end vertex. Please check the direction of the edges.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+        }
+
         pictureBox1->Invalidate();
     }
-
+    void MyForm::ExpandGridArea() {
+        // Adjust the grid area based on the current view offset and zoom factor
+        // This is a placeholder implementation, adjust as needed for your specific grid logic
+        //int gridWidth = static_cast<int>(pictureBox1->Width / zoomFactor);
+        //int gridHeight = static_cast<int>(pictureBox1->Height / zoomFactor);
+        // Ensure the grid area is large enough to cover the view
+        // You may need to adjust the logic here based on your specific requirements
+    }
 
     void MyForm::pictureBox1_MouseWheel(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
         Point cursorPos = e->Location;
@@ -618,7 +638,16 @@ void MyForm::UpdateInfoPanel() {
 
         pictureBox1->Invalidate();
     }
-
+    void MyForm::HandleTouchpadGesture(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+        //if (e->Button == System::Windows::Forms::MouseButtons::None && e->Delta != 0) {
+        //    Point currentMousePos = e->Location;
+        //    Point delta = Point(currentMousePos.X - lastMousePos.X, currentMousePos.Y - lastMousePos.Y);
+        //    viewOffsetX += delta.X / zoomFactor;
+        //    viewOffsetY += delta.Y / zoomFactor;
+        //    lastMousePos = currentMousePos;
+        //    pictureBox1->Invalidate(); // Redraw the pictureBox to reflect the new view offset
+        //}
+    }
 
     void MyForm::DrawGraph(Graphics^ g)
     {
@@ -822,9 +851,11 @@ void MyForm::UpdateInfoPanel() {
         //int adjustedX = e->X;
         //int adjustedY = e->Y;
         //this->mouseX = e->X; this->mouseY = e->Y; this->single_Click = true; this->clickTimer->Start();
-        int adjustedX = static_cast<int>(std::round(e->X * zoomFactor));
-        int adjustedY = static_cast<int>(std::round(e->Y * zoomFactor));
-    if (e->Button == System::Windows::Forms::MouseButtons::Left)
+        //int adjustedX = static_cast<int>(std::round(e->X * zoomFactor));
+        //int adjustedY = static_cast<int>(std::round(e->Y * zoomFactor));
+        float adjustedX = (e->X - viewOffsetX) / zoomFactor;
+        float adjustedY = (e->Y - viewOffsetY) / zoomFactor;
+    if (e->Button == System::Windows::Forms::MouseButtons::Left && draggingVertex == nullptr)
     {
         //PointF worldPoint = ScreenToWorld(e->Location);
         Vertex^ clickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
@@ -1028,12 +1059,15 @@ void MyForm::UpdateInfoPanel() {
     
     System::Void MyForm::pictureBox1_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) 
     {
-        Vertex^ hoveredVertex = FindVertexAtPoint(e->X, e->Y);
-        Edge^ hoveredEdge = FindEdgeAtPoint(e->X, e->Y);
+        //Vertex^ hoveredVertex = FindVertexAtPoint(e->X, e->Y);
+        //Edge^ hoveredEdge = FindEdgeAtPoint(e->X, e->Y);
 
         if (draggingVertex != nullptr) {
+            int gridSize = 20;
             float adjustedX = (e->X - viewOffsetX) / zoomFactor;
             float adjustedY = (e->Y - viewOffsetY) / zoomFactor;
+            //float adjustedX = static_cast<int>(std::round(draggingVertex->X / (gridSize * zoomFactor)) * gridSize * zoomFactor);
+            //float adjustedY = static_cast<int>(std::round(draggingVertex->Y / (gridSize * zoomFactor)) * gridSize * zoomFactor);
             draggingVertex->X = adjustedX;
             draggingVertex->Y = adjustedY;
             pictureBox1->Invalidate();
@@ -1043,6 +1077,9 @@ void MyForm::UpdateInfoPanel() {
             lastMousePos = e->Location;
             pictureBox1->Invalidate();
         }//LookOver
+        Vertex^ hoveredVertex = FindVertexAtPoint((e->X - viewOffsetX) / zoomFactor, (e->Y - viewOffsetY) / zoomFactor);
+        Edge^ hoveredEdge = FindEdgeAtPoint((e->X - viewOffsetX) / zoomFactor, (e->Y - viewOffsetY) / zoomFactor);
+
         if (hoveredVertex != nullptr) {
             this->Cursor = Cursors::Hand;
         }
@@ -1052,12 +1089,24 @@ void MyForm::UpdateInfoPanel() {
         else {
             this->Cursor = Cursors::Default;
         }
+        //drag middle
+        if (e->Button == System::Windows::Forms::MouseButtons::Middle) {
+            Point currentMousePos = e->Location;
+            Point delta = Point(currentMousePos.X - lastMousePos.X, currentMousePos.Y - lastMousePos.Y);
+            viewOffsetX += delta.X / zoomFactor;
+            viewOffsetY += delta.Y / zoomFactor;
+            lastMousePos = currentMousePos;
+            pictureBox1->Invalidate(); // redraw the pictureBox to reflect the new view offset
+            //ExpandGridArea(); // Grid Fix
+
+        }
     }
     System::Void MyForm::pictureBox1_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) 
     {
         if (e->Button == System::Windows::Forms::MouseButtons::Middle) {
             isPanning = true;
             lastMousePos = e->Location;
+            pictureBox1->Invalidate();
         }
         else if (e->Button == System::Windows::Forms::MouseButtons::Left) {
             Vertex^ vertex = graph->FindVertexAt((e->X - viewOffsetX) / zoomFactor, (e->Y - viewOffsetY) / zoomFactor);
@@ -1077,6 +1126,7 @@ void MyForm::UpdateInfoPanel() {
         }
         if (e->Button == System::Windows::Forms::MouseButtons::Middle) {
             isPanning = false;
+            pictureBox1->Invalidate();
         }
         else if (e->Button == System::Windows::Forms::MouseButtons::Left && draggingVertex != nullptr) {
             draggingVertex = nullptr;
