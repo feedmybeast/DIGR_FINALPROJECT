@@ -1,13 +1,2 @@
-﻿  MyForm.cpp
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(368,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(369,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(955,60): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(955,49): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(1127,68): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(1127,57): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(1215,101): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(1215,66): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(1256,34): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\Project2\MyForm.cpp(1257,34): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  MyForm.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
+﻿  MyForm.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
   Project2.vcxproj -> C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\x64\Debug\Project2.exe

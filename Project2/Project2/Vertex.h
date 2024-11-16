@@ -22,8 +22,10 @@ public:
         this->Y = y;
         //this->XFloat = x;
         //this->YFloat = y;
+
         this->Radius = 10.0f;
     }
+
 private:
     int id;
     String^ name;

@@ -1144,10 +1144,10 @@ void MyForm::UpdateInfoPanel() {
             this->single_Click = false;
             this->doubleClickOccured = true;
             this->clickTimer->Stop();
-            //int adjustedX = static_cast<int>(std::round(e->X * zoomFactor));
-            //int adjustedY = static_cast<int>(std::round(e->Y * zoomFactor));
-            float adjustedX = static_cast<float>((this->mouseX * zoomFactor));
-            float adjustedY = static_cast<float>((this->mouseY * zoomFactor));
+            int adjustedX = static_cast<int>(std::round(e->X * zoomFactor));
+            int adjustedY = static_cast<int>(std::round(e->Y * zoomFactor));
+            //float adjustedX = static_cast<float>((this->mouseX * zoomFactor));
+            //float adjustedY = static_cast<float>((this->mouseY * zoomFactor));
             Vertex^ doubleclickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
             if (doubleclickedVertex != nullptr)
             {
@@ -1240,9 +1240,10 @@ void MyForm::UpdateInfoPanel() {
         if (e->Button == System::Windows::Forms::MouseButtons::Middle) {
             isPanning = true;
             lastMousePos = e->Location;
-            //pictureBox1->Invalidate();
+            pictureBox1->Invalidate();
         }
         else if (e->Button == System::Windows::Forms::MouseButtons::Left) {
+
             Vertex^ vertex = graph->FindVertexAt((e->X - viewOffsetX) / zoomFactor, (e->Y - viewOffsetY) / zoomFactor);
             if (vertex != nullptr) {
                 draggingVertex = vertex;
@@ -1260,10 +1261,11 @@ void MyForm::UpdateInfoPanel() {
         }
         if (e->Button == System::Windows::Forms::MouseButtons::Middle) {
             isPanning = false;
-            //pictureBox1->Invalidate();
+            pictureBox1->Invalidate();
         }
         else if (e->Button == System::Windows::Forms::MouseButtons::Left && draggingVertex != nullptr) {
             draggingVertex = nullptr;
+            pictureBox1->Invalidate();
         }
     }
     System::Void MyForm::SaveGraph(System::Object^ sender, System::EventArgs^ e) 
