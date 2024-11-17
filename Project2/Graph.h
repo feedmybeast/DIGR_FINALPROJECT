@@ -1,16 +1,19 @@
 #pragma once
-
+#include "Vertex.h"
+#include "Edge.h"
+#include <vector>
 using namespace System;
 using namespace System::Collections::Generic;
-
-ref class Vertex;
-ref class Edge;
 
 public ref class Graph
 {
 public:
-    Graph() : vertices(gcnew List<Vertex^>()), edges(gcnew List<Edge^>()) {}
-
+    Graph();
+    Vertex^ FindVertexAt(float x, float y);
+    void AddEdge(String^ startVertexName, String^ endVertexName, int weight, bool isDirected);
+    void AddEdge(String^ startVertexName, String^ endVertexName, int weight);
+    //void AddEdge(Vertex^ start, Vertex^ end, Color color, bool directed);
+    Vertex^ FindVertexByName(String^ name);
     property List<Vertex^>^ Vertices {
         List<Vertex^>^ get() { return vertices; }
     }
@@ -56,6 +59,8 @@ public:
         vertices->Clear();
         edges->Clear();
     }
+
+    void SaveToFile(String^ fileName);
 
 private:
     List<Vertex^>^ vertices;

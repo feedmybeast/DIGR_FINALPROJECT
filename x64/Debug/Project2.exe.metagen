@@ -14,52 +14,78 @@ Assembly System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=
 	hash=None, flags=None
 Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
 	hash=None, flags=None
-Class Project2.Vertex: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
-    Void .ctor(Int32, System.String, Int32, Int32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+Assembly Microsoft.VisualBasic, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a: 
+	hash=None, flags=None
+Class Vertex: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(Int32, System.String, Single, Single): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    Single Radius : Public
   Properties:
+    System.Drawing.Color ColorProperty 'get set' : 
     Int32 Degree 'get set' : 
-    Int32 Y    'get set' : 
-    Int32 X    'get set' : 
+    Single Y   'get set' : 
+    Single X   'get set' : 
     System.String Name 'get set' : 
-    Int32 Id   'get ' : 
+    Int32 Id   'get set' : 
   Methods:
     get_Id(): PrivateScope, Public, HideBySig, SpecialName
+    set_Id(Int32): PrivateScope, Public, HideBySig, SpecialName
     get_Name(): PrivateScope, Public, HideBySig, SpecialName
     set_Name(String): PrivateScope, Public, HideBySig, SpecialName
     get_X(): PrivateScope, Public, HideBySig, SpecialName
-    set_X(Int32): PrivateScope, Public, HideBySig, SpecialName
+    set_X(Single): PrivateScope, Public, HideBySig, SpecialName
     get_Y(): PrivateScope, Public, HideBySig, SpecialName
-    set_Y(Int32): PrivateScope, Public, HideBySig, SpecialName
+    set_Y(Single): PrivateScope, Public, HideBySig, SpecialName
     get_Degree(): PrivateScope, Public, HideBySig, SpecialName
     set_Degree(Int32): PrivateScope, Public, HideBySig, SpecialName
-Class Project2.Edge: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
-    Void .ctor(Int32, Project2.Vertex, Project2.Vertex, Int32, System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    get_ColorProperty(): PrivateScope, Public, HideBySig, SpecialName
+    set_ColorProperty(Color): PrivateScope, Public, HideBySig, SpecialName
+Class Edge: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(Int32, Vertex, Vertex, Int32, System.Drawing.Color): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(Vertex, Vertex, Boolean): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(Vertex, Vertex, Int32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(Vertex, Vertex, Int32, System.Drawing.Color): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(Int32, Vertex, Vertex, Int32, System.Drawing.Color, Boolean): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(Vertex, Vertex, Int32, System.Drawing.Color, Boolean): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Properties:
-    System.String Color 'get set' : 
+    Boolean Directed 'get set' : 
+    System.Drawing.Color Color 'get set' : 
     Int32 Weight 'get set' : 
-    Project2.Vertex End 'get ' : 
-    Project2.Vertex Start 'get ' : 
-    Int32 Id   'get ' : 
+    Vertex End 'get set' : 
+    Vertex Start 'get set' : 
+    Int32 Id   'get set' : 
   Methods:
     get_Id(): PrivateScope, Public, HideBySig, SpecialName
+    set_Id(Int32): PrivateScope, Public, HideBySig, SpecialName
     get_Start(): PrivateScope, Public, HideBySig, SpecialName
+    set_Start(Vertex): PrivateScope, Public, HideBySig, SpecialName
     get_End(): PrivateScope, Public, HideBySig, SpecialName
+    set_End(Vertex): PrivateScope, Public, HideBySig, SpecialName
     get_Weight(): PrivateScope, Public, HideBySig, SpecialName
     set_Weight(Int32): PrivateScope, Public, HideBySig, SpecialName
     get_Color(): PrivateScope, Public, HideBySig, SpecialName
-    set_Color(String): PrivateScope, Public, HideBySig, SpecialName
-Class Project2.Graph: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    set_Color(Color): PrivateScope, Public, HideBySig, SpecialName
+    get_Directed(): PrivateScope, Public, HideBySig, SpecialName
+    set_Directed(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig, SpecialName
+Class Graph: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Properties:
-    System.Collections.Generic.List`1[Project2.Edge] Edges 'get ' : 
-    System.Collections.Generic.List`1[Project2.Vertex] Vertices 'get ' : 
+    System.Collections.Generic.List`1[Edge] Edges 'get ' : 
+    System.Collections.Generic.List`1[Vertex] Vertices 'get ' : 
   Methods:
-    AddVertex(Vertex): PrivateScope, Public, HideBySig
+    FindVertexAt(Single, Single): PrivateScope, Public, HideBySig
     AddEdge(Edge): PrivateScope, Public, HideBySig
-    RemoveVertex(Int32): PrivateScope, Public, HideBySig
-    RemoveEdge(Int32): PrivateScope, Public, HideBySig
+    AddEdge(String, String, Int32): PrivateScope, Public, HideBySig
+    AddEdge(String, String, Int32, Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig
+    FindVertexByName(String): PrivateScope, Public, HideBySig
     get_Vertices(): PrivateScope, Public, HideBySig, SpecialName
     get_Edges(): PrivateScope, Public, HideBySig, SpecialName
+    AddVertex(Vertex): PrivateScope, Public, HideBySig
+    RemoveVertex(Vertex): PrivateScope, Public, HideBySig
+    RemoveEdge(Edge): PrivateScope, Public, HideBySig
+    GetVertexById(Int32): PrivateScope, Public, HideBySig
+    Clear(): PrivateScope, Public, HideBySig
+    SaveToFile(String): PrivateScope, Public, HideBySig
 Class Project2.MyForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName

@@ -1,5 +1,25 @@
 ﻿  MyForm.cpp
-C:\Users\Admin\source\repos\Project2\Project2\MyForm.cpp(411,112): warning C4129: '{': unrecognized character escape sequence
-C:\Users\Admin\source\repos\Project2\Project2\MyForm.cpp(411,112): warning C4129: '}': unrecognized character escape sequence
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(380,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(381,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(382,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(383,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(933,52): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(933,41): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1105,53): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1105,42): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1129,63): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1129,52): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1198,53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1198,47): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1278,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1279,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1284,79): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1284,32): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1285,79): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1285,32): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1293,53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1293,47): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1324,54): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1324,48): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   MyForm.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
-  Project2.vcxproj -> C:\Users\Admin\source\repos\Project2\x64\Debug\Project2.exe
+  Project2.vcxproj -> C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\x64\Debug\Project2.exe
