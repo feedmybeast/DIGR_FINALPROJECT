@@ -1,22 +1,27 @@
 
+// MyForm.cpp
+// Implementation of the MyForm class for a graph editor application
+
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include "MyForm.h"
 #include "Graph.h"
 #include <cmath> 
+#include <msclr\marshal_cppstd.h>
+#include <fstream>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
-#include <msclr\marshal_cppstd.h>
-#include <fstream>
+
 using namespace System::Drawing::Drawing2D;
 #using <Microsoft.VisualBasic.dll>
+
 namespace Project2 {
+	// InitializeComponent: Initializes all the UI components of the form
 	void MyForm::InitializeComponent(void)
 	{
-		// ... (keep existing initializations)
-
+		// Initialize and configure the default radio button
 		this->defaultRadioButton = (gcnew System::Windows::Forms::RadioButton());
 		this->defaultRadioButton->AutoSize = true;
 		this->defaultRadioButton->Checked = true;
@@ -32,10 +37,12 @@ namespace Project2 {
 		// Add the defaultRadioButton to the form's controls
 		this->Controls->Add(this->defaultRadioButton);
 
-		// Dummy call to DrawArrow to force linking
+		// Dummy call to DrawArrow to force linking (compiler optimization)
 		if (false) {
 			DrawArrow(nullptr, nullptr, nullptr);
 		}
+
+		// Initialize other UI components
 		this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 		this->infoPanel = (gcnew System::Windows::Forms::TextBox());
 		this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
@@ -250,7 +257,7 @@ namespace Project2 {
 
 	}
 
-	// Helper function to show an input box
+	// ShowInputBox: Helper function to display an input dialog box
 	String^ ShowInputBox(String^ prompt, String^ title, String^ defaultValue) {
 		Form^ inputBox = gcnew Form();
 		inputBox->Width = 300;
@@ -293,6 +300,7 @@ namespace Project2 {
 		return inputBox->ShowDialog() == System::Windows::Forms::DialogResult::OK ? textBox->Text : "";
 	}
 
+	// FindVertexAtPoint: Finds a vertex at the given coordinates (x, y)
 	Vertex^ MyForm::FindVertexAtPoint(float x, float y) {
 		for each (Vertex ^ v in graph->Vertices) {
 			if (Math::Abs(v->X - x) < 10 && Math::Abs(v->Y - y) < 10) {
@@ -302,6 +310,7 @@ namespace Project2 {
 		return nullptr;
 	}
 
+	// FindEdgeAtPoint: Finds an edge near the given coordinates (x, y)
 	Edge^ MyForm::FindEdgeAtPoint(int x, int y) {
 		for each (Edge ^ e in graph->Edges) {
 			float x1 = e->Start->X, y1 = e->Start->Y, x2 = e->End->X, y2 = e->End->Y;
@@ -336,27 +345,34 @@ namespace Project2 {
 	//void MyForm::SomeFunction() {
 	//graph->AddEdge(selectedVertex, draggingVertex, currentEdgeColor, true);
 	//}
+// DeleteVertex: Removes a vertex from the graph and updates the UI
 	void MyForm::DeleteVertex(Vertex^ vertex) {
 		graph->RemoveVertex(vertex);
 		UpdateInfoPanel();
 		pictureBox1->Invalidate();
 	}
 
+	// DeleteEdge: Removes an edge from the graph and updates the UI
 	void MyForm::DeleteEdge(Edge^ edge) {
 		graph->RemoveEdge(edge);
 		UpdateInfoPanel();
 		pictureBox1->Invalidate();
 	}
 
+	// UpdateInfoPanel: Updates the information panel with current graph statistics
 	void MyForm::UpdateInfoPanel() {
 		infoPanel->Text = "Vertices: " + graph->Vertices->Count + "\r\n";
 		infoPanel->Text += "Edges: " + graph->Edges->Count + "\r\n";
 	}
 
-	System::Void MyForm::pictureBox1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
+	// pictureBox1_Paint: Handles the painting of the graph on the picture box
+	System::Void MyForm::pictureBox1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e)
+	{
 		Graphics^ g = e->Graphics;
 		g->SmoothingMode = Drawing2D::SmoothingMode::AntiAlias;
 		g->Clear(Color::White);
+
+		// Apply zoom and pan transformations
 
 		// Apply zoom and pan transformations
 		g->TranslateTransform(viewOffsetX, viewOffsetY);
@@ -840,6 +856,8 @@ namespace Project2 {
 		return 0;
 	}
 
+	// pictureBox1_MouseClick: Handles mouse click events on the picture box
+	// This function manages vertex and edge creation, selection, and deletion
 	System::Void MyForm::pictureBox1_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
 	{
 		//int adjustedX = e->X;
@@ -1165,6 +1183,8 @@ namespace Project2 {
 	}
 
 
+	// pictureBox1_MouseMove: Handles mouse movement events on the picture box
+	// This function manages vertex dragging and edge creation preview
 	System::Void MyForm::pictureBox1_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
 	{
 		if (defaultRadioButton->Checked)
@@ -1211,6 +1231,7 @@ namespace Project2 {
 		}
 	}
 
+	// ZoomIn: Increases the zoom level of the graph view
 	System::Void MyForm::ZoomIn(System::Object^ sender, System::EventArgs^ e) {
 		float oldZoom = zoomFactor;
 		zoomFactor *= 1.2f;
@@ -1225,10 +1246,17 @@ namespace Project2 {
 		pictureBox1->Invalidate();
 	}
 
+	// ZoomInButton_Click: Handles the zoom in button click event
 	System::Void MyForm::ZoomInButton_Click(System::Object^ sender, System::EventArgs^ e) {
 		ZoomIn(sender, e);
 	}
 
+	// ZoomOutButton_Click: Handles the zoom out button click event
+	System::Void MyForm::ZoomOutButton_Click(System::Object^ sender, System::EventArgs^ e) {
+		ZoomOut(sender, e);
+	}
+
+	// ZoomOut: Decreases the zoom level of the graph view
 	System::Void MyForm::ZoomOut(System::Object^ sender, System::EventArgs^ e) {
 		float oldZoom = zoomFactor;
 		zoomFactor /= 1.2f;
@@ -1243,10 +1271,7 @@ namespace Project2 {
 		pictureBox1->Invalidate();
 	}
 
-	System::Void MyForm::ZoomOutButton_Click(System::Object^ sender, System::EventArgs^ e) {
-		ZoomOut(sender, e);
-	}
-
+	// ResetZoom: Resets the zoom level and view offset to their default values
 	System::Void MyForm::ResetZoom(System::Object^ sender, System::EventArgs^ e) {
 		zoomFactor = 1.0f;
 		viewOffsetX = 0;
@@ -1255,10 +1280,12 @@ namespace Project2 {
 		pictureBox1->Invalidate();
 	}
 
+	// ResetZoomButton_Click: Handles the reset zoom button click event
 	System::Void MyForm::ResetZoomButton_Click(System::Object^ sender, System::EventArgs^ e) {
-		this->ResetZoom(sender, e);
+		ResetZoom(sender, e);
 	}
 
+	// ClearButton_Click: Clears all vertices and edges from the graph
 	System::Void MyForm::ClearButton_Click(System::Object^ sender, System::EventArgs^ e) {
 		// Clear the graph
 		graph->Clear();
@@ -1272,6 +1299,7 @@ namespace Project2 {
 		pictureBox1->Invalidate();
 	}
 
+	// DrawArrow: Draws an arrow head at the end of an edge
 	void MyForm::DrawArrow(Graphics^ g, Vertex^ start, Vertex^ end) {
 		float dx = end->X - start->X;
 		float dy = end->Y - start->Y;
@@ -1288,6 +1316,7 @@ namespace Project2 {
 		g->FillPolygon(Brushes::Black, arrowHead);
 	}
 
+	// pictureBox1_MouseDown: Handles mouse button press events on the picture box
 	System::Void MyForm::pictureBox1_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
 		if (e->Button == System::Windows::Forms::MouseButtons::Left) {
 			Vertex^ clickedVertex = FindVertexAtPoint(e->X, e->Y);
