@@ -75,6 +75,8 @@ namespace Project2 {
 		System::Windows::Forms::RadioButton^ undirectedRadioButton;
 		System::Windows::Forms::Timer^ clickTimer;
 		System::Windows::Forms::ComboBox^ directionComboBox;
+		System::Windows::Forms::TableLayoutPanel^ LayoutPanel;
+		System::Windows::Forms::Panel^ ControlPanel;
 
 		System::Void ZoomIn(System::Object^ sender, System::EventArgs^ e);
 		System::Void ZoomOut(System::Object^ sender, System::EventArgs^ e);

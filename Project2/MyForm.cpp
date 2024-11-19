@@ -25,14 +25,15 @@ namespace Project2 {
 		this->defaultRadioButton = (gcnew System::Windows::Forms::RadioButton());
 		this->defaultRadioButton->AutoSize = true;
 		this->defaultRadioButton->Checked = true;
-		this->defaultRadioButton->Location = System::Drawing::Point(600, 120);
+		this->defaultRadioButton->Location = System::Drawing::Point(700, 90);
 		this->defaultRadioButton->Name = L"defaultRadioButton";
-		this->defaultRadioButton->Size = System::Drawing::Size(59, 17);
+		this->defaultRadioButton->Size = System::Drawing::Size(40, 20);
 		this->defaultRadioButton->TabIndex = 6;
 		this->defaultRadioButton->TabStop = true;
 		this->defaultRadioButton->Text = L"Default";
 		this->defaultRadioButton->UseVisualStyleBackColor = true;
 		this->defaultRadioButton->CheckedChanged += gcnew System::EventHandler(this, &MyForm::defaultRadioButton_CheckedChanged);
+		//this->defaultRadioButton->Dock = System::Windows::Forms::DockStyle::Right;
 
 		// Add the defaultRadioButton to the form's controls
 		this->Controls->Add(this->defaultRadioButton);
@@ -59,6 +60,8 @@ namespace Project2 {
 		this->showGridButton->Click += gcnew System::EventHandler(this, &MyForm::ShowGridButton_Click);
 		this->undirectedRadioButton = (gcnew System::Windows::Forms::RadioButton());
 		this->directedRadioButton = (gcnew System::Windows::Forms::RadioButton());
+		//this->LayoutPanel = (gcnew System::Windows::Forms::TableLayoutPanel());
+		//this->ControlPanel = (gcnew System::Windows::Forms::Panel());
 
 		// The buttons are now added directly to the toolStrip1 in the Items->AddRange call
 
@@ -86,7 +89,7 @@ namespace Project2 {
 		// pictureBox1
 		this->pictureBox1->Location = System::Drawing::Point(12, 27);
 		this->pictureBox1->Name = L"pictureBox1";
-		this->pictureBox1->Size = System::Drawing::Size(558, 600);
+		this->pictureBox1->Size = System::Drawing::Size(680,650);
 		this->pictureBox1->TabIndex = 0;
 		this->pictureBox1->TabStop = false;
 		this->pictureBox1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::pictureBox1_Paint);
@@ -94,9 +97,9 @@ namespace Project2 {
 		this->pictureBox1->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::pictureBox1_MouseMove);
 		this->pictureBox1->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::pictureBox1_MouseDown);
 		this->pictureBox1->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::pictureBox1_MouseUp);
-		this->pictureBox1->Dock = System::Windows::Forms::DockStyle::Fill;
 		this->pictureBox1->MouseWheel += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::pictureBox1_MouseWheel);
 		this->pictureBox1->MouseDoubleClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::pictureBox1_MouseDoubleClick);
+		
 
 		// infoPanel 2
 		this->infoPanel->Location = System::Drawing::Point(12, 27);
@@ -161,6 +164,7 @@ namespace Project2 {
 
 		this->clearButton = (gcnew System::Windows::Forms::ToolStripButton());
 		this->clearButton->Text = L"Clear";
+
 		// Event handler for clearing the graph or network diagram
 		this->clearButton->Click += gcnew System::EventHandler(this, &MyForm::ClearButton_Click);
 
@@ -196,33 +200,43 @@ namespace Project2 {
 		this->toolStrip1->Items->AddRange(items->ToArray());
 
 		// undirectedRadioButton
-		this->undirectedRadioButton->Location = System::Drawing::Point(600, 50);
+		this->undirectedRadioButton->Location = System::Drawing::Point(700, 50);
 		this->undirectedRadioButton->Name = L"undirectedRadioButton";
 		this->undirectedRadioButton->Size = System::Drawing::Size(100, 20);
 		this->undirectedRadioButton->TabIndex = 4;
 		this->undirectedRadioButton->TabStop = true;
 		this->undirectedRadioButton->Text = L"Undirected";
+		//this->undirectedRadioButton->Dock = System::Windows::Forms::DockStyle::Fill;
 		this->undirectedRadioButton->UseVisualStyleBackColor = true;
 		this->Controls->Add(this->undirectedRadioButton);
 
 		// directedRadioButton
-		this->directedRadioButton->Location = System::Drawing::Point(600, 80);
+		this->directedRadioButton->Location = System::Drawing::Point(700, 70);
 		this->directedRadioButton->Name = L"directedRadioButton";
-		this->directedRadioButton->Size = System::Drawing::Size(104, 24);
+		this->directedRadioButton->Size = System::Drawing::Size(100, 20);
 		this->directedRadioButton->TabIndex = 1;
 		this->directedRadioButton->TabStop = true;
 		this->directedRadioButton->Text = L"Directed";
+		//this->directedRadioButton->Dock = System::Windows::Forms::DockStyle::Fill;
 		this->directedRadioButton->UseVisualStyleBackColor = true;
 		this->Controls->Add(this->directedRadioButton);
 
 		// directionComboBox
 		this->directionComboBox = (gcnew System::Windows::Forms::ComboBox());
-		this->directionComboBox->Location = System::Drawing::Point(600, 150);
+		this->directionComboBox->Location = System::Drawing::Point(695, 110);
 		this->directionComboBox->Name = L"directionComboBox";
 		this->directionComboBox->Size = System::Drawing::Size(100, 20);
+		this->directionComboBox->Anchor = AnchorStyles::Right;
+		//this->directionComboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+
 		this->directionComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Start to End", L"End to Start" });
 		this->directionComboBox->SelectedIndex = 0;
 		this->Controls->Add(this->directionComboBox);
+		//No fit
+		this->WindowState = System::Windows::Forms::FormWindowState::Normal;
+		this->MaximizeBox = false;
+		this->MinimizeBox = false;
+
 
 	}
 
