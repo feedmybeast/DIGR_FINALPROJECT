@@ -67,7 +67,7 @@
               "RelativeDocumentMoniker": "Project2\\MyForm.cpp",
               "ToolTip": "C:\\Users\\trant\\source\\repos\\DIGR_FINALPROJECT\\Project2\\MyForm.cpp",
               "RelativeToolTip": "Project2\\MyForm.cpp",
-              "ViewState": "AgIAAB8DAAAAAAAAAAAIwEwDAAAsAAAAAAAAAA==",
+              "ViewState": "AgIAANcAAAAAAAAAAAAAwOkAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-11-19T09:15:01.398Z",
               "EditorCaption": ""
@@ -80,7 +80,7 @@
               "RelativeDocumentMoniker": "Project2\\Graph.cpp",
               "ToolTip": "C:\\Users\\trant\\source\\repos\\DIGR_FINALPROJECT\\Project2\\Graph.cpp",
               "RelativeToolTip": "Project2\\Graph.cpp",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAmwB4AAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA4AAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-11-06T15:17:51.071Z",
               "EditorCaption": ""
@@ -95,8 +95,7 @@
               "RelativeToolTip": "..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\include\\exception",
               "ViewState": "AgIAACwBAAAAAAAAAADwvyQBAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-11-07T04:46:12.54Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-07T04:46:12.54Z"
             },
             {
               "$type": "Document",
@@ -143,8 +142,7 @@
               "RelativeToolTip": "Project2\\Edge.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-11-06T15:17:49.648Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-06T15:17:49.648Z"
             },
             {
               "$type": "Document",
@@ -168,8 +166,7 @@
               "RelativeToolTip": "Project2\\Graph.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-11-06T15:17:43.259Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-06T15:17:43.259Z"
             }
           ]
         },

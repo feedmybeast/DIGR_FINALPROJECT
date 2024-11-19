@@ -8,12 +8,13 @@
 #include "Graph.h"
 #include <cmath> 
 #include <msclr\marshal_cppstd.h>
+#include<string>
+#include <sstream>
 #include <fstream>
-
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
-
+using namespace System;
 using namespace System::Drawing::Drawing2D;
 #using <Microsoft.VisualBasic.dll>
 
@@ -766,98 +767,6 @@ namespace Project2 {
 			Vertex^ clickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
 			if (clickedVertex != nullptr && (directedRadioButton->Checked || undirectedRadioButton->Checked)) //XuanThanh button
 			{
-				Form^ inputForm = gcnew Form();
-				inputForm->Text = "Add Edge";
-				inputForm->Size = System::Drawing::Size(180, 300);
-				inputForm->StartPosition = FormStartPosition::CenterParent;
-				inputForm->FormBorderStyle = Windows::Forms::FormBorderStyle::FixedDialog;
-				inputForm->MaximizeBox = false;
-				inputForm->MinimizeBox = false;
-
-				Label^ startLabel = gcnew Label();
-				startLabel->Text = "Start Vertex:";
-				startLabel->Location = System::Drawing::Point(10, 10);
-				inputForm->Controls->Add(startLabel);
-
-				ComboBox^ startComboBox = gcnew ComboBox();
-				startComboBox->Location = System::Drawing::Point(10, 30);
-				startComboBox->Size = System::Drawing::Size(100, 20);
-				inputForm->Controls->Add(startComboBox);
-
-				Label^ endLabel = gcnew Label();
-				endLabel->Text = "End Vertex:";
-				endLabel->Location = System::Drawing::Point(10, 60);
-				inputForm->Controls->Add(endLabel);
-
-				ComboBox^ endComboBox = gcnew ComboBox();
-				endComboBox->Location = System::Drawing::Point(10, 80);
-				endComboBox->Size = System::Drawing::Size(100, 20);
-				inputForm->Controls->Add(endComboBox);
-
-				Label^ weightLabel = gcnew Label();
-				weightLabel->Text = "Weight:";
-				weightLabel->Location = System::Drawing::Point(10, 110);
-				inputForm->Controls->Add(weightLabel);
-
-				TextBox^ weightTextBox = gcnew TextBox();
-				weightTextBox->Location = System::Drawing::Point(10, 130);
-				weightTextBox->Size = System::Drawing::Size(100, 20);
-				inputForm->Controls->Add(weightTextBox);
-
-				// Add RadioButtons for edge type
-				Label^ edgeTypeLabel = gcnew Label();
-				edgeTypeLabel->Text = "Edge Type:";
-				edgeTypeLabel->Location = System::Drawing::Point(10, 160);
-				inputForm->Controls->Add(edgeTypeLabel);
-
-				RadioButton^ undirectedRadioButton = gcnew RadioButton();
-				undirectedRadioButton->Text = "Undirected";
-				undirectedRadioButton->Location = System::Drawing::Point(10, 180);
-				undirectedRadioButton->Checked = true; // Default to undirected
-				inputForm->Controls->Add(undirectedRadioButton);
-
-				RadioButton^ directedRadioButton = gcnew RadioButton();
-				directedRadioButton->Text = "Directed";
-				directedRadioButton->Location = System::Drawing::Point(10, 200);
-				inputForm->Controls->Add(directedRadioButton);
-
-				// Adjust OK button position
-				Button^ okButton = gcnew Button();
-				okButton->Text = "OK";
-				okButton->DialogResult = System::Windows::Forms::DialogResult::OK;
-				okButton->Location = System::Drawing::Point(10, 230);
-				okButton->Size = System::Drawing::Size(75, 30);
-				inputForm->Controls->Add(okButton);
-
-				// Populate the combo boxes with vertex names
-				for each (Vertex ^ vertex in graph->Vertices) {
-					startComboBox->Items->Add(vertex->Name);
-					endComboBox->Items->Add(vertex->Name);
-				}
-
-				// Show the form and get the result
-				if (inputForm->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
-					if (startComboBox->SelectedItem != nullptr && endComboBox->SelectedItem != nullptr) {
-						String^ startVertexName = startComboBox->SelectedItem->ToString();
-						String^ endVertexName = endComboBox->SelectedItem->ToString();
-						int weight;
-						if (Int32::TryParse(weightTextBox->Text, weight)) {
-							if (undirectedRadioButton->Checked) {
-								graph->AddEdge(startVertexName, endVertexName, weight); // false for undirected
-							}
-							else if (directedRadioButton->Checked) {
-								graph->AddEdge(startVertexName, endVertexName, weight, true); // true for directed
-							}
-						}
-						else {
-							MessageBox::Show("Please enter a valid integer for the weight.");
-						}
-					}
-					else {
-						MessageBox::Show("Please select both start and end vertices.");
-					}
-				}
-
 				//XuanThanh fix direct Add Vertex Bug
 				//String^ newVertexName = PromptForVertexName();
 				//if (!String::IsNullOrEmpty(newVertexName))
@@ -1200,8 +1109,12 @@ namespace Project2 {
 						newX = round(newX / gridSize) * gridSize;
 						newY = round(newY / gridSize) * gridSize;
 					}
-					draggedVertex->X = newX;
-					draggedVertex->Y = newY;
+					//draggedVertex->X = newX;
+					//draggedVertex->Y = newY;//Fix ZoomIn
+					float adjustedX = (e->X - viewOffsetX) / zoomFactor;
+					float adjustedY = (e->Y - viewOffsetY) / zoomFactor;
+					draggedVertex->X = adjustedX;
+					draggedVertex->Y = adjustedY;
 					pictureBox1->Invalidate();
 				}
 				else if (isPanning)
@@ -1319,7 +1232,11 @@ namespace Project2 {
 	// pictureBox1_MouseDown: Handles mouse button press events on the picture box
 	System::Void MyForm::pictureBox1_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
 		if (e->Button == System::Windows::Forms::MouseButtons::Left) {
-			Vertex^ clickedVertex = FindVertexAtPoint(e->X, e->Y);
+			float adjustedX = (e->X - viewOffsetX) / zoomFactor;////Fix ZoomIn
+			float adjustedY = (e->Y - viewOffsetY) / zoomFactor;
+			//Vertex^ clickedVertex = FindVertexAtPoint(e->X, e->Y);
+			Vertex^ clickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
+
 			if (clickedVertex != nullptr) {
 				selectedVertex = clickedVertex;
 				if (defaultRadioButton->Checked) {
@@ -1352,11 +1269,21 @@ namespace Project2 {
 				// Do nothing else in Default mode
 			}
 			else if (directedRadioButton->Checked || undirectedRadioButton->Checked) {
-				Vertex^ clickedVertex = FindVertexAtPoint(e->X, e->Y);
+				float adjustedX = (e->X - viewOffsetX) / zoomFactor;//Fix ZoomIn
+				float adjustedY = (e->Y - viewOffsetY) / zoomFactor;
+				Vertex^ clickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
+				//Vertex^ clickedVertex = FindVertexAtPoint(e->X, e->Y);
+
 				if (selectedVertex != nullptr && clickedVertex != nullptr && clickedVertex != selectedVertex) {
 					// Handle edge creation
+					String^ weight = ShowInputBox("Enter the value of Weight:", "Weight Add", "1");
 					bool isDirected = directedRadioButton->Checked;
-					graph->AddEdge(selectedVertex->Name, clickedVertex->Name, 0, isDirected);
+					std::stringstream ss;//Convert String^ to string, then string to int
+					std::string str = msclr::interop::marshal_as<std::string>(weight);
+					int weightnum;
+					ss << str;
+					ss >> weightnum;
+					graph->AddEdge(selectedVertex->Name, clickedVertex->Name, weightnum, isDirected);
 					pictureBox1->Invalidate();
 				}
 				else if (clickedVertex == nullptr && !isDragging && draggingVertex == nullptr) {
