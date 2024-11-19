@@ -389,7 +389,7 @@ namespace Project2 {
 			delete brush;
 
 			// Highlight selected vertex
-			if (defaultRadioButton->Checked && vertex == selectedVertex)
+			if (defaultRadioButton->Checked && vertex == selectedVertex )//fix Vertex create && draggedVertex == nullptr && !isDragging
 			{
 				Pen^ highlightPen = gcnew Pen(Color::Red, 2 / zoomFactor);
 				g->DrawEllipse(highlightPen, vertex->X - vertex->Radius - 2, vertex->Y - vertex->Radius - 2, (vertex->Radius + 2) * 2, (vertex->Radius + 2) * 2);
@@ -430,12 +430,14 @@ namespace Project2 {
 				return; // Don't add a new vertex if one already exists here
 			}
 		}
-
-		String^ vertexName = PromptForVertexName();
-		if (!String::IsNullOrEmpty(vertexName)) {
-			Vertex^ newVertex = gcnew Vertex(graph->Vertices->Count + 1, vertexName, adjustedX, adjustedY);
-			graph->AddVertex(newVertex);
-			pictureBox1->Invalidate();
+		if (directedRadioButton->Checked || undirectedRadioButton->Checked)//XuanThanh
+		{
+			String^ vertexName = PromptForVertexName();
+			if (!String::IsNullOrEmpty(vertexName)) {
+				Vertex^ newVertex = gcnew Vertex(graph->Vertices->Count + 1, vertexName, adjustedX, adjustedY);
+				graph->AddVertex(newVertex);
+				pictureBox1->Invalidate();
+			}
 		}
 	}
 	System::Void MyForm::RunDijkstraButton_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -762,38 +764,132 @@ namespace Project2 {
 		{
 			//PointF worldPoint = ScreenToWorld(e->Location);
 			Vertex^ clickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
-			if (clickedVertex != nullptr)
+			if (clickedVertex != nullptr && (directedRadioButton->Checked || undirectedRadioButton->Checked)) //XuanThanh button
 			{
-				String^ newVertexName = PromptForVertexName();
-				if (!String::IsNullOrEmpty(newVertexName))
-				{
-					if (newVertexName->Length >= 10)
-					{
-						if (newVertexName->Length > 10) {
-							MessageBox::Show("The name is too long. Please choose a name with fewer than 10 characters.", "Name Too Long", MessageBoxButtons::OK, MessageBoxIcon::Error);
-							return;
+				Form^ inputForm = gcnew Form();
+				inputForm->Text = "Add Edge";
+				inputForm->Size = System::Drawing::Size(180, 300);
+				inputForm->StartPosition = FormStartPosition::CenterParent;
+				inputForm->FormBorderStyle = Windows::Forms::FormBorderStyle::FixedDialog;
+				inputForm->MaximizeBox = false;
+				inputForm->MinimizeBox = false;
+
+				Label^ startLabel = gcnew Label();
+				startLabel->Text = "Start Vertex:";
+				startLabel->Location = System::Drawing::Point(10, 10);
+				inputForm->Controls->Add(startLabel);
+
+				ComboBox^ startComboBox = gcnew ComboBox();
+				startComboBox->Location = System::Drawing::Point(10, 30);
+				startComboBox->Size = System::Drawing::Size(100, 20);
+				inputForm->Controls->Add(startComboBox);
+
+				Label^ endLabel = gcnew Label();
+				endLabel->Text = "End Vertex:";
+				endLabel->Location = System::Drawing::Point(10, 60);
+				inputForm->Controls->Add(endLabel);
+
+				ComboBox^ endComboBox = gcnew ComboBox();
+				endComboBox->Location = System::Drawing::Point(10, 80);
+				endComboBox->Size = System::Drawing::Size(100, 20);
+				inputForm->Controls->Add(endComboBox);
+
+				Label^ weightLabel = gcnew Label();
+				weightLabel->Text = "Weight:";
+				weightLabel->Location = System::Drawing::Point(10, 110);
+				inputForm->Controls->Add(weightLabel);
+
+				TextBox^ weightTextBox = gcnew TextBox();
+				weightTextBox->Location = System::Drawing::Point(10, 130);
+				weightTextBox->Size = System::Drawing::Size(100, 20);
+				inputForm->Controls->Add(weightTextBox);
+
+				// Add RadioButtons for edge type
+				Label^ edgeTypeLabel = gcnew Label();
+				edgeTypeLabel->Text = "Edge Type:";
+				edgeTypeLabel->Location = System::Drawing::Point(10, 160);
+				inputForm->Controls->Add(edgeTypeLabel);
+
+				RadioButton^ undirectedRadioButton = gcnew RadioButton();
+				undirectedRadioButton->Text = "Undirected";
+				undirectedRadioButton->Location = System::Drawing::Point(10, 180);
+				undirectedRadioButton->Checked = true; // Default to undirected
+				inputForm->Controls->Add(undirectedRadioButton);
+
+				RadioButton^ directedRadioButton = gcnew RadioButton();
+				directedRadioButton->Text = "Directed";
+				directedRadioButton->Location = System::Drawing::Point(10, 200);
+				inputForm->Controls->Add(directedRadioButton);
+
+				// Adjust OK button position
+				Button^ okButton = gcnew Button();
+				okButton->Text = "OK";
+				okButton->DialogResult = System::Windows::Forms::DialogResult::OK;
+				okButton->Location = System::Drawing::Point(10, 230);
+				okButton->Size = System::Drawing::Size(75, 30);
+				inputForm->Controls->Add(okButton);
+
+				// Populate the combo boxes with vertex names
+				for each (Vertex ^ vertex in graph->Vertices) {
+					startComboBox->Items->Add(vertex->Name);
+					endComboBox->Items->Add(vertex->Name);
+				}
+
+				// Show the form and get the result
+				if (inputForm->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+					if (startComboBox->SelectedItem != nullptr && endComboBox->SelectedItem != nullptr) {
+						String^ startVertexName = startComboBox->SelectedItem->ToString();
+						String^ endVertexName = endComboBox->SelectedItem->ToString();
+						int weight;
+						if (Int32::TryParse(weightTextBox->Text, weight)) {
+							if (undirectedRadioButton->Checked) {
+								graph->AddEdge(startVertexName, endVertexName, weight); // false for undirected
+							}
+							else if (directedRadioButton->Checked) {
+								graph->AddEdge(startVertexName, endVertexName, weight, true); // true for directed
+							}
 						}
-					}
-					bool isNameExist = false;
-					for each (Vertex ^ v in graph->Vertices)
-					{
-						if (v->Name == newVertexName)
-						{
-							isNameExist = true;
-							break;
+						else {
+							MessageBox::Show("Please enter a valid integer for the weight.");
 						}
-					}
-					if (isNameExist) {
-						MessageBox::Show("The name already exists. Please choose another name.", "Duplicate Name",
-							MessageBoxButtons::OK, MessageBoxIcon::Error);
 					}
 					else {
-						clickedVertex->Name = newVertexName;
-						pictureBox1->Invalidate();
+						MessageBox::Show("Please select both start and end vertices.");
 					}
 				}
+
+				//XuanThanh fix direct Add Vertex Bug
+				//String^ newVertexName = PromptForVertexName();
+				//if (!String::IsNullOrEmpty(newVertexName))
+				//{
+				//	if (newVertexName->Length >= 10)
+				//	{
+				//		if (newVertexName->Length > 10) {
+				//			MessageBox::Show("The name is too long. Please choose a name with fewer than 10 characters.", "Name Too Long", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				//			return;
+				//		}
+				//	}
+				//	bool isNameExist = false;
+				//	for each (Vertex ^ v in graph->Vertices)
+				//	{
+				//		if (v->Name == newVertexName)
+				//		{
+				//			isNameExist = true;
+				//			break;
+				//		}
+				//	}
+				//	if (isNameExist) {
+				//		MessageBox::Show("The name already exists. Please choose another name.", "Duplicate Name",
+				//			MessageBoxButtons::OK, MessageBoxIcon::Error);
+				//	}
+				//	else {
+				//		clickedVertex->Name = newVertexName;
+				//		pictureBox1->Invalidate();
+				//	}
+				//}
+
 			}
-			else if (draggingVertex == nullptr)
+			else if (draggingVertex == nullptr &&(directedRadioButton->Checked || undirectedRadioButton->Checked)) //XuanThanh
 			{
 				String^ vertexName = PromptForVertexName();
 				if (!String::IsNullOrEmpty(vertexName))
@@ -928,7 +1024,7 @@ namespace Project2 {
 		float adjustedY = static_cast<float>((this->mouseY * zoomFactor));
 		if (this->single_Click && !this->doubleClickOccured)
 		{
-			if (this->mouseButtonClicked == System::Windows::Forms::MouseButtons::Left)
+			if (this->mouseButtonClicked == System::Windows::Forms::MouseButtons::Left &&(directedRadioButton->Checked || undirectedRadioButton->Checked)) //XuanThanh
 			{
 				Vertex^ clickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
 				if (clickedVertex != nullptr)
@@ -960,7 +1056,7 @@ namespace Project2 {
 						}
 					}
 				}
-				else if (draggingVertex == nullptr)
+				else if (draggingVertex == nullptr && (directedRadioButton->Checked || undirectedRadioButton->Checked)) //XuanThanh
 				{
 					String^ vertexName = PromptForVertexName();
 					if (!String::IsNullOrEmpty(vertexName))
@@ -1237,12 +1333,13 @@ namespace Project2 {
 					isPanning = false;  // Set to false initially
 				}
 			}
+
 			lastMousePosition = e->Location;  // Always record the initial position
 		}
 	}
 
 	System::Void MyForm::pictureBox1_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		if (e->Button == System::Windows::Forms::MouseButtons::Left) {
+		if (e->Button == System::Windows::Forms::MouseButtons::Left) {// fix vertex create
 			if (defaultRadioButton->Checked) {
 				if (isPanning) {
 					isPanning = false;
@@ -1262,7 +1359,7 @@ namespace Project2 {
 					graph->AddEdge(selectedVertex->Name, clickedVertex->Name, 0, isDirected);
 					pictureBox1->Invalidate();
 				}
-				else if (clickedVertex == nullptr && !isDragging) {
+				else if (clickedVertex == nullptr && !isDragging && draggingVertex == nullptr) {
 					// Create a new vertex only if no vertex was clicked and we're not dragging
 					AddVertexAtCursor(e->Location);
 				}

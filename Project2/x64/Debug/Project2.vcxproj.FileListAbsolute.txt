@@ -4,3 +4,6 @@ C:\Users\Admin\source\repos\Project2\Project2\x64\Debug\Project2.vcxproj.Generat
 C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\x64\Debug\Project2.vcxproj.AssemblyReference.cache
 C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\x64\Debug\Project2.MyForm.resources
 C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\x64\Debug\Project2.vcxproj.GenerateResource.cache
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\x64\Debug\Project2.vcxproj.AssemblyReference.cache
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\x64\Debug\Project2.MyForm.resources
+C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\x64\Debug\Project2.vcxproj.GenerateResource.cache

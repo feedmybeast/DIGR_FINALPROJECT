@@ -1,25 +1,2 @@
-﻿  MyForm.cpp
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(344,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(345,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(346,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(347,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(842,52): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(842,41): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1009,53): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1009,42): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1033,63): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1033,52): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1122,53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1122,47): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1210,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1211,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1216,79): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1216,32): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1217,79): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1217,32): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1226,53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1226,47): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1258,54): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\Project2\MyForm.cpp(1258,48): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  MyForm.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
-  Project2.vcxproj -> C:\Users\Admin\Documents\FUTURE\DIGR\GIT_TEST\DIGR_FINALPROJECT\x64\Debug\Project2.exe
+﻿  MyForm.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
+  Project2.vcxproj -> C:\Users\trant\source\repos\DIGR_FINALPROJECT\x64\Debug\Project2.exe
