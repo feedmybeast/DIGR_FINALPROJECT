@@ -30,8 +30,8 @@ namespace Project2 {
 			viewOffsetX = 0.0f;
 			viewOffsetY = 0.0f;
 			isPanning = false;
-			gridWidth = 1000; // Initial grid width
-			gridHeight = 1000; // Initial grid height
+			gridWidth = 1000; 
+			gridHeight = 1000;
 			needsGridExpansion = false;
 			gridSize = 20;
 		}
@@ -43,8 +43,8 @@ namespace Project2 {
 		System::ComponentModel::Container^ components;
 
 		static const float GRID_SIZE = 20.0f;
-		Vertex^ draggingVertex; // Declare draggingVertex
-		PointF offset; // Declare offset
+		Vertex^ draggingVertex;
+		PointF offset; 
 		bool isDragging;
 		Vertex^ draggedVertex;
 		Point lastMousePosition;
@@ -89,7 +89,6 @@ namespace Project2 {
 		String^ PromptForVertexName();
 		String^ PromptForEditVertex(String^ title);
 
-		//PointF^ ScreenToWorld(Point screenPoint);
 		void MyForm::AddVertexAtCursor(Point cursorPosition);
 		Graph^ graph;
 		float zoomFactor;
@@ -97,6 +96,8 @@ namespace Project2 {
 
 		float viewOffsetX;
 		float viewOffsetY;
+
+		Point potentialDragStart;
 
 		bool isPanning;
 		Point lastMousePos;
@@ -139,16 +140,11 @@ namespace Project2 {
 		void DrawGraph(Graphics^ g);
 		Vertex^ FindVertexAtPoint(float x, float y);
 		Edge^ FindEdgeAtPoint(int x, int y);
-		//void AddEdge(Vertex^ start, Vertex^ end);
-		//void MyForm::AddEdge(Vertex^ start, Vertex^ end, bool isDirected);
 		void DeleteVertex(Vertex^ vertex);
 		void DeleteEdge(Edge^ edge);
 		void UpdateInfoPanel();
-		void HandleTouchpadGesture(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
-		void MyForm::ExpandGridArea();
 	protected:
 		virtual void WndProc(System::Windows::Forms::Message% m) override {
-			//const int WM_MOUSEWHEEL = 0x020A;
 			if (m.Msg == WM_MOUSEWHEEL) {
 				int64_t lParam = m.LParam.ToInt64();
 				int64_t wParam = m.WParam.ToInt64();
@@ -159,8 +155,6 @@ namespace Project2 {
 			}
 			System::Windows::Forms::Form::WndProc(m);
 		}
-		//System::Void pictureBox1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e);
-		//System::Void pictureBox1_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
 		System::Void pictureBox1_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
 		System::Void pictureBox1_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
 		System::Void pictureBox1_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
@@ -169,6 +163,8 @@ namespace Project2 {
 		System::Void SaveGraph(System::Object^ sender, System::EventArgs^ e);
 		System::Void LoadGraph(System::Object^ sender, System::EventArgs^ e);
 		System::Void ChangeEdgeColor(System::Object^ sender, System::EventArgs^ e);
+		bool IsVertexNameExist(String^ name);
+
 
 
 

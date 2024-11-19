@@ -75,7 +75,7 @@ namespace Project2 {
 		this->Controls->Add(this->toolStrip1);
 		//this->MainMenuStrip = this->menuStrip1;
 		this->Name = L"MyForm";
-		this->Text = L"Graph Editor";
+		this->Text = L"DIGR_TEAM09_VISUAL GRAPH DRAWING PROJECT";
 		this->ResumeLayout(false);
 		this->PerformLayout();
 
@@ -97,44 +97,18 @@ namespace Project2 {
 		this->pictureBox1->Dock = System::Windows::Forms::DockStyle::Fill;
 		this->pictureBox1->MouseWheel += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::pictureBox1_MouseWheel);
 		this->pictureBox1->MouseDoubleClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::pictureBox1_MouseDoubleClick);
-		this->pictureBox1->MouseWheel += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::HandleTouchpadGesture);
-		// infoPanel
-		//this->infoPanel->Location = System::Drawing::Point(12, 425);
-		//this->infoPanel->Multiline = true;
-		//this->infoPanel->Name = L"infoPanel";
-		//this->infoPanel->ReadOnly = true;
-		//this->infoPanel->Size = System::Drawing::Size(558, 74);
-		//this->infoPanel->TabIndex = 1;
+
 		// infoPanel 2
 		this->infoPanel->Location = System::Drawing::Point(12, 27);
 		this->infoPanel->Name = L"infoPanel";
 		this->infoPanel->Size = System::Drawing::Size(558, 392);
 		this->infoPanel->TabIndex = 0;
 		this->infoPanel->TabStop = false;
+
 		//CLick timer (for diff between single and double click)
 		this->clickTimer = (gcnew System::Windows::Forms::Timer());
 		this->clickTimer->Interval = SystemInformation::DoubleClickTime;
 		this->clickTimer->Tick += gcnew System::EventHandler(this, &MyForm::clickTimer_Tick);
-
-		// menuStrip1
-	   /* this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
-			this->fileToolStripMenuItem,
-				this->editToolStripMenuItem
-		});
-		this->menuStrip1->Location = System::Drawing::Point(0, 0);
-		this->menuStrip1->Name = L"menuStrip1";
-		this->menuStrip1->Size = System::Drawing::Size(582, 24);
-		this->menuStrip1->TabIndex = 2;
-		this->menuStrip1->Text = L"menuStrip1";*/
-
-		// fileToolStripMenuItem
-		/*this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
-			this->saveToolStripMenuItem,
-				this->loadToolStripMenuItem
-		});
-		this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
-		this->fileToolStripMenuItem->Size = System::Drawing::Size(37, 20);
-		this->fileToolStripMenuItem->Text = L"File";*/
 
 		// saveToolStripMenuItem
 		this->saveToolStripMenuItem->Name = L"saveToolStripMenuItem";
@@ -148,63 +122,63 @@ namespace Project2 {
 		this->loadToolStripMenuItem->Text = L"Load";
 		this->loadToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::LoadGraph);
 
-		// editToolStripMenuItem
-		/*this->editToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->changeEdgeColorToolStripMenuItem });
-		this->editToolStripMenuItem->Name = L"editToolStripMenuItem";
-		this->editToolStripMenuItem->Size = System::Drawing::Size(39, 20);
-		this->editToolStripMenuItem->Text = L"Edit";*/
-
 		// changeEdgeColorToolStripMenuItem
 		this->changeEdgeColorToolStripMenuItem->Name = L"changeEdgeColorToolStripMenuItem";
 		this->changeEdgeColorToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 		this->changeEdgeColorToolStripMenuItem->Text = L"Change Edge Color";
+
+		// Event handler for changing the edge color
 		this->changeEdgeColorToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::ChangeEdgeColor);
-
-		// toolStrip1
-		//this->addVertexButton = (gcnew System::Windows::Forms::ToolStripButton());
-		//this->addVertexButton->Text = L"Add Vertex";
-		//this->addVertexButton->Click += gcnew System::EventHandler(this, &MyForm::AddVertexButton_Click);
-
-		//this->deleteVertexButton = (gcnew System::Windows::Forms::ToolStripButton());
-		//this->deleteVertexButton->Text = L"Delete Vertex";
-		//this->deleteVertexButton->Click += gcnew System::EventHandler(this, &MyForm::DeleteVertexButton_Click);
 
 		this->addEdgeButton = (gcnew System::Windows::Forms::ToolStripButton());
 		this->addEdgeButton->Text = L"Add Edge";
+
+		// Event handler for adding a new edge
 		this->addEdgeButton->Click += gcnew System::EventHandler(this, &MyForm::AddEdgeButton_Click);
 
 		this->deleteEdgeButton = (gcnew System::Windows::Forms::ToolStripButton());
 		this->deleteEdgeButton->Text = L"Delete Edge";
+
+		// Event handler for deleting an edge
 		this->deleteEdgeButton->Click += gcnew System::EventHandler(this, &MyForm::DeleteEdgeButton_Click);
 
 		this->zoomInButton = (gcnew System::Windows::Forms::ToolStripButton());
 		this->zoomInButton->Text = L"Zoom In";
+
+		// Event handler for zooming in
 		this->zoomInButton->Click += gcnew System::EventHandler(this, &MyForm::ZoomInButton_Click);
 
 		this->zoomOutButton = (gcnew System::Windows::Forms::ToolStripButton());
 		this->zoomOutButton->Text = L"Zoom Out";
+		// Event handler for zooming out
 		this->zoomOutButton->Click += gcnew System::EventHandler(this, &MyForm::ZoomOutButton_Click);
 
 		this->resetZoomButton = (gcnew System::Windows::Forms::ToolStripButton());
 		this->resetZoomButton->Text = L"Reset Zoom";
+
+		// Event handler for resetting the zoom level
 		this->resetZoomButton->Click += gcnew System::EventHandler(this, &MyForm::ResetZoomButton_Click);
 
 		this->clearButton = (gcnew System::Windows::Forms::ToolStripButton());
 		this->clearButton->Text = L"Clear";
+		// Event handler for clearing the graph or network diagram
 		this->clearButton->Click += gcnew System::EventHandler(this, &MyForm::ClearButton_Click);
 
 		this->runDijkstraButton = (gcnew System::Windows::Forms::ToolStripButton());
 		this->runDijkstraButton->Text = L"Run Dijkstra";
+
+		// Event handler for running Dijkstra's algorithm
 		this->runDijkstraButton->Click += gcnew System::EventHandler(this, &MyForm::RunDijkstraButton_Click);
 
 		this->showGridButton = (gcnew System::Windows::Forms::ToolStripButton());
 		this->showGridButton->Text = L"Show Grid";
+
+		// Event handler for toggling the grid visibility
 		this->showGridButton->Click += gcnew System::EventHandler(this, &MyForm::ShowGridButton_Click);
 
 		System::Collections::Generic::List<System::Windows::Forms::ToolStripItem^>^ items = gcnew System::Collections::Generic::List<System::Windows::Forms::ToolStripItem^>();
 
-		//items->Add(this->addVertexButton);
-		//items->Add(this->deleteVertexButton);
+		// List of items in tools strip
 		items->Add(this->addEdgeButton);
 		items->Add(this->deleteEdgeButton);
 		items->Add(gcnew System::Windows::Forms::ToolStripSeparator());
@@ -220,7 +194,8 @@ namespace Project2 {
 		items->Add(gcnew System::Windows::Forms::ToolStripButton(L"Load", nullptr, gcnew System::EventHandler(this, &MyForm::LoadGraph)));
 
 		this->toolStrip1->Items->AddRange(items->ToArray());
-		//  undirectedRadioButton
+
+		// undirectedRadioButton
 		this->undirectedRadioButton->Location = System::Drawing::Point(600, 50);
 		this->undirectedRadioButton->Name = L"undirectedRadioButton";
 		this->undirectedRadioButton->Size = System::Drawing::Size(100, 20);
@@ -230,14 +205,7 @@ namespace Project2 {
 		this->undirectedRadioButton->UseVisualStyleBackColor = true;
 		this->Controls->Add(this->undirectedRadioButton);
 
-		//  directedRadioButton
-		//this->directedRadioButton->Location = System::Drawing::Point(600, 80);
-		//this->directedRadioButton->Name = L"directedRadioButton";
-		//this->directedRadioButton->Size = System::Drawing::Size(100, 20);
-		//this->directedRadioButton->TabIndex = 5;
-		//this->directedRadioButton->TabStop = true;
-		//this->directedRadioButton->Text = L"Directed";
-		//this->directedRadioButton->UseVisualStyleBackColor = true;
+		// directedRadioButton
 		this->directedRadioButton->Location = System::Drawing::Point(600, 80);
 		this->directedRadioButton->Name = L"directedRadioButton";
 		this->directedRadioButton->Size = System::Drawing::Size(104, 24);
@@ -246,7 +214,8 @@ namespace Project2 {
 		this->directedRadioButton->Text = L"Directed";
 		this->directedRadioButton->UseVisualStyleBackColor = true;
 		this->Controls->Add(this->directedRadioButton);
-		//  directionComboBox
+
+		// directionComboBox
 		this->directionComboBox = (gcnew System::Windows::Forms::ComboBox());
 		this->directionComboBox->Location = System::Drawing::Point(600, 150);
 		this->directionComboBox->Name = L"directionComboBox";
@@ -323,29 +292,8 @@ namespace Project2 {
 		return nullptr;
 	}
 
-	//void MyForm::AddEdge(Vertex^ start, Vertex^ end) {
-	//    if (start != end) {
-	//        int newId = graph->Edges->Count + 1;
-	//        Edge^ newEdge = gcnew Edge(newId, start, end, 1, System::Drawing::Color::Black); // Default weight is 1, default color is Black
-	//        graph->AddEdge(newEdge);
-	//        UpdateInfoPanel();
-	//        pictureBox1->Invalidate();
-	//    }
-	//}
-	//void MyForm::AddEdge(Vertex^ start, Vertex^ end, bool isDirected)
-	//{
-	//    Edge^ newEdge = gcnew Edge(start, end, currentEdgeColor);
-	//    graph->Edges->Add(newEdge);
-	//    if (!isDirected)
-	//    {
-	//        Edge^ reverseEdge = gcnew Edge(end, start, currentEdgeColor);
-	//        graph->Edges->Add(reverseEdge);
-	//    }
-	//}
-	//void MyForm::SomeFunction() {
-	//graph->AddEdge(selectedVertex, draggingVertex, currentEdgeColor, true);
-	//}
-// DeleteVertex: Removes a vertex from the graph and updates the UI
+
+	// DeleteVertex: Removes a vertex from the graph and updates the UI
 	void MyForm::DeleteVertex(Vertex^ vertex) {
 		graph->RemoveVertex(vertex);
 		UpdateInfoPanel();
@@ -617,52 +565,22 @@ namespace Project2 {
 
 		pictureBox1->Invalidate();
 	}
-	void MyForm::ExpandGridArea() {
-		// Adjust the grid area based on the current view offset and zoom factor
-		// This is a placeholder implementation, adjust as needed for your specific grid logic
-		//int gridWidth = static_cast<int>(pictureBox1->Width / zoomFactor);
-		//int gridHeight = static_cast<int>(pictureBox1->Height / zoomFactor);
-		// Ensure the grid area is large enough to cover the view
-		// You may need to adjust the logic here based on your specific requirements
-	}
 
 	void MyForm::pictureBox1_MouseWheel(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
 		Point cursorPos = e->Location;
-		//float zoomIncrement = 0.1f;
 		const float zoomStep = 0.1f;
 
 		if (e->Delta > 0) {
-			//zoomFactor += zoomIncrement;
 			zoomFactor += zoomStep;
 		}
 		else {
 			zoomFactor = Math::Max(zoomFactor - zoomStep, zoomStep);
-			//zoomFactor -= zoomIncrement;
-			//if (zoomFactor < zoomIncrement) {
-				//zoomFactor = zoomIncrement;  
-			//}
 		}
-		//zoomFactor = Math::Max(0.1f, Math::Min(zoomFactor, 10.0f));
 		AdjustVerticesToGrid();
 		pictureBox1->Invalidate();
-		//float newCenterX = (cursorPos.X - viewOffsetX) / zoomFactor;
-		//float newCenterY = (cursorPos.Y - viewOffsetY) / zoomFactor;
 
-		//viewOffsetX = cursorPos.X - newCenterX * zoomFactor;
-		//viewOffsetY = cursorPos.Y - newCenterY * zoomFactor;
-
-		//pictureBox1->Invalidate();
 	}
-	void MyForm::HandleTouchpadGesture(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		//if (e->Button == System::Windows::Forms::MouseButtons::None && e->Delta != 0) {
-		//    Point currentMousePos = e->Location;
-		//    Point delta = Point(currentMousePos.X - lastMousePos.X, currentMousePos.Y - lastMousePos.Y);
-		//    viewOffsetX += delta.X / zoomFactor;
-		//    viewOffsetY += delta.Y / zoomFactor;
-		//    lastMousePos = currentMousePos;
-		//    pictureBox1->Invalidate(); // Redraw the pictureBox to reflect the new view offset
-		//}
-	}
+	//
 
 	void MyForm::DrawGraph(Graphics^ g)
 	{
@@ -682,28 +600,6 @@ namespace Project2 {
 		//Improve animation qualifications
 		g->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::AntiAlias;
 		g->TextRenderingHint = System::Drawing::Text::TextRenderingHint::AntiAliasGridFit;
-
-		// // Draw edges
-		// for each (Edge ^ edge in graph->Edges) {
-		//     Vertex^ start = edge->Start;
-		//     Vertex^ end = edge->End;
-		//     PointF startCenter = PointF(start->X, start->Y);
-		//     PointF endCenter = PointF(end->X, end->Y);
-		//     Pen^ pen = gcnew Pen(edge->Color, 2);
-		//     g->DrawLine(pen, startCenter, endCenter);
-		//     int midX = (startCenter.X + endCenter.X) / 2;
-		//     int midY = (startCenter.Y + endCenter.Y) / 2;
-		//     g->DrawString(edge->Weight.ToString(), this->Font, Brushes::Black, midX, midY);
-		// }
-		// // Draw vertices
-		// for each (Vertex ^ vertex in graph->Vertices) {
-		//     g->FillEllipse(Brushes::White, vertex->X - 15, vertex->Y - 15, 30, 30);
-		//     g->DrawEllipse(Pens::Black, vertex->X - 15, vertex->Y - 15, 30, 30);
-		//     g->DrawString(vertex->Name, this->Font, Brushes::Black, vertex->X - 5, vertex->Y - 7);
-		//     // Draw the vertex degree
-		//     String^ degreeStr = vertex->Degree.ToString();
-		//     g->DrawString(degreeStr, this->Font, Brushes::Red, vertex->X - 15, vertex->Y - 30);
-		// }
 	}
 	void MyForm::AddEdgeButton_Click(System::Object^ sender, System::EventArgs^ e) {
 		// Create a new form to get user input for the edge
@@ -860,11 +756,6 @@ namespace Project2 {
 	// This function manages vertex and edge creation, selection, and deletion
 	System::Void MyForm::pictureBox1_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
 	{
-		//int adjustedX = e->X;
-		//int adjustedY = e->Y;
-		//this->mouseX = e->X; this->mouseY = e->Y; this->single_Click = true; this->clickTimer->Start();
-		//int adjustedX = static_cast<int>(std::round(e->X * zoomFactor));
-		//int adjustedY = static_cast<int>(std::round(e->Y * zoomFactor));
 		float adjustedX = (e->X - viewOffsetX) / zoomFactor;
 		float adjustedY = (e->Y - viewOffsetY) / zoomFactor;
 		if (e->Button == System::Windows::Forms::MouseButtons::Left && draggingVertex == nullptr)
@@ -959,9 +850,6 @@ namespace Project2 {
 		}
 		UpdateInfoPanel();
 	}
-	/*PointF MyForm::ScreenToWorld(Point screenPoint) {
-		return PointF((screenPoint.X / zoomFactor) - offset.X, (screenPoint.Y / zoomFactor) - offset.Y);*/
-		//}
 
 	String^ MyForm::PromptForVertexName()
 	{
@@ -1036,8 +924,6 @@ namespace Project2 {
 	System::Void MyForm::clickTimer_Tick(System::Object^ sender, System::EventArgs^ e)
 	{
 		this->clickTimer->Stop();
-		//int adjustedX = static_cast<int>(std::round(this->mouseX * zoomFactor));
-		//int adjustedY = static_cast<int>(std::round(this->mouseY * zoomFactor));
 		float adjustedX = static_cast<float>((this->mouseX * zoomFactor));
 		float adjustedY = static_cast<float>((this->mouseY * zoomFactor));
 		if (this->single_Click && !this->doubleClickOccured)
@@ -1187,31 +1073,49 @@ namespace Project2 {
 	// This function manages vertex dragging and edge creation preview
 	System::Void MyForm::pictureBox1_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
 	{
+		const int DRAG_THRESHOLD = 5; // pixels
+
 		if (defaultRadioButton->Checked)
 		{
-			if (isDragging && draggedVertex != nullptr)
+			if (e->Button == System::Windows::Forms::MouseButtons::Left)
 			{
-				float gridSize = GRID_SIZE;
-				float newX = (e->X - viewOffsetX) / zoomFactor;
-				float newY = (e->Y - viewOffsetY) / zoomFactor;
-				if (showGrid)
+				int dx = e->X - lastMousePosition.X;
+				int dy = e->Y - lastMousePosition.Y;
+
+				if (!isDragging && !isPanning && (Math::Abs(dx) > DRAG_THRESHOLD || Math::Abs(dy) > DRAG_THRESHOLD))
 				{
-					newX = round(newX / gridSize) * gridSize;
-					newY = round(newY / gridSize) * gridSize;
+					if (draggedVertex != nullptr)
+					{
+						isDragging = true;
+					}
+					else
+					{
+						isPanning = true;
+					}
 				}
-				draggedVertex->X = newX;
-				draggedVertex->Y = newY;
+
+				if (isDragging && draggedVertex != nullptr)
+				{
+					float gridSize = GRID_SIZE;
+					float newX = (e->X - viewOffsetX) / zoomFactor;
+					float newY = (e->Y - viewOffsetY) / zoomFactor;
+					if (showGrid)
+					{
+						newX = round(newX / gridSize) * gridSize;
+						newY = round(newY / gridSize) * gridSize;
+					}
+					draggedVertex->X = newX;
+					draggedVertex->Y = newY;
+					pictureBox1->Invalidate();
+				}
+				else if (isPanning)
+				{
+					viewOffsetX += dx;
+					viewOffsetY += dy;
+					pictureBox1->Invalidate();
+				}
+
 				lastMousePosition = e->Location;
-				pictureBox1->Invalidate();
-			}
-			else if (isPanning)
-			{
-				int dx = e->X - lastMousePos.X;
-				int dy = e->Y - lastMousePos.Y;
-				viewOffsetX += dx;
-				viewOffsetY += dy;
-				lastMousePos = e->Location;
-				pictureBox1->Invalidate();
 			}
 
 			// Update cursor based on whether it's over a vertex
@@ -1323,33 +1227,34 @@ namespace Project2 {
 			if (clickedVertex != nullptr) {
 				selectedVertex = clickedVertex;
 				if (defaultRadioButton->Checked) {
-					isDragging = true;
+					isDragging = false;  // Set to false initially
 					draggedVertex = clickedVertex;
 				}
-				lastMousePosition = e->Location;
 			}
 			else {
 				selectedVertex = nullptr;
 				if (defaultRadioButton->Checked) {
-					isPanning = true;
-					lastMousePos = e->Location;
+					isPanning = false;  // Set to false initially
 				}
 			}
+			lastMousePosition = e->Location;  // Always record the initial position
 		}
 	}
 
 	System::Void MyForm::pictureBox1_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		if (isPanning) {
-			isPanning = false;
-		}
-		if (isDragging && draggedVertex != nullptr) {
-			isDragging = false;
-			AdjustVerticesToGrid();
-			pictureBox1->Invalidate();
-		}
-
 		if (e->Button == System::Windows::Forms::MouseButtons::Left) {
-			if (directedRadioButton->Checked || undirectedRadioButton->Checked) {
+			if (defaultRadioButton->Checked) {
+				if (isPanning) {
+					isPanning = false;
+				}
+				else if (isDragging && draggedVertex != nullptr) {
+					isDragging = false;
+					AdjustVerticesToGrid();
+					pictureBox1->Invalidate();
+				}
+				// Do nothing else in Default mode
+			}
+			else if (directedRadioButton->Checked || undirectedRadioButton->Checked) {
 				Vertex^ clickedVertex = FindVertexAtPoint(e->X, e->Y);
 				if (selectedVertex != nullptr && clickedVertex != nullptr && clickedVertex != selectedVertex) {
 					// Handle edge creation
@@ -1357,8 +1262,8 @@ namespace Project2 {
 					graph->AddEdge(selectedVertex->Name, clickedVertex->Name, 0, isDirected);
 					pictureBox1->Invalidate();
 				}
-				else if (clickedVertex == nullptr) {
-					// Create a new vertex only if no vertex was clicked
+				else if (clickedVertex == nullptr && !isDragging) {
+					// Create a new vertex only if no vertex was clicked and we're not dragging
 					AddVertexAtCursor(e->Location);
 				}
 			}
@@ -1367,6 +1272,7 @@ namespace Project2 {
 		draggedVertex = nullptr;
 		selectedVertex = nullptr;
 		isPanning = false;
+		isDragging = false;
 		pictureBox1->Invalidate();
 	}
 
@@ -1427,7 +1333,19 @@ namespace Project2 {
 		}
 		pictureBox1->Invalidate();
 	}
+
+	// IsVertexNameExist: Checks if a vertex with the given name already exists
+	bool MyForm::IsVertexNameExist(String^ name) {
+		for each (Vertex ^ v in graph->Vertices) {
+			if (v->Name == name) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
+
+
 
 
 
