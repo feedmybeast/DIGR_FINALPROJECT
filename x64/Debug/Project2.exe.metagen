@@ -21,6 +21,7 @@ Class Vertex: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   Fields:
     Single Radius : Public
   Properties:
+    Boolean IsCoincideVertex 'get set' : 
     System.Drawing.Color ColorProperty 'get set' : 
     Int32 Degree 'get set' : 
     Single Y   'get set' : 
@@ -40,14 +41,19 @@ Class Vertex: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     set_Degree(Int32): PrivateScope, Public, HideBySig, SpecialName
     get_ColorProperty(): PrivateScope, Public, HideBySig, SpecialName
     set_ColorProperty(Color): PrivateScope, Public, HideBySig, SpecialName
+    get_IsCoincideVertex(): PrivateScope, Public, HideBySig, SpecialName
+    set_IsCoincideVertex(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig, SpecialName
 Class Edge: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(Boolean, Vertex, Vertex, Int32, System.Drawing.Color): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(Int32, Vertex, Vertex, Int32, System.Drawing.Color): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(Vertex, Vertex, Boolean): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(Vertex, Vertex, Int32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(Vertex, Vertex, Int32, System.Drawing.Color): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(Int32, Vertex, Vertex, Int32, System.Drawing.Color, Boolean): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(Boolean, Vertex, Vertex, Int32, System.Drawing.Color, Boolean): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(Vertex, Vertex, Int32, System.Drawing.Color, Boolean): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Properties:
+    Boolean IsCoincideEdge 'get set' : 
     Boolean Directed 'get set' : 
     System.Drawing.Color Color 'get set' : 
     Int32 Weight 'get set' : 
@@ -67,6 +73,10 @@ Class Edge: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     set_Color(Color): PrivateScope, Public, HideBySig, SpecialName
     get_Directed(): PrivateScope, Public, HideBySig, SpecialName
     set_Directed(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig, SpecialName
+    get_IsCoincideEdge(): PrivateScope, Public, HideBySig, SpecialName
+    set_IsCoincideEdge(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig, SpecialName
+    SetEdgeIndex(Int32): PrivateScope, Public, HideBySig
+    GetEdgeIndex(): PrivateScope, Public, HideBySig
 Class Graph: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Properties:
@@ -75,17 +85,28 @@ Class Graph: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   Methods:
     FindVertexAt(Single, Single): PrivateScope, Public, HideBySig
     AddEdge(Edge): PrivateScope, Public, HideBySig
+    AddEdge(Boolean(HasFieldMarshal), String, String, Int32): PrivateScope, Public, HideBySig
+    AddEdge(Boolean(HasFieldMarshal), String, String, Int32, Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig
     AddEdge(String, String, Int32): PrivateScope, Public, HideBySig
     AddEdge(String, String, Int32, Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig
     FindVertexByName(String): PrivateScope, Public, HideBySig
+    GetVertexByName(String): PrivateScope, Public, HideBySig
     get_Vertices(): PrivateScope, Public, HideBySig, SpecialName
     get_Edges(): PrivateScope, Public, HideBySig, SpecialName
     AddVertex(Vertex): PrivateScope, Public, HideBySig
     RemoveVertex(Vertex): PrivateScope, Public, HideBySig
     RemoveEdge(Edge): PrivateScope, Public, HideBySig
     GetVertexById(Int32): PrivateScope, Public, HideBySig
+    Undo(): PrivateScope, Public, HideBySig
     Clear(): PrivateScope, Public, HideBySig
     SaveToFile(String): PrivateScope, Public, HideBySig
+    LoadFromFile(String): PrivateScope, Public, HideBySig
+    UndoAddEdge(Edge): PrivateScope, Public, HideBySig
+    UndoRemoveVertex(Vertex): PrivateScope, Public, HideBySig
+    UndoAddVertex(Vertex): PrivateScope, Public, HideBySig
+    UndoRemoveEdge(Edge): PrivateScope, Public, HideBySig
 Class Project2.MyForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    System.String shortpath : Public

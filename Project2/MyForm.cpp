@@ -11,22 +11,25 @@
 #include<string>
 #include <sstream>
 #include <fstream>
+#include <vcclr.h>
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
 using namespace System;
 using namespace System::Drawing::Drawing2D;
+using namespace System::Collections::Generic;
 #using <Microsoft.VisualBasic.dll>
-
 namespace Project2 {
 	// InitializeComponent: Initializes all the UI components of the form
 	void MyForm::InitializeComponent(void)
 	{
+		// Set KeyPreview to true
+		this->KeyPreview = true;
 		// Initialize and configure the default radio button
 		this->defaultRadioButton = (gcnew System::Windows::Forms::RadioButton());
 		this->defaultRadioButton->AutoSize = true;
 		this->defaultRadioButton->Checked = true;
-		this->defaultRadioButton->Location = System::Drawing::Point(600, 120);
+		this->defaultRadioButton->Location = System::Drawing::Point(700, 90);
 		this->defaultRadioButton->Name = L"defaultRadioButton";
 		this->defaultRadioButton->Size = System::Drawing::Size(59, 17);
 		this->defaultRadioButton->TabIndex = 6;
@@ -34,7 +37,8 @@ namespace Project2 {
 		this->defaultRadioButton->Text = L"Default";
 		this->defaultRadioButton->UseVisualStyleBackColor = true;
 		this->defaultRadioButton->CheckedChanged += gcnew System::EventHandler(this, &MyForm::defaultRadioButton_CheckedChanged);
-
+		// Add KeyDown event handler
+		this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm::MyForm_KeyDown);
 		// Add the defaultRadioButton to the form's controls
 		this->Controls->Add(this->defaultRadioButton);
 
@@ -60,6 +64,8 @@ namespace Project2 {
 		this->showGridButton->Click += gcnew System::EventHandler(this, &MyForm::ShowGridButton_Click);
 		this->undirectedRadioButton = (gcnew System::Windows::Forms::RadioButton());
 		this->directedRadioButton = (gcnew System::Windows::Forms::RadioButton());
+		this->directedRadioButton->CheckedChanged += gcnew System::EventHandler(this, &MyForm::directedRadioButton_CheckedChanged);
+		this->undirectedRadioButton->CheckedChanged += gcnew System::EventHandler(this, &MyForm::undirectedRadioButton_CheckedChanged);
 
 		// The buttons are now added directly to the toolStrip1 in the Items->AddRange call
 
@@ -87,7 +93,7 @@ namespace Project2 {
 		// pictureBox1
 		this->pictureBox1->Location = System::Drawing::Point(12, 27);
 		this->pictureBox1->Name = L"pictureBox1";
-		this->pictureBox1->Size = System::Drawing::Size(558, 600);
+		this->pictureBox1->Size = System::Drawing::Size(680, 650);
 		this->pictureBox1->TabIndex = 0;
 		this->pictureBox1->TabStop = false;
 		this->pictureBox1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::pictureBox1_Paint);
@@ -105,6 +111,16 @@ namespace Project2 {
 		this->infoPanel->Size = System::Drawing::Size(558, 392);
 		this->infoPanel->TabIndex = 0;
 		this->infoPanel->TabStop = false;
+		// Initialize and configure infoPanel3
+		this->infoPanel3 = (gcnew System::Windows::Forms::TextBox());
+		this->infoPanel3->Location = System::Drawing::Point(690, 135); // Adjust the position to the middle of the right blank space
+		this->infoPanel3->Name = L"infoPanel3";
+		this->infoPanel3->Size = System::Drawing::Size(120, 120); // Adjust the size as needed
+		this->infoPanel3->TabIndex = 1;
+		this->infoPanel3->ReadOnly = true;
+		this->infoPanel3->Multiline = true;
+		this->infoPanel3->Enabled = false; // Add this line to make it read-only and non-interactive
+		this->Controls->Add(this->infoPanel3);
 
 		//CLick timer (for diff between single and double click)
 		this->clickTimer = (gcnew System::Windows::Forms::Timer());
@@ -174,6 +190,12 @@ namespace Project2 {
 		this->showGridButton = (gcnew System::Windows::Forms::ToolStripButton());
 		this->showGridButton->Text = L"Show Grid";
 
+		// fix size window
+		this->WindowState = System::Windows::Forms::FormWindowState::Normal;
+		this->MaximizeBox = false;
+		this->MinimizeBox = false;
+		this->Icon = gcnew System::Drawing::Icon("digr.ico");
+		this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedDialog;
 		// Event handler for toggling the grid visibility
 		this->showGridButton->Click += gcnew System::EventHandler(this, &MyForm::ShowGridButton_Click);
 
@@ -197,7 +219,7 @@ namespace Project2 {
 		this->toolStrip1->Items->AddRange(items->ToArray());
 
 		// undirectedRadioButton
-		this->undirectedRadioButton->Location = System::Drawing::Point(600, 50);
+		this->undirectedRadioButton->Location = System::Drawing::Point(700, 50);
 		this->undirectedRadioButton->Name = L"undirectedRadioButton";
 		this->undirectedRadioButton->Size = System::Drawing::Size(100, 20);
 		this->undirectedRadioButton->TabIndex = 4;
@@ -207,7 +229,7 @@ namespace Project2 {
 		this->Controls->Add(this->undirectedRadioButton);
 
 		// directedRadioButton
-		this->directedRadioButton->Location = System::Drawing::Point(600, 80);
+		this->directedRadioButton->Location = System::Drawing::Point(700, 70);
 		this->directedRadioButton->Name = L"directedRadioButton";
 		this->directedRadioButton->Size = System::Drawing::Size(104, 24);
 		this->directedRadioButton->TabIndex = 1;
@@ -215,15 +237,6 @@ namespace Project2 {
 		this->directedRadioButton->Text = L"Directed";
 		this->directedRadioButton->UseVisualStyleBackColor = true;
 		this->Controls->Add(this->directedRadioButton);
-
-		// directionComboBox
-		this->directionComboBox = (gcnew System::Windows::Forms::ComboBox());
-		this->directionComboBox->Location = System::Drawing::Point(600, 150);
-		this->directionComboBox->Name = L"directionComboBox";
-		this->directionComboBox->Size = System::Drawing::Size(100, 20);
-		this->directionComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Start to End", L"End to Start" });
-		this->directionComboBox->SelectedIndex = 0;
-		this->Controls->Add(this->directionComboBox);
 
 	}
 
@@ -299,6 +312,7 @@ namespace Project2 {
 		graph->RemoveVertex(vertex);
 		UpdateInfoPanel();
 		pictureBox1->Invalidate();
+		UpdateInfoPanel3();
 	}
 
 	// DeleteEdge: Removes an edge from the graph and updates the UI
@@ -306,6 +320,7 @@ namespace Project2 {
 		graph->RemoveEdge(edge);
 		UpdateInfoPanel();
 		pictureBox1->Invalidate();
+		UpdateInfoPanel3();
 	}
 
 	// UpdateInfoPanel: Updates the information panel with current graph statistics
@@ -313,15 +328,23 @@ namespace Project2 {
 		infoPanel->Text = "Vertices: " + graph->Vertices->Count + "\r\n";
 		infoPanel->Text += "Edges: " + graph->Edges->Count + "\r\n";
 	}
-
+	void MyForm::UpdateInfoPanel3()
+	{
+		int vertexCount = graph->Vertices->Count;
+		int edgeCount = graph->Edges->Count;
+		this->infoPanel3->Text = "Vertices: " + vertexCount + "\r\nEdges: " + edgeCount + "\n";
+		this->infoPanel3->Text += shortpath;
+		shortpath = "";
+		//this->Invalidate();
+		pictureBox1->Invalidate();
+	}
 	// pictureBox1_Paint: Handles the painting of the graph on the picture box
+	bool flag = nullptr;
 	System::Void MyForm::pictureBox1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e)
 	{
 		Graphics^ g = e->Graphics;
 		g->SmoothingMode = Drawing2D::SmoothingMode::AntiAlias;
 		g->Clear(Color::White);
-
-		// Apply zoom and pan transformations
 
 		// Apply zoom and pan transformations
 		g->TranslateTransform(viewOffsetX, viewOffsetY);
@@ -360,48 +383,354 @@ namespace Project2 {
 			delete gridPen;
 		}
 
-		// Draw edges
+
 		for each (Edge ^ edge in graph->Edges)
 		{
-			Pen^ pen = gcnew Pen(edge->Color, 2 / zoomFactor);
-			g->DrawLine(pen, edge->Start->X, edge->Start->Y, edge->End->X, edge->End->Y);
-			delete pen;
-
-			// Draw arrow for directed edges
-			if (edge->Directed)
+			float angle2;
+			if (edge->Start != edge->End)
 			{
-				DrawArrow(g, edge->Start, edge->End);
+
+				if (edge->IsCoincideEdge == true)
+				{
+					Pen^ pen = gcnew Pen(edge->Color, 2 / zoomFactor);
+					float midX = (edge->Start->X + edge->End->X) / 2;
+					float midY = (edge->Start->Y + edge->End->Y) / 2;
+					float dx = edge->End->X - edge->Start->X;
+					float dy = edge->End->Y - edge->Start->Y;
+					float edgeIndex = edge->GetEdgeIndex();
+					float curveFactor = 30 + (edgeIndex * 10); // Adjust curvature based on edge index
+					float controlX = midX - dy * (curveFactor / std::sqrt(dx * dx + dy * dy));
+					float controlY = midY + dx * (curveFactor / std::sqrt(dx * dx + dy * dy));
+					array<PointF>^ curvePoints = { PointF(edge->Start->X, edge->Start->Y),
+						PointF(controlX, controlY),
+						PointF(edge->End->X, edge->End->Y) };
+					g->DrawCurve(pen, curvePoints);
+
+					//}
+					delete pen;
+					PointF labelPoint(controlX, controlY);
+					System::Drawing::Font^ largerFont = gcnew System::Drawing::Font(this->Font->FontFamily, this->Font->Size * 1.2f, System::Drawing::FontStyle::Bold);
+					for (int dx = -1; dx <= 1; ++dx) {
+						for (int dy = -1; dy <= 1; ++dy) {
+							if (dx != 0 || dy != 0) {
+								g->DrawString(edge->Weight.ToString(), largerFont, Brushes::White, labelPoint.X + dx, labelPoint.Y + dy);
+							}
+						}
+					}
+					
+					g->DrawString(edge->Weight.ToString(), largerFont, Brushes::Black, labelPoint);
+
+					if (edge->Directed && undirectedRadioButton->Checked)
+					{
+						flag = true;
+					}
+
+					if (edge->Directed && directedRadioButton->Checked)
+					{
+						flag = false;
+						// Calculate the direction vector
+						float arrowDx = edge->End->X - controlX;
+						float arrowDy = edge->End->Y - controlY;
+						float length = std::sqrt(arrowDx * arrowDx + arrowDy * arrowDy);
+						// Normalize the direction vector
+						arrowDx /= length;
+						arrowDy /= length;
+						// Define the size of the arrowhead
+						float arrowSize = 15.0f;
+
+						// Move the arrowhead away from the vertex point
+						float offset = 7.0f; // Adjust this value to move the arrowhead further away
+						PointF arrowTip = PointF(
+							edge->End->X - offset * arrowDx,
+							edge->End->Y - offset * arrowDy
+						);
+
+						// Calculate the points for the arrowhead
+						PointF arrowPoint1 = PointF(
+							arrowTip.X - arrowSize * (arrowDx * std::cos(M_PI / 6) - arrowDy * std::sin(M_PI / 6)),
+							arrowTip.Y - arrowSize * (arrowDy * std::cos(M_PI / 6) + arrowDx * std::sin(M_PI / 6))
+						);
+						PointF arrowPoint2 = PointF(
+							arrowTip.X - arrowSize * (arrowDx * std::cos(-M_PI / 6) - arrowDy * std::sin(-M_PI / 6)),
+							arrowTip.Y - arrowSize * (arrowDy * std::cos(-M_PI / 6) + arrowDx * std::sin(-M_PI / 6))
+						);
+
+						// Draw the arrowhead
+						array<PointF>^ arrowHead = { arrowTip, arrowPoint1, arrowPoint2 };
+						g->FillPolygon(Brushes::DarkCyan, arrowHead);
+					}
+					if (edge->Directed && undirectedRadioButton->Checked)
+					{
+						flag = true;
+					}
+					if (edge->Directed && directedRadioButton->Checked)
+					{
+						flag = false;
+							// Calculate the direction vector
+							float arrowDx = edge->End->X - controlX;
+							float arrowDy = edge->End->Y - controlY;
+							float length = std::sqrt(arrowDx * arrowDx + arrowDy * arrowDy);
+
+							// Normalize the direction vector
+							arrowDx /= length;
+							arrowDy /= length;
+
+							// Define the size of the arrowhead
+							float arrowSize = 15.0f;
+
+							// Move the arrowhead away from the vertex point
+							float offset = 7.0f; // Adjust this value to move the arrowhead further away
+							PointF arrowTip = PointF(
+								edge->End->X - offset * arrowDx,
+								edge->End->Y - offset * arrowDy
+							);
+
+							// Calculate the points for the arrowhead
+							PointF arrowPoint1 = PointF(
+								arrowTip.X - arrowSize * (arrowDx * std::cos(M_PI / 6) - arrowDy * std::sin(M_PI / 6)),
+								arrowTip.Y - arrowSize * (arrowDy * std::cos(M_PI / 6) + arrowDx * std::sin(M_PI / 6))
+							);
+							PointF arrowPoint2 = PointF(
+								arrowTip.X - arrowSize * (arrowDx * std::cos(-M_PI / 6) - arrowDy * std::sin(-M_PI / 6)),
+								arrowTip.Y - arrowSize * (arrowDy * std::cos(-M_PI / 6) + arrowDx * std::sin(-M_PI / 6))
+							);
+
+							// Draw the arrowhead
+							array<PointF>^ arrowHead = { arrowTip, arrowPoint1, arrowPoint2 };
+							g->FillPolygon(Brushes::DarkCyan, arrowHead);
+							Pen^ boundaryPen = gcnew Pen(Color::Black, 2.0f);
+							g->DrawPolygon(boundaryPen, arrowHead);
+							delete boundaryPen;
+					
+					}
+					if (edge->Directed && defaultRadioButton->Checked)
+					{
+						if (flag)
+						{
+							// Do nothing, as the edge is undirected
+						}
+						else
+						{
+							// Calculate the direction vector
+							float arrowDx = edge->End->X - controlX;
+							float arrowDy = edge->End->Y - controlY;
+							float length = std::sqrt(arrowDx * arrowDx + arrowDy * arrowDy);
+
+							// Normalize the direction vector
+							arrowDx /= length;
+							arrowDy /= length;
+
+							// Define the size of the arrowhead
+							float arrowSize = 15.0f;
+
+							// Move the arrowhead away from the vertex point
+							float offset = 8.0f; // Adjust this value to move the arrowhead further away
+							PointF arrowTip = PointF(
+								edge->End->X - offset * arrowDx,
+								edge->End->Y - offset * arrowDy
+							);
+
+							// Calculate the points for the arrowhead
+							PointF arrowPoint1 = PointF(
+								arrowTip.X - arrowSize * (arrowDx * std::cos(M_PI / 6) - arrowDy * std::sin(M_PI / 6)),
+								arrowTip.Y - arrowSize * (arrowDy * std::cos(M_PI / 6) + arrowDx * std::sin(M_PI / 6))
+							);
+							PointF arrowPoint2 = PointF(
+								arrowTip.X - arrowSize * (arrowDx * std::cos(-M_PI / 6) - arrowDy * std::sin(-M_PI / 6)),
+								arrowTip.Y - arrowSize * (arrowDy * std::cos(-M_PI / 6) + arrowDx * std::sin(-M_PI / 6))
+							);
+
+							// Draw the arrowhead
+							array<PointF>^ arrowHead = { arrowTip, arrowPoint1, arrowPoint2 };
+							g->FillPolygon(Brushes::DarkCyan, arrowHead);
+							Pen^ boundaryPen = gcnew Pen(Color::Black, 2.0f);
+							g->DrawPolygon(boundaryPen, arrowHead);
+							delete boundaryPen;
+						}
+					}
+				}
+				else if (edge->IsCoincideEdge == false)
+				{
+					Pen^ pen = gcnew Pen(edge->Color, 2 / zoomFactor);//edge->Color
+					g->DrawLine(pen, edge->Start->X, edge->Start->Y, edge->End->X, edge->End->Y);
+					delete pen;
+					//Draw arrow
+					if (edge->Directed && undirectedRadioButton->Checked)
+					{
+						flag = true;
+					}
+
+					if (edge->Directed && directedRadioButton->Checked)
+					{
+						flag = false;
+						DrawArrow(g, edge->Start, edge->End);
+					}
+
+					if (edge->Directed && defaultRadioButton->Checked)
+					{
+						if (flag)
+						{
+							// Do nothing, as the edge is undirected
+						}
+						else
+						{
+							DrawArrow(g, edge->Start, edge->End);
+						}
+					}
+				}
+			}
+			else if (edge->Start == edge->End) {
+
+
+				float loopRadius = 2.0f * gridSize; // 4 square grids
+				float centerX = edge->Start->X;
+				float centerY = edge->Start->Y;
+
+				//// Determine the less crowded side by checking the density of edges around the vertex
+				int leftCount = 0, rightCount = 0, topCount = 0, bottomCount = 0;
+				for each (Edge ^ e in graph->Edges) {
+					if (e->Start->X < centerX) leftCount++;
+					if (e->Start->X > centerX) rightCount++;
+					if (e->Start->Y < centerY) topCount++;
+					if (e->Start->Y > centerY) bottomCount++;
+				}
+				//// Choose the side with the least edges
+				float offsetX = centerX, offsetY = centerY;
+				if (leftCount <= rightCount && leftCount <= topCount && leftCount <= bottomCount) {
+					offsetX -= loopRadius;
+				}
+				else if (rightCount <= leftCount && rightCount <= topCount && rightCount <= bottomCount) {
+					offsetX += loopRadius;
+				}
+				else if (topCount <= leftCount && topCount <= rightCount && topCount <= bottomCount) {
+					offsetY -= loopRadius;
+				}
+				else {
+					offsetY += loopRadius;
+				}
+				offsetX = round(offsetX / gridSize) * gridSize;
+				offsetY = round(offsetY / gridSize) * gridSize;
+
+				Pen^ pen = gcnew Pen(edge->Color, 2 / zoomFactor);
+				g->DrawEllipse(pen, offsetX - loopRadius, offsetY - loopRadius, loopRadius * 2, loopRadius * 2);
+
+
+				float arrowSize = 20;
+				PointF arrowPoint1, arrowPoint2, arrowPoint3;
+				float angle = atan2(centerY - offsetY, centerX - offsetX);
+				angle2 = angle;
+				// Rotate 90 degrees to the right
+				float rightAngle = angle - M_PI / 2 - 6;
+				// Rotate 90 degrees to the left
+				float leftAngle = angle + M_PI / 2;
+				// Choose the desired rotation direction
+				float rotationAngle = rightAngle; // or leftAngle
+				float arrowX = centerX;
+				float arrowY = centerY;
+
+				arrowPoint1 = PointF(arrowX, arrowY);
+				arrowPoint2 = PointF(arrowX - arrowSize * cos(rotationAngle - M_PI / 6), arrowY - arrowSize * sin(rotationAngle - M_PI / 6));
+				arrowPoint3 = PointF(arrowX - arrowSize * cos(rotationAngle + M_PI / 6), arrowY - arrowSize * sin(rotationAngle + M_PI / 6));
+				array<PointF>^ arrowPoints = { arrowPoint1, arrowPoint2, arrowPoint3 };
+				delete pen;
+				//Draw arrow
+				if (edge->Directed && undirectedRadioButton->Checked)
+				{
+					flag = true;
+				}
+
+				if (edge->Directed && directedRadioButton->Checked)
+				{
+					flag = false;
+					g->FillPolygon(Brushes::DarkCyan, arrowPoints);
+					Pen^ boundaryPen = gcnew Pen(Color::Black, 2.0f);
+					g->DrawPolygon(boundaryPen, arrowPoints);
+				}
+
+				if (edge->Directed && defaultRadioButton->Checked)
+				{
+					if (flag)
+					{
+						// Do nothing, as the edge is undirected
+					}
+					else
+					{
+						g->FillPolygon(Brushes::DarkCyan, arrowPoints);
+						Pen^ boundaryPen = gcnew Pen(Color::Black, 2.0f);
+						g->DrawPolygon(boundaryPen, arrowPoints);
+					}
+				}
+				this->pictureBox1->Invalidate();
 			}
 
+
+
 			// Draw edge weight
-			if (edge->Weight != 0)
+			if (edge->Weight != 0 && edge->Start != edge->End && edge->IsCoincideEdge == false)
 			{
 				float midX = (edge->Start->X + edge->End->X) / 2;
 				float midY = (edge->Start->Y + edge->End->Y) / 2;
-				g->DrawString(edge->Weight.ToString(), this->Font, Brushes::Black, midX, midY);
+				System::Drawing::Font^ largerFont = gcnew System::Drawing::Font(this->Font->FontFamily, this->Font->Size * 1.2f, System::Drawing::FontStyle::Bold);
+				for (int dx = -1; dx <= 1; ++dx) {
+					for (int dy = -1; dy <= 1; ++dy) {
+						if (dx != 0 || dy != 0) {
+							g->DrawString(edge->Weight.ToString(), largerFont, Brushes::White, midX + dx, midY + dy);
+						}
+					}
+				}
+				// Draw the weight of the edge with the larger font
+				g->DrawString(edge->Weight.ToString(), largerFont, Brushes::Black, midX, midY);
+			}
+			else if (edge->Weight != 0 && edge->Start == edge->End)
+			{
+				float loopRadius = 2.0f * gridSize; // Adjust the radius as needed
+				float centerX = (edge->Start->X + edge->End->X) / 2 - loopRadius * cos(angle2);
+				float centerY = (edge->Start->Y + edge->End->Y) / 2 - loopRadius * sin(angle2);
+				// Highlight the weight
+				System::Drawing::Font^ largerFont = gcnew System::Drawing::Font(this->Font->FontFamily, this->Font->Size * 1.2f, System::Drawing::FontStyle::Bold);
+				for (int dx = -1; dx <= 1; ++dx) {
+					for (int dy = -1; dy <= 1; ++dy) {
+						if (dx != 0 || dy != 0) {
+							g->DrawString(edge->Weight.ToString(), largerFont, Brushes::White, centerX + dx, centerY + dy);
+						}
+					}
+				}
+				g->DrawString(edge->Weight.ToString(), largerFont, Brushes::Black, centerX, centerY);
 			}
 		}
-
-		// Draw vertices
+		//Draw Vertices
 		for each (Vertex ^ vertex in graph->Vertices)
 		{
-			SolidBrush^ brush = gcnew SolidBrush(vertex->ColorProperty);
-			g->FillEllipse(brush, vertex->X - vertex->Radius, vertex->Y - vertex->Radius, vertex->Radius * 2, vertex->Radius * 2);
+			SolidBrush^ brush = gcnew SolidBrush(System::Drawing::Color::DarkBlue);
+			float adjustedRadius = vertex->Radius * 0.8f;
+			g->FillEllipse(brush, vertex->X - adjustedRadius, vertex->Y - adjustedRadius, adjustedRadius * 2, adjustedRadius * 2);
+
 			delete brush;
 
 			// Highlight selected vertex
-			if (defaultRadioButton->Checked && vertex == selectedVertex )//fix Vertex create && draggedVertex == nullptr && !isDragging
+			if (defaultRadioButton->Checked && vertex == selectedVertex)//fix Vertex create && draggedVertex == nullptr && !isDragging
 			{
 				Pen^ highlightPen = gcnew Pen(Color::Red, 2 / zoomFactor);
 				g->DrawEllipse(highlightPen, vertex->X - vertex->Radius - 2, vertex->Y - vertex->Radius - 2, (vertex->Radius + 2) * 2, (vertex->Radius + 2) * 2);
 				delete highlightPen;
 			}
+			System::Drawing::Font^ boldLargerFont = gcnew System::Drawing::Font(this->Font->FontFamily, this->Font->Size * 1.5f, System::Drawing::FontStyle::Bold);
+			for (int dx = -1; dx <= 1; ++dx) {
+				for (int dy = -1; dy <= 1; ++dy) {
+					if (dx != 0 || dy != 0) {
+						g->DrawString(vertex->Name, boldLargerFont, Brushes::White, vertex->X - vertex->Radius + dx, vertex->Y - vertex->Radius - 15 + dy);
+					}
+				}
+			}
 
-			g->DrawString(vertex->Name, this->Font, Brushes::Black, vertex->X - vertex->Radius, vertex->Y - vertex->Radius - 15);
+			// Draw the text with the bold font on top
+			g->DrawString(vertex->Name, boldLargerFont, Brushes::Black, vertex->X - vertex->Radius, vertex->Y - vertex->Radius - 15);
+
 		}
-
 		// Reset transformations
 		g->ResetTransform();
+
+
 	}
 	void MyForm::AdjustVerticesToGrid()
 	{
@@ -440,83 +769,70 @@ namespace Project2 {
 				pictureBox1->Invalidate();
 			}
 		}
+		UpdateInfoPanel3();
 	}
 	System::Void MyForm::RunDijkstraButton_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (graph->Vertices->Count < 2) {
-			MessageBox::Show("Please add at least two vertices to run Dijkstra's algorithm.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+
+		if (graph->Edges->Count < 2) {
+			MessageBox::Show("Please add at least two edges to run Dijkstra's algorithm.",
+				"Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
 			return;
 		}
+
 		for each (Edge ^ edge in graph->Edges) {
-			edge->Color = Color::Empty;
+			edge->Color = Color::Black;
 		}
-		int startId, endId;
-		String^ startIdStr = ShowInputBox("Enter the ID of the start vertex:", "Start Vertex", "1");
-		String^ endIdStr = ShowInputBox("Enter the ID of the end vertex:", "End Vertex", "2");
-		if (Int32::TryParse(startIdStr, startId) && Int32::TryParse(endIdStr, endId)) {
+		String^ startName = ShowInputBox("Enter the name of the start vertex:", "Start Vertex", "");
+		String^ endName = ShowInputBox("Enter the name of the end vertex:", "End Vertex", "");
 
-			Vertex^ start = graph->GetVertexById(startId);
-			Vertex^ end = graph->GetVertexById(endId);
+		Vertex^ start = graph->GetVertexByName(startName);
+		Vertex^ end = graph->GetVertexByName(endName);
 
-			if (start != nullptr && end != nullptr) {
-				RunDijkstra(start, end);
-			}
-			else {
-				MessageBox::Show("Invalid start or end vertex ID.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
-			}
+		if (start != nullptr && end != nullptr)
+		{
+			RunDijkstra(start, end); pictureBox1->Invalidate();
 		}
-		else {
-			MessageBox::Show("Invalid input. Please enter numeric IDs.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		else
+		{
+			MessageBox::Show("Invalid start or end vertex ID.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			return;
 		}
 	}
 
 	System::Void MyForm::LoadGraph(System::Object^ sender, System::EventArgs^ e) {
-		OpenFileDialog^ openFileDialog1 = gcnew OpenFileDialog();
-		openFileDialog1->Filter = "Text File|*.txt";
-		openFileDialog1->Title = "Load Graph";
-		openFileDialog1->ShowDialog();
+		OpenFileDialog^ openFileDialog = gcnew OpenFileDialog();
+		openFileDialog->Filter = "GraphML Files (*.graphml)|*.graphml|All Files (*.*)|*.*";
+		openFileDialog->DefaultExt = "graphml";
 
-		if (openFileDialog1->FileName != "") {
+		if (openFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+			String^ fileName = openFileDialog->FileName;
 			graph->Clear();
-			System::IO::StreamReader^ sr = gcnew System::IO::StreamReader(openFileDialog1->FileName);
-			int vertexCount = System::Int32::Parse(sr->ReadLine());
-			for (int i = 0; i < vertexCount; i++) {
-				array<String^>^ parts = sr->ReadLine()->Split(' ');
-				int id = System::Int32::Parse(parts[0]);
-				int x = System::Int32::Parse(parts[1]);
-				int y = System::Int32::Parse(parts[2]);
-				graph->AddVertex(gcnew Vertex(id, "V" + id, static_cast<float>(x), static_cast<float>(y)));
-			}
-			int edgeCount = System::Int32::Parse(sr->ReadLine());
-			for (int i = 0; i < edgeCount; i++) {
-				array<String^>^ parts = sr->ReadLine()->Split(' ');
-				int startId = System::Int32::Parse(parts[0]);
-				int endId = System::Int32::Parse(parts[1]);
-				int weight = System::Int32::Parse(parts[2]);
-				Vertex^ start = graph->GetVertexById(startId);
-				Vertex^ end = graph->GetVertexById(endId);
-				graph->AddEdge(gcnew Edge(i + 1, start, end, weight, System::Drawing::Color::Black));
-			}
-			sr->Close();
-			UpdateInfoPanel();
+			graph->LoadFromFile(fileName);
 			pictureBox1->Invalidate();
+			MessageBox::Show("Graph loaded successfully from GraphML format.", "Load Successful", MessageBoxButtons::OK, MessageBoxIcon::Information);
 		}
+		UpdateInfoPanel3();
 	}
 
 	void MyForm::RunDijkstra(Vertex^ start, Vertex^ end) {
 		bool isDirected = directedRadioButton->Checked;
-		// Implementation of Dijkstra's algorithm
-		Dictionary<Vertex^, int>^ distances = gcnew Dictionary<Vertex^, int>();
-		Dictionary<Vertex^, Vertex^>^ previous = gcnew Dictionary<Vertex^, Vertex^>();
-		List<Vertex^>^ unvisited = gcnew List<Vertex^>();
 
+		// Initialize data structures
+		Dictionary<Vertex^, int>^ distances = gcnew Dictionary<Vertex^, int>(); // Shortest distances
+		Dictionary<Vertex^, Vertex^>^ previous = gcnew Dictionary<Vertex^, Vertex^>(); // Previous vertices
+		List<Vertex^>^ unvisited = gcnew List<Vertex^>(); // Unvisited vertices
+
+		// Set initial distances to infinity and previous vertices to null
 		for each (Vertex ^ v in graph->Vertices) {
 			distances[v] = Int32::MaxValue;
 			previous[v] = nullptr;
 			unvisited->Add(v);
 		}
-		distances[start] = 0;
+		distances[start] = 0; // Distance to the start vertex is zero
 
+		// Main loop: Process unvisited vertices
 		while (unvisited->Count > 0) {
+			// Find vertex with the smallest distance in unvisited set
 			Vertex^ current = nullptr;
 			for each (Vertex ^ v in unvisited) {
 				if (current == nullptr || distances[v] < distances[current]) {
@@ -524,37 +840,60 @@ namespace Project2 {
 				}
 			}
 
-			if (current == end) break;
+			Console::WriteLine("Current vertex: {0}, Distance: {1}", current->Name, distances[current]);
+
+			if (current == end) break; // Stop if we reached the end vertex
 
 			unvisited->Remove(current);
 
+			// Relax edges from the current vertex
 			for each (Edge ^ edge in graph->Edges) {
+				Vertex^ neighbor = nullptr;
+
+				// Check edge direction
 				if (edge->Start == current) {
-					int alt = distances[current] + edge->Weight;
-					if (alt < distances[edge->End]) {
-						distances[edge->End] = alt;
-						previous[edge->End] = current;
+					neighbor = edge->End; // Forward direction
+				}
+				else if (!isDirected && edge->End == current) {
+					neighbor = edge->Start; // Reverse direction (for undirected graphs)
+				}
+
+				if (neighbor != nullptr && unvisited->Contains(neighbor)) {
+					int alt = distances[current] + edge->Weight; // Calculate new distance
+					Console::WriteLine("  Checking edge from {0} to {1}, Weight: {2}, Alt: {3}", current->Name, neighbor->Name, edge->Weight, alt);
+
+					if (alt < distances[neighbor]) {
+						distances[neighbor] = alt; // Update distance
+						previous[neighbor] = current; // Update previous vertex
 					}
 				}
 			}
 		}
 
-		// Highlight the shortest path
+		// Reconstruct the shortest path and highlight it
 		Vertex^ current = end;
-		bool pathExists = true;
-		while (current != nullptr) {
+		bool pathExists = distances[end] != Int32::MaxValue; // Check if path exists
+		String^ path = ""; // To store the path as a string for display
+
+		while (current != nullptr && pathExists) {
 			Vertex^ prev = previous[current];
 			if (prev != nullptr) {
 				bool edgeFound = false;
+				// Add to the path string
+				path = current->Name + " -> " + path;
+
+				// Highlight the edge in the shortest path
 				for each (Edge ^ edge in graph->Edges) {
 					if ((edge->Start == prev && edge->End == current) ||
 						(!isDirected && edge->Start == current && edge->End == prev)) {
-						edge->Color = Color::Red;
+						edge->Color = Color::Red; // Highlight edge
 						edgeFound = true;
 						break;
 					}
 				}
-				if (!edgeFound) {
+				if (!edgeFound)
+				{
+					Console::WriteLine("Edge not found from {0} to {1}", prev->Name, current->Name);
 					pathExists = false;
 					break;
 				}
@@ -562,10 +901,27 @@ namespace Project2 {
 			current = prev;
 		}
 
-		if (!pathExists) {
-			MessageBox::Show("No path found from start to end vertex. Please check the direction of the edges.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		// Add the starting vertex to the path string
+		path = start->Name + " -> " + path;
+
+		// Remove the trailing arrow " -> " if present
+		if (path->EndsWith(" -> ")) {
+			path = path->Substring(0, path->Length - 4);
 		}
 
+		// Display the path or an error message
+		if (!pathExists) {
+			MessageBox::Show("No path found from start to end vertex. Please check the direction of the edges.",
+				"Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		}
+		else {
+			MessageBox::Show("Shortest path found:\n" + path,
+				"Success", MessageBoxButtons::OK, MessageBoxIcon::Information);
+		}
+
+		shortpath += "\r\nThe Dijkstra Shortest Path: " + path;
+		UpdateInfoPanel3();
+		// Redraw the picture box to show updated edge colors
 		pictureBox1->Invalidate();
 	}
 
@@ -585,6 +941,18 @@ namespace Project2 {
 	}
 	//
 
+
+	void ConvertStringToInt(String^& a, int& b)//XuanThanh
+	{
+		std::stringstream ss;//Convert String^ to string, then string to int
+		std::string str = msclr::interop::marshal_as<std::string>(a);
+		ss << str;
+		ss >> b;
+	}
+	void ConvertStringTostring(String^& a, std::string& b)//XuanThanh
+	{
+		b = msclr::interop::marshal_as<std::string>(a);
+	}
 	void MyForm::DrawGraph(Graphics^ g)
 	{
 		// Draw grid if showGrid is true
@@ -612,7 +980,7 @@ namespace Project2 {
 		inputForm->StartPosition = FormStartPosition::CenterParent;
 		inputForm->FormBorderStyle = Windows::Forms::FormBorderStyle::FixedDialog;
 		inputForm->MaximizeBox = false;
-		inputForm->MinimizeBox = false;
+		inputForm->MinimizeBox = true;
 
 		Label^ startLabel = gcnew Label();
 		startLabel->Text = "Start Vertex:";
@@ -680,16 +1048,36 @@ namespace Project2 {
 			if (startComboBox->SelectedItem != nullptr && endComboBox->SelectedItem != nullptr) {
 				String^ startVertexName = startComboBox->SelectedItem->ToString();
 				String^ endVertexName = endComboBox->SelectedItem->ToString();
+
+				std::string str1;
+				std::string str2;
+				ConvertStringTostring(startVertexName, str1);
+				ConvertStringTostring(endVertexName, str2);
 				int weight;
-				if (Int32::TryParse(weightTextBox->Text, weight)) {
+				//Loop
+				if ((str1.compare(str2) == 0) && Int32::TryParse(weightTextBox->Text, weight))
+				{
+					int isCoincideVertex = (startVertexName == endVertexName) ? true : false;
 					if (undirectedRadioButton->Checked) {
-						graph->AddEdge(startVertexName, endVertexName, weight); // false for undirected
+						graph->AddEdge(isCoincideVertex, startVertexName, endVertexName, weight); // false for undirected
 					}
 					else if (directedRadioButton->Checked) {
-						graph->AddEdge(startVertexName, endVertexName, weight, true); // true for directed
+						graph->AddEdge(isCoincideVertex, startVertexName, endVertexName, weight, true); // true for directed
 					}
 				}
-				else {
+				// NotLoop
+				else if (Int32::TryParse(weightTextBox->Text, weight) && (str1.compare(str2) != 0))
+				{
+					int isCoincideVertex = (startVertexName == endVertexName) ? true : false;
+					if (undirectedRadioButton->Checked) {
+						graph->AddEdge(isCoincideVertex, startVertexName, endVertexName, weight); // false for undirected
+					}
+					else if (directedRadioButton->Checked) {
+						graph->AddEdge(isCoincideVertex, startVertexName, endVertexName, weight, true); // true for directed
+					}
+				}
+				else
+				{
 					MessageBox::Show("Please enter a valid integer for the weight.");
 				}
 			}
@@ -697,6 +1085,7 @@ namespace Project2 {
 				MessageBox::Show("Please select both start and end vertices.");
 			}
 		}
+		UpdateInfoPanel3();
 	}
 
 	System::Void MyForm::DeleteEdgeButton_Click(System::Object^ sender, System::EventArgs^ e)
@@ -754,11 +1143,92 @@ namespace Project2 {
 		Application::Run(% form);
 		return 0;
 	}
+	void MyForm::ClearGraph() {
+		// Clear the vertices and edges from the graph
+		graph->Vertices->Clear();
+		graph->Edges->Clear();
+
+		// Refresh the display to reflect the changes
+		pictureBox1->Invalidate();
+		UpdateInfoPanel3();
+	}
+	void MyForm::DrawLoopDirectedEdge(Graphics^ g, Edge^ edge, float offsetX, float offsetY)
+	{
+		// Calculate the angle between the start and end vertices
+		float dx = edge->End->X - edge->Start->X;
+		float dy = edge->End->Y - edge->Start->Y;
+		float angle = static_cast<float>(Math::Atan2(dy, dx) * 180 / Math::PI);
+
+		// Calculate the distance between the start and end vertices
+		float distance = static_cast<float>(Math::Sqrt(dx * dx + dy * dy));
+
+		// Calculate the radius of the circle
+		float circleRadius = 4.0f * gridSize * zoomFactor;
+
+		// Calculate the position of the circle
+		float circleX = edge->Start->X + (distance - circleRadius) * dx / distance;
+		float circleY = edge->Start->Y + (distance - circleRadius) * dy / distance;
+
+		// Check if the circle is in an obtuse angle
+		bool isObtuseAngle = true;
+		for each (Edge ^ e in graph->Edges)
+		{
+			if (e != edge)
+			{
+				float ex = e->End->X - e->Start->X;
+				float ey = e->End->Y - e->Start->Y;
+				float eAngle = static_cast<float>(Math::Atan2(ey, ex) * 180 / Math::PI);
+
+				// Calculate the angle difference
+				float angleDiff = Math::Abs(angle - eAngle);
+				if (angleDiff < 90 || angleDiff > 270)
+				{
+					isObtuseAngle = false;
+					break;
+				}
+			}
+		}
+
+		// Check if the circle is in a space with no vertex
+		bool isSpaceWithNoVertex = true;
+		for each (Vertex ^ v in graph->Vertices)
+		{
+			float vx = v->X - circleX;
+			float vy = v->Y - circleY;
+			float vertexDistance = static_cast<float>(Math::Sqrt(vx * vx + vy * vy));
+			if (vertexDistance < v->Radius + circleRadius)
+			{
+				isSpaceWithNoVertex = false;
+				break;
+			}
+		}
+
+		// Draw the circle
+		if (isObtuseAngle && isSpaceWithNoVertex)
+		{
+			float circleDiameter = 2.0f * circleRadius;
+			float circleXOffset = circleX - circleRadius;
+			float circleYOffset = circleY - circleRadius;
+			g->FillEllipse(Brushes::White, offsetX + circleXOffset, offsetY + circleYOffset, circleDiameter, circleDiameter);
+			g->DrawEllipse(Pens::Black, offsetX + circleXOffset, offsetY + circleYOffset, circleDiameter, circleDiameter);
+		}
+
+		// Draw the arrow
+		float arrowSize = 5.0f / zoomFactor;
+		PointF arrowPoint1(offsetX + edge->End->X, offsetY + edge->End->Y);
+		PointF arrowPoint2(offsetX + edge->End->X - arrowSize, offsetY + edge->End->Y - arrowSize);
+		PointF arrowPoint3(offsetX + edge->End->X + arrowSize, offsetY + edge->End->Y - arrowSize);
+		array<PointF>^ arrowPoints = { arrowPoint1, arrowPoint2, arrowPoint3 };
+		g->FillPolygon(Brushes::Black, arrowPoints);
+	}
 
 	// pictureBox1_MouseClick: Handles mouse click events on the picture box
 	// This function manages vertex and edge creation, selection, and deletion
 	System::Void MyForm::pictureBox1_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
 	{
+		this->mouseButtonClicked = e->Button;
+		this->single_Click = true;
+		this->clickTimer->Start();
 		float adjustedX = (e->X - viewOffsetX) / zoomFactor;
 		float adjustedY = (e->Y - viewOffsetY) / zoomFactor;
 		if (e->Button == System::Windows::Forms::MouseButtons::Left && draggingVertex == nullptr)
@@ -798,7 +1268,7 @@ namespace Project2 {
 				//}
 
 			}
-			else if (draggingVertex == nullptr &&(directedRadioButton->Checked || undirectedRadioButton->Checked)) //XuanThanh
+			else if (draggingVertex == nullptr && (directedRadioButton->Checked || undirectedRadioButton->Checked)) //XuanThanh
 			{
 				String^ vertexName = PromptForVertexName();
 				if (!String::IsNullOrEmpty(vertexName))
@@ -853,7 +1323,8 @@ namespace Project2 {
 			}
 			pictureBox1->Invalidate();
 		}
-		UpdateInfoPanel();
+		UpdateInfoPanel3();
+		//pictureBox1->Invalidate();
 	}
 
 	String^ MyForm::PromptForVertexName()
@@ -928,17 +1399,22 @@ namespace Project2 {
 	}
 	System::Void MyForm::clickTimer_Tick(System::Object^ sender, System::EventArgs^ e)
 	{
+		//this->clickTimer->Stop();
+		//if (this->single_Click)
+		//{
+		//	this->doubleClickOccured = false;
+		//}
 		this->clickTimer->Stop();
 		float adjustedX = static_cast<float>((this->mouseX * zoomFactor));
 		float adjustedY = static_cast<float>((this->mouseY * zoomFactor));
 		if (this->single_Click && !this->doubleClickOccured)
 		{
-			if (this->mouseButtonClicked == System::Windows::Forms::MouseButtons::Left &&(directedRadioButton->Checked || undirectedRadioButton->Checked)) //XuanThanh
+			if (this->mouseButtonClicked == System::Windows::Forms::MouseButtons::Left && (directedRadioButton->Checked || undirectedRadioButton->Checked)) //XuanThanh
 			{
 				Vertex^ clickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
 				if (clickedVertex != nullptr)
 				{
-					String^ newVertexName = PromptForVertexName();
+					/*String^ newVertexName = PromptForVertexName();
 					if (!String::IsNullOrEmpty(newVertexName))
 					{
 						if (newVertexName->Length > 10)
@@ -963,11 +1439,11 @@ namespace Project2 {
 							MessageBox::Show("The name already exists. Please choose another name.",
 								"Duplicate Name", MessageBoxButtons::OK, MessageBoxIcon::Error);
 						}
-					}
+					}*/
 				}
 				else if (draggingVertex == nullptr && (directedRadioButton->Checked || undirectedRadioButton->Checked)) //XuanThanh
 				{
-					String^ vertexName = PromptForVertexName();
+					/*String^ vertexName = PromptForVertexName();
 					if (!String::IsNullOrEmpty(vertexName))
 					{
 						if (vertexName->Length > 10)
@@ -999,7 +1475,7 @@ namespace Project2 {
 							graph->AddVertex(newVertex);
 							pictureBox1->Invalidate();
 						}
-					}
+					}*/
 				}
 			}
 			else if (this->mouseButtonClicked == System::Windows::Forms::MouseButtons::Right)
@@ -1021,7 +1497,7 @@ namespace Project2 {
 			}
 		}
 		this->doubleClickOccured = false;
-		UpdateInfoPanel();
+		UpdateInfoPanel3();
 	}
 
 	System::Void MyForm::pictureBox1_MouseDoubleClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
@@ -1033,8 +1509,7 @@ namespace Project2 {
 			this->clickTimer->Stop();
 			int adjustedX = static_cast<int>(std::round(e->X * zoomFactor));
 			int adjustedY = static_cast<int>(std::round(e->Y * zoomFactor));
-			//float adjustedX = static_cast<float>((this->mouseX * zoomFactor));
-			//float adjustedY = static_cast<float>((this->mouseY * zoomFactor));
+
 			Vertex^ doubleclickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
 			if (doubleclickedVertex != nullptr)
 			{
@@ -1142,6 +1617,46 @@ namespace Project2 {
 		{
 			pictureBox1->Cursor = Cursors::Cross;
 		}
+		if (isDragging) {//add
+			Vertex^ vertex = graph->FindVertexAt(e->X / zoomFactor, e->Y / zoomFactor);
+			if (vertex != nullptr) {
+				vertex->X = e->X / zoomFactor;
+				vertex->Y = e->Y / zoomFactor;
+
+				// Determine the less crowded side by checking the density of edges around the vertex
+				int leftCount = 0, rightCount = 0, topCount = 0, bottomCount = 0;
+				for each (Edge ^ edge in graph->Edges) {
+					if (edge->Start->X < vertex->X) leftCount++;
+					if (edge->Start->X > vertex->X) rightCount++;
+					if (edge->Start->Y < vertex->Y) topCount++;
+					if (edge->Start->Y > vertex->Y) bottomCount++;
+				}
+
+				// Choose the side with the least edges
+				float offsetX = vertex->X, offsetY = vertex->Y;
+				if (leftCount <= rightCount && leftCount <= topCount && leftCount <= bottomCount) {
+					offsetX -= 20.0f / zoomFactor;
+				}
+				else if (rightCount <= leftCount && rightCount <= topCount && rightCount <= bottomCount) {
+					offsetX += 20.0f / zoomFactor;
+				}
+				else if (topCount <= leftCount && topCount <= rightCount && topCount <= bottomCount) {
+					offsetY -= 20.0f / zoomFactor;
+				}
+				else {
+					offsetY += 20.0f / zoomFactor;
+				}
+
+				// Adjust the position to fit the grid
+				offsetX = round(offsetX / gridSize) * gridSize;
+				offsetY = round(offsetY / gridSize) * gridSize;
+
+				vertex->X = offsetX;
+				vertex->Y = offsetY;
+
+				pictureBox1->Invalidate();
+			}
+		}
 	}
 
 	// ZoomIn: Increases the zoom level of the graph view
@@ -1210,23 +1725,43 @@ namespace Project2 {
 
 		// Redraw the picture box
 		pictureBox1->Invalidate();
+		UpdateInfoPanel3();
 	}
 
 	// DrawArrow: Draws an arrow head at the end of an edge
 	void MyForm::DrawArrow(Graphics^ g, Vertex^ start, Vertex^ end) {
+
+		//// Draw the arrow head
+		//g->FillPolygon(Brushes::Red, arrowHead);
 		float dx = end->X - start->X;
 		float dy = end->Y - start->Y;
 		float angle = Math::Atan2(dy, dx);
 		float length = Math::Sqrt(dx * dx + dy * dy);
-
+		float arrowSize = 12;
+		float adjustedRadius = end->Radius - 2.8f;
+		float adjustedEndX = end->X - adjustedRadius * Math::Cos(angle);
+		float adjustedEndY = end->Y - adjustedRadius * Math::Sin(angle);
 		// Calculate the arrow head points
 		array<PointF>^ arrowHead = gcnew array<PointF>(3);
-		arrowHead[0] = PointF(end->X, end->Y);
-		arrowHead[1] = PointF(end->X - 15 * Math::Cos(angle - Math::PI / 6), end->Y - 15 * Math::Sin(angle - Math::PI / 6));
-		arrowHead[2] = PointF(end->X - 15 * Math::Cos(angle + Math::PI / 6), end->Y - 15 * Math::Sin(angle + Math::PI / 6));
+		arrowHead[0] = PointF(adjustedEndX, adjustedEndY);
+		arrowHead[1] = PointF(adjustedEndX - arrowSize * Math::Cos(angle - Math::PI / 6),
+			adjustedEndY - arrowSize * Math::Sin(angle - Math::PI / 6));
+		arrowHead[2] = PointF(adjustedEndX - arrowSize * Math::Cos(angle + Math::PI / 6),
+			adjustedEndY - arrowSize * Math::Sin(angle + Math::PI / 6));
+		// Calculate the boundary arrow head points
+		float boundarySize = 16; // Slightly larger size for boundary
+		array<PointF>^ boundaryArrowHead = gcnew array<PointF>(3);
+		boundaryArrowHead[0] = PointF(adjustedEndX + 1.5, adjustedEndY);
+		boundaryArrowHead[1] = PointF(adjustedEndX - 1 - boundarySize * Math::Cos(angle - Math::PI - 1 / 6),
+			adjustedEndY - boundarySize * Math::Sin(angle - Math::PI / 6));
+		boundaryArrowHead[2] = PointF(adjustedEndX - 1 - boundarySize * Math::Cos(angle + Math::PI / 6),
+			adjustedEndY - boundarySize * Math::Sin(angle + Math::PI / 6));
+		//g->FillPolygon(Brushes::Red, boundaryArrowHead);
 
 		// Draw the arrow head
-		g->FillPolygon(Brushes::Black, arrowHead);
+		g->FillPolygon(Brushes::DarkCyan, arrowHead);
+		Pen^ boundaryPen = gcnew Pen(Color::Black, 1.0f);
+		g->DrawPolygon(boundaryPen, arrowHead);
 	}
 
 	// pictureBox1_MouseDown: Handles mouse button press events on the picture box
@@ -1276,14 +1811,12 @@ namespace Project2 {
 
 				if (selectedVertex != nullptr && clickedVertex != nullptr && clickedVertex != selectedVertex) {
 					// Handle edge creation
-					String^ weight = ShowInputBox("Enter the value of Weight:", "Weight Add", "1");
+					int isCoincideVertex = (selectedVertex->Name == clickedVertex->Name) ? true : false;
+					String^ weight = ShowInputBox("Enter the value of Weight:", "Weight Add", "0");
 					bool isDirected = directedRadioButton->Checked;
-					std::stringstream ss;//Convert String^ to string, then string to int
-					std::string str = msclr::interop::marshal_as<std::string>(weight);
 					int weightnum;
-					ss << str;
-					ss >> weightnum;
-					graph->AddEdge(selectedVertex->Name, clickedVertex->Name, weightnum, isDirected);
+					ConvertStringToInt(weight, weightnum);
+					graph->AddEdge(isCoincideVertex, selectedVertex->Name, clickedVertex->Name, weightnum, isDirected);
 					pictureBox1->Invalidate();
 				}
 				else if (clickedVertex == nullptr && !isDragging && draggingVertex == nullptr) {
@@ -1298,17 +1831,19 @@ namespace Project2 {
 		isPanning = false;
 		isDragging = false;
 		pictureBox1->Invalidate();
+		UpdateInfoPanel3();
 	}
 
 	System::Void MyForm::SaveGraph(System::Object^ sender, System::EventArgs^ e) {
 		SaveFileDialog^ saveFileDialog = gcnew SaveFileDialog();
-		saveFileDialog->Filter = "Graph Files (*.graph)|*.graph|All Files (*.*)|*.*";
-		saveFileDialog->DefaultExt = "graph";
+		saveFileDialog->Filter = "GraphML Files (*.graphml)|*.graphml|All Files (*.*)|*.*";
+		saveFileDialog->DefaultExt = "graphml";
 		saveFileDialog->AddExtension = true;
 
 		if (saveFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 			String^ fileName = saveFileDialog->FileName;
 			graph->SaveToFile(fileName);
+			MessageBox::Show("Graph saved successfully in GraphML format.", "Save Successful", MessageBoxButtons::OK, MessageBoxIcon::Information);
 		}
 	}
 
@@ -1317,6 +1852,7 @@ namespace Project2 {
 		if (colorDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 			currentEdgeColor = colorDialog->Color;
 		}
+
 	}
 
 	System::Void MyForm::defaultRadioButton_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
@@ -1326,6 +1862,10 @@ namespace Project2 {
 			selectedVertex = nullptr;
 			pictureBox1->Cursor = Cursors::Default;
 		}
+		for each (Edge ^ edge in graph->Edges) {
+			edge->Color = Color::Black;
+		}
+		UpdateInfoPanel3();
 	}
 
 	System::Void MyForm::directedRadioButton_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
@@ -1335,6 +1875,8 @@ namespace Project2 {
 			selectedVertex = nullptr;
 			pictureBox1->Cursor = Cursors::Cross;
 		}
+		this->pictureBox1->Invalidate();
+
 	}
 
 	System::Void MyForm::undirectedRadioButton_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
@@ -1344,6 +1886,8 @@ namespace Project2 {
 			selectedVertex = nullptr;
 			pictureBox1->Cursor = Cursors::Cross;
 		}
+		this->pictureBox1->Invalidate();
+
 	}
 
 
@@ -1367,7 +1911,74 @@ namespace Project2 {
 		}
 		return false;
 	}
+	System::Void MyForm::MyForm_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+		if (e->Control && e->KeyCode == Keys::E) {
+			if (e->Shift) {
+				// Ctrl + Shift + E: Delete Edge
+				DeleteEdgeButton_Click(sender, e);
+			}
+			else {
+				// Ctrl + E: Add Edge
+				AddEdgeButton_Click(sender, e);
+			}
+			//this->pictureBox1->Invalidate();
+
+		}
+		else if (e->Control && e->KeyCode == Keys::D) {
+			// Ctrl + D: Run Dijkstra's
+			RunDijkstraButton_Click(sender, e);
+			//this->pictureBox1->Invalidate();
+
+		}
+		else if (e->Control && e->KeyCode == Keys::Oemplus) {
+			// Ctrl + '+': Zoom In
+			ZoomIn(sender, e);
+			//this->pictureBox1->Invalidate();
+
+		}
+		else if (e->Control && e->KeyCode == Keys::OemMinus) {
+			// Ctrl + '-': Zoom Out
+			ZoomOut(sender, e);
+			//this->pictureBox1->Invalidate();
+
+		}
+		else if (e->Control && e->KeyCode == Keys::S) {
+			// Ctrl + S: Save Graph
+			SaveGraph(sender, e);
+			this->pictureBox1->Invalidate();
+
+		}
+		else if (e->Control && e->KeyCode == Keys::O) {
+			// Ctrl + O: Load Graph
+			LoadGraph(sender, e);
+			this->pictureBox1->Invalidate();
+
+		}
+		else if (e->Control && e->KeyCode == Keys::R) {
+			// Ctrl + R: Reset Zoom
+			ResetZoom(sender, e);
+		}
+		else if (e->Control && e->KeyCode == Keys::Delete) {
+			// Ctrl + Delete: Clear Graph
+			ClearGraph();
+			//this->pictureBox1->Invalidate();
+
+		}
+		else if (e->Control && e->KeyCode == Keys::G) {
+			// Ctrl + G: Show Grid
+			ShowGridButton_Click(sender, e);
+			//this->pictureBox1->Invalidate();
+		}
+		else if (e->Control && e->KeyCode == System::Windows::Forms::Keys::Z) {
+			graph->Undo();
+			//this->pictureBox1->Invalidate();
+		}
+		//pictureBox1->Invalidate();
+		UpdateInfoPanel3();
+	}
 }
+
+
 
 
 

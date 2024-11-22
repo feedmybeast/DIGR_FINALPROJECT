@@ -13,6 +13,7 @@ public:
     property int Degree { int get() { return degree; } void set(int value) { degree = value; } }
     property Color ColorProperty { Color get() { return color; } void set(Color value) { color = value; } }
     float Radius;
+    property bool IsCoincideVertex { bool get() { return isCoincideVertex; } void set(bool value) { isCoincideVertex = value; } }
 
     Vertex(int id, String^ name, float x, float y) {
         this->Id = id;
@@ -21,6 +22,7 @@ public:
         this->Y = y;
         this->ColorProperty = Color::Black; // Use the property to set color
         this->Radius = 10.0f;
+        this->IsCoincideVertex = isCoincideVertex;
     }
 
 private:
@@ -29,4 +31,5 @@ private:
     float x, y;
     int degree;
     Color color; // Store the color in a private member variable
+    bool isCoincideVertex;
 };

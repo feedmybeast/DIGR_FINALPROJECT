@@ -1,9 +1,13 @@
 #pragma once
 #include <cstdint>
+#include <vcclr.h>
+
 #include "Vertex.h"
 #include "Edge.h"
 #include "Graph.h"
 #define WM_MOUSEWHEEL 0x020A
+#include<stack>
+
 namespace Project2 {
 
 	using namespace System;
@@ -30,22 +34,27 @@ namespace Project2 {
 			viewOffsetX = 0.0f;
 			viewOffsetY = 0.0f;
 			isPanning = false;
-			gridWidth = 1000; 
+			gridWidth = 1000;
 			gridHeight = 1000;
 			needsGridExpansion = false;
 			gridSize = 20;
 		}
-		//void SomeFunction();
+
+		String^ shortpath;
+
 	private:
+		System::Void MyForm_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e);
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
 		System::ComponentModel::Container^ components;
 
+
 		static const float GRID_SIZE = 20.0f;
 		Vertex^ draggingVertex;
-		PointF offset; 
+		PointF offset;
 		bool isDragging;
+
 		Vertex^ draggedVertex;
 		Point lastMousePosition;
 		bool showGrid = false;
@@ -82,7 +91,7 @@ namespace Project2 {
 		System::Void defaultRadioButton_CheckedChanged(System::Object^ sender, System::EventArgs^ e);
 		System::Void directedRadioButton_CheckedChanged(System::Object^ sender, System::EventArgs^ e);
 		System::Void undirectedRadioButton_CheckedChanged(System::Object^ sender, System::EventArgs^ e);
-
+		//void MyForm::DrawArrowWithPointF(Graphics^ g, PointF start, PointF end);
 
 		System::Windows::Forms::ToolStrip^ toolStrip1;
 
@@ -90,6 +99,7 @@ namespace Project2 {
 		String^ PromptForEditVertex(String^ title);
 
 		void MyForm::AddVertexAtCursor(Point cursorPosition);
+		void MyForm::ClearGraph();
 		Graph^ graph;
 		float zoomFactor;
 		System::Drawing::Color currentEdgeColor;
@@ -128,6 +138,8 @@ namespace Project2 {
 		System::Void DeleteEdgeButton_Click(System::Object^ sender, System::EventArgs^ e);
 		System::Void RunDijkstraButton_Click(System::Object^ sender, System::EventArgs^ e);
 		void RunDijkstra(Vertex^ start, Vertex^ end);
+		System::Windows::Forms::TextBox^ infoPanel3;
+		void MyForm::UpdateInfoPanel3();
 	protected:
 		~MyForm()
 		{
@@ -143,6 +155,7 @@ namespace Project2 {
 		void DeleteVertex(Vertex^ vertex);
 		void DeleteEdge(Edge^ edge);
 		void UpdateInfoPanel();
+		void MyForm::DrawLoopDirectedEdge(Graphics^ g, Edge^ edge, float offsetX, float offsetY);
 	protected:
 		virtual void WndProc(System::Windows::Forms::Message% m) override {
 			if (m.Msg == WM_MOUSEWHEEL) {
@@ -169,4 +182,5 @@ namespace Project2 {
 
 
 	};
+
 }

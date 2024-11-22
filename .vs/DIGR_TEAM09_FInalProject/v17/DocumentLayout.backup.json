@@ -1,0 +1,202 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D5790374-58F9-4215-8E50-63D1B2289D77}|Project2\\Project2.vcxproj|C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\MyForm.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D5790374-58F9-4215-8E50-63D1B2289D77}|Project2\\Project2.vcxproj|solutionrelative:Project2\\MyForm.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D5790374-58F9-4215-8E50-63D1B2289D77}|Project2\\Project2.vcxproj|C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\Graph.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D5790374-58F9-4215-8E50-63D1B2289D77}|Project2\\Project2.vcxproj|solutionrelative:Project2\\Graph.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D5790374-58F9-4215-8E50-63D1B2289D77}|Project2\\Project2.vcxproj|C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\MyForm.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D5790374-58F9-4215-8E50-63D1B2289D77}|Project2\\Project2.vcxproj|solutionrelative:Project2\\MyForm.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D5790374-58F9-4215-8E50-63D1B2289D77}|Project2\\Project2.vcxproj|C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\Vertex.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D5790374-58F9-4215-8E50-63D1B2289D77}|Project2\\Project2.vcxproj|solutionrelative:Project2\\Vertex.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D5790374-58F9-4215-8E50-63D1B2289D77}|Project2\\Project2.vcxproj|C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\Graph.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D5790374-58F9-4215-8E50-63D1B2289D77}|Project2\\Project2.vcxproj|solutionrelative:Project2\\Graph.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D5790374-58F9-4215-8E50-63D1B2289D77}|Project2\\Project2.vcxproj|C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\Edge.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D5790374-58F9-4215-8E50-63D1B2289D77}|Project2\\Project2.vcxproj|solutionrelative:Project2\\Edge.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\include\\exception||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D5790374-58F9-4215-8E50-63D1B2289D77}|Project2\\Project2.vcxproj|C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\MyForm.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}|Form",
+      "RelativeMoniker": "D:0:0:{D5790374-58F9-4215-8E50-63D1B2289D77}|Project2\\Project2.vcxproj|solutionrelative:Project2\\MyForm.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D5790374-58F9-4215-8E50-63D1B2289D77}|Project2\\Project2.vcxproj|C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\MyForm.resx||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D5790374-58F9-4215-8E50-63D1B2289D77}|Project2\\Project2.vcxproj|solutionrelative:Project2\\MyForm.resx||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 483,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MyForm.h",
+              "DocumentMoniker": "C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\MyForm.h",
+              "RelativeDocumentMoniker": "Project2\\MyForm.h",
+              "ToolTip": "C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\MyForm.h",
+              "RelativeToolTip": "Project2\\MyForm.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-11-06T14:07:47.01Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "exception",
+              "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\include\\exception",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\include\\exception",
+              "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\include\\exception",
+              "RelativeToolTip": "..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\include\\exception",
+              "ViewState": "AgIAAAkBAAAAAAAAAAAvwCQBAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-11-07T04:46:12.54Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MyForm.cpp",
+              "DocumentMoniker": "C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\MyForm.cpp",
+              "RelativeDocumentMoniker": "Project2\\MyForm.cpp",
+              "ToolTip": "C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\MyForm.cpp",
+              "RelativeToolTip": "Project2\\MyForm.cpp",
+              "ViewState": "AgIAAAcBAAAAAAAAAAAewPUAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-11-21T13:39:44.02Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{269a02dc-6af8-11d3-bdc4-00c04f688e50}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Graph.cpp",
+              "DocumentMoniker": "C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\Graph.cpp",
+              "RelativeDocumentMoniker": "Project2\\Graph.cpp",
+              "ToolTip": "C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\Graph.cpp",
+              "RelativeToolTip": "Project2\\Graph.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-11-06T15:17:51.071Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Edge.h",
+              "DocumentMoniker": "C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\Edge.h",
+              "RelativeDocumentMoniker": "Project2\\Edge.h",
+              "ToolTip": "C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\Edge.h",
+              "RelativeToolTip": "Project2\\Edge.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEYAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-11-19T11:35:21.378Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Graph.h",
+              "DocumentMoniker": "C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\Graph.h",
+              "RelativeDocumentMoniker": "Project2\\Graph.h",
+              "ToolTip": "C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\Graph.h",
+              "RelativeToolTip": "Project2\\Graph.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-11-06T15:17:43.259Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "MyForm.h [Design]",
+              "DocumentMoniker": "C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\MyForm.h",
+              "RelativeDocumentMoniker": "Project2\\MyForm.h",
+              "ToolTip": "C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\MyForm.h [Design]",
+              "RelativeToolTip": "Project2\\MyForm.h [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-11-17T13:31:44.972Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "MyForm.resx",
+              "DocumentMoniker": "C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\MyForm.resx",
+              "RelativeDocumentMoniker": "Project2\\MyForm.resx",
+              "ToolTip": "C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\MyForm.resx",
+              "RelativeToolTip": "Project2\\MyForm.resx",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2024-11-13T10:44:36.169Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Vertex.h",
+              "DocumentMoniker": "C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\Vertex.h",
+              "RelativeDocumentMoniker": "Project2\\Vertex.h",
+              "ToolTip": "C:\\Users\\trant\\Downloads\\DIGR_FINALPROJECT\\Project2\\Vertex.h",
+              "RelativeToolTip": "Project2\\Vertex.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-11-06T15:17:47.773Z"
+            }
+          ]
+        },
+        {
+          "DockedHeight": 370,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            }
+          ]
+        },
+        {
+          "DockedHeight": 328,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

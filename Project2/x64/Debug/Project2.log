@@ -1,21 +1,48 @@
-﻿  MyForm.cpp
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\MyForm.cpp(345,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\MyForm.cpp(346,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\MyForm.cpp(347,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\MyForm.cpp(348,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\MyForm.cpp(847,52): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\MyForm.cpp(847,41): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\MyForm.cpp(1014,53): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\MyForm.cpp(1014,42): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\MyForm.cpp(1038,63): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\MyForm.cpp(1038,52): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\MyForm.cpp(1131,53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\MyForm.cpp(1131,47): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\MyForm.cpp(1219,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\MyForm.cpp(1220,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\MyForm.cpp(1225,79): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\MyForm.cpp(1225,32): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\MyForm.cpp(1226,79): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\trant\source\repos\DIGR_FINALPROJECT\Project2\MyForm.cpp(1226,32): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (Project2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  MyForm.cpp
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(368,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(369,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(370,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(371,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(400,22): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(451,19): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(450,19): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(455,19): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(454,19): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(491,20): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(490,20): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(495,20): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(494,20): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(536,20): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(535,20): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(540,20): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(539,20): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(623,22): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(625,21): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(632,85): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(632,33): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(633,85): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(633,33): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1317,52): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1317,41): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1490,53): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1490,42): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1513,63): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1513,52): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1606,53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1606,47): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1738,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1739,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1742,22): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1743,22): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1748,17): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1747,38): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1750,17): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1749,38): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1754,46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1756,17): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1755,50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1758,17): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\trant\Downloads\DIGR_FINALPROJECT\Project2\MyForm.cpp(1757,50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   MyForm.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
-  Project2.vcxproj -> C:\Users\trant\source\repos\DIGR_FINALPROJECT\x64\Debug\Project2.exe
+  Project2.vcxproj -> C:\Users\trant\Downloads\DIGR_FINALPROJECT\x64\Debug\VisualizeGraph.exe
