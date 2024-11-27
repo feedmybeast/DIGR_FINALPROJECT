@@ -2,6 +2,7 @@
 #include "Vertex.h"
 #include "Edge.h"
 #include <cmath>
+#include<stack>
 using namespace System::Collections::Generic;
 Graph::Graph() {
     vertices = gcnew List<Vertex^>();
@@ -12,6 +13,11 @@ Graph::Graph() {
     undoIsAddEdge = gcnew List<bool>();
     undoVertices = gcnew List<Vertex^>();
     undoIsAddVertex = gcnew List<bool>();
+    Licc = gcnew List<Edge^>();
+    //actionHistory = gcnew  System::Collections::Generic::Stack<Action^>();
+    actionTypes = gcnew List<String^>(); // Initialize actionTypes
+    actionVertices = gcnew List<Vertex^>(); // Initialize actionVertices
+    actionEdges = gcnew List<Edge^>();
 }
 
 Vertex^ Graph::FindVertexAt(float x, float y) {
@@ -27,25 +33,6 @@ Vertex^ Graph::FindVertexAt(float x, float y) {
 }
 
 void Graph::AddEdge(String^ startVertexName, String^ endVertexName, int weight, bool isDirected) {
-    //Vertex^ startVertex = FindVertexByName(startVertexName);
-    //Vertex^ endVertex = FindVertexByName(endVertexName);
-
-    //if (startVertex != nullptr && endVertex != nullptr) {
-    //    if (isDirected) {
-    //        Edge^ newEdge = gcnew Edge(startVertex, endVertex, weight, System::Drawing::Color::Black, isDirected);
-    //        edges->Add(newEdge);
-    //        //undoStack->Push(gcnew AddEdgeAction(this, newEdge));
-    //    }
-    //    else {
-    //        Edge^ newEdge = gcnew Edge(startVertex, endVertex, weight, System::Drawing::Color::Black, isDirected);
-    //        edges->Add(newEdge);
-    //        //undoStack->Push(gcnew AddEdgeAction(this, newEdge));
-    //    }
-    //}
-    ////if (startVertex != nullptr && endVertex != nullptr) {
-    ////    Edge^ newEdge = gcnew Edge(startVertex, endVertex, weight, System::Drawing::Color::Black, isDirected);
-    ////    edges->Add(newEdge);
-    ////}
     Vertex^ startVertex = FindVertexByName(startVertexName);
     Vertex^ endVertex = FindVertexByName(endVertexName);
 
@@ -58,6 +45,9 @@ void Graph::AddEdge(String^ startVertexName, String^ endVertexName, int weight, 
         // Record action for undo
         undoEdges->Add(newEdge);
         undoIsAddEdge->Add(true); // True for "add edge"
+        actionTypes->Add("AddEdge"); // Record action type
+        actionVertices->Add(nullptr); // No vertex involved in this action
+        actionEdges->Add(newEdge);
     }
 
 }
@@ -74,6 +64,9 @@ void Graph::AddEdge(String^ start, String^ end, int weight) {
         // Record action for undo
         undoEdges->Add(newEdge);
         undoIsAddEdge->Add(true); // True for "add edge"
+        actionTypes->Add("AddEdge"); // Record action type
+        actionVertices->Add(nullptr); // No vertex involved in this action
+        actionEdges->Add(newEdge);
     }
 }
 void Graph::AddEdge(bool isCoincideVertex, String^ startVertexName, String^ endVertexName, int weight) {
@@ -96,6 +89,9 @@ void Graph::AddEdge(bool isCoincideVertex, String^ startVertexName, String^ endV
         // Record action for undo
         undoEdges->Add(newEdge);
         undoIsAddEdge->Add(true); // True for "add edge"
+        actionTypes->Add("AddEdge"); // Record action type
+        actionVertices->Add(nullptr); // No vertex involved in this action
+        actionEdges->Add(newEdge);
     }
 }
 void Graph::AddEdge(bool isCoincideVertex, String^ startVertexName, String^ endVertexName, int weight, bool isDirected) {
@@ -120,15 +116,12 @@ void Graph::AddEdge(bool isCoincideVertex, String^ startVertexName, String^ endV
         // Record action for undo
         undoEdges->Add(newEdge);
         undoIsAddEdge->Add(true); // True for "add edge"
+        actionTypes->Add("AddEdge"); // Record action type
+        actionVertices->Add(nullptr); // No vertex involved in this action
+        actionEdges->Add(newEdge);
     }
 }
-void Graph::RemoveEdge(Edge^ edge) {
-    edges->Remove(edge);
 
-    // Record action for undo
-    undoEdges->Add(edge);
-    undoIsAddEdge->Add(false); // False for "remove edge"
-}
 Vertex^ Graph::FindVertexByName(String^ name) {
     for each (Vertex ^ vertex in vertices) {
         if (vertex->Name == name) {
@@ -298,33 +291,62 @@ void Graph::LoadFromFile(String^ fileName) {
 
 }
 void Graph::Undo() {
-    if (undoEdges->Count > 0 && undoIsAddEdge->Count > 0) {
-        Edge^ edge = undoEdges[undoEdges->Count - 1];
-        bool isAddEdge = undoIsAddEdge[undoIsAddEdge->Count - 1];
+    if (actionTypes->Count > 0) {
+        String^ lastActionType = actionTypes[actionTypes->Count - 1];
+        Vertex^ lastActionVertex = actionVertices[actionVertices->Count - 1];
+        Edge^ lastActionEdge = actionEdges[actionEdges->Count - 1];
 
-        if (isAddEdge) {
-            UndoAddEdge(edge);
-        }
-        else {
-            UndoRemoveEdge(edge);
-        }
+        actionTypes->RemoveAt(actionTypes->Count - 1);
+        actionVertices->RemoveAt(actionVertices->Count - 1);
+        actionEdges->RemoveAt(actionEdges->Count - 1);
 
-        undoEdges->RemoveAt(undoEdges->Count - 1);
-        undoIsAddEdge->RemoveAt(undoIsAddEdge->Count - 1);
-    }
-    else if (undoVertices->Count > 0 && undoIsAddVertex->Count > 0) {
-        Vertex^ vertex = undoVertices[undoVertices->Count - 1];
-        bool isAddVertex = undoIsAddVertex[undoIsAddVertex->Count - 1];
-
-        if (isAddVertex) {
-            vertices->Remove(vertex);
+        if (lastActionType == "AddVertex") {
+            vertices->Remove(lastActionVertex);
         }
-        else {
-            vertices->Add(vertex);
+        else if (lastActionType == "RemoveVertex") {
+            vertices->Add(lastActionVertex);
         }
+        else if (lastActionType == "AddEdge") {
+            edges->Remove(lastActionEdge);
+        }
+        else if (lastActionType == "RemoveEdge") {
+            bool isCoincideEdge = false;
+            int edgeIndex = 0;
+            for each (Edge ^ e in edges) {
+                if ((e->Start == lastActionEdge->Start && e->End == lastActionEdge->End) || (e->Start == lastActionEdge->End && e->End == lastActionEdge->Start)) {
+                    isCoincideEdge = true;
+                    e->IsCoincideEdge = true; // Mark the existing edge as coinciding
+                    edgeIndex++;
+                }
+                if (isCoincideEdge == true) lastActionEdge->IsCoincideEdge = true;
+            }
+            edges->Add(lastActionEdge);
 
-        undoVertices->RemoveAt(undoVertices->Count - 1);
-        undoIsAddVertex->RemoveAt(undoIsAddVertex->Count - 1);
+            //if (undoEdges->Count > 0 && undoIsAddEdge->Count > 0) {
+            //    Edge^ edge = undoEdges[undoEdges->Count - 1];
+            //    bool isAddEdge = undoIsAddEdge[undoIsAddEdge->Count - 1];
+            //    if (isAddEdge) {
+            //        UndoAddEdge(edge);
+            //    }
+            //    else {
+            //        UndoRemoveEdge(edge);
+            //    }
+            //    undoEdges->RemoveAt(undoEdges->Count - 1);
+            //    undoIsAddEdge->RemoveAt(undoIsAddEdge->Count - 1);
+            //}
+            //        if (undoVertices->Count > 0 && undoIsAddVertex->Count > 0) {
+               //            Vertex^ vertex = undoVertices[undoVertices->Count - 1];
+               //            bool isAddVertex = undoIsAddVertex[undoIsAddVertex->Count - 1];
+               //            if (isAddVertex) {
+               //                vertices->Remove(vertex);
+               //            }
+               //            else {
+               //                vertices->Add(vertex);
+               //            }
+               //            undoVertices->RemoveAt(undoVertices->Count - 1);
+               //            undoIsAddVertex->RemoveAt(undoIsAddVertex->Count - 1);
+               //        }
+        }
     }
 }
 void Graph::Clear() {
@@ -349,8 +371,3 @@ void Graph::UndoAddVertex(Vertex^ vertex) {
     // Remove edges connected to this vertex
     edges->RemoveAll(gcnew Predicate<Edge^>(this, &Graph::EdgeContainsVertex));
 }
-//void Graph::MyForm_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
-//    if (e->KeyCode == Keys::Z && e->Control) {
-//        Undo();
-//    }
-//}

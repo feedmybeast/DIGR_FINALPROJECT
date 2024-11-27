@@ -73,7 +73,7 @@ namespace Project2 {
 
 		this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 		this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-		this->ClientSize = System::Drawing::Size(800, 700);
+		this->ClientSize = System::Drawing::Size(870, 700);
 		this->Controls->Add(this->pictureBox1);
 		this->Controls->Add(this->infoPanel);
 		//this->Controls->Add(this->undirectedRadioButton);
@@ -115,13 +115,27 @@ namespace Project2 {
 		this->infoPanel3 = (gcnew System::Windows::Forms::TextBox());
 		this->infoPanel3->Location = System::Drawing::Point(690, 135); // Adjust the position to the middle of the right blank space
 		this->infoPanel3->Name = L"infoPanel3";
-		this->infoPanel3->Size = System::Drawing::Size(120, 120); // Adjust the size as needed
+		this->infoPanel3->Size = System::Drawing::Size(180, 120); // Adjust the size as needed
 		this->infoPanel3->TabIndex = 1;
 		this->infoPanel3->ReadOnly = true;
 		this->infoPanel3->Multiline = true;
-		this->infoPanel3->Enabled = false; // Add this line to make it read-only and non-interactive
+		this->infoPanel3->Enabled = false;
+		this->infoPanel3->ForeColor = System::Drawing::Color::Black;	
+		this->infoPanel3->Font = gcnew System::Drawing::Font(this->infoPanel3->Font, System::Drawing::FontStyle::Bold);
 		this->Controls->Add(this->infoPanel3);
-
+		// Initialize and configure infoPanel4
+		this->infoPanel4 = (gcnew System::Windows::Forms::TextBox());
+		this->infoPanel4->Location = System::Drawing::Point(690, 250); // Adjust the position to the middle of the right blank space
+		this->infoPanel4->Name = L"infoPanel4";
+		this->infoPanel4->Size = System::Drawing::Size(180, 120); // Adjust the size as needed
+		this->infoPanel4->TabIndex = 1;
+		this->infoPanel4->ReadOnly = true;
+		this->infoPanel4->Multiline = true;
+		this->infoPanel4->Enabled = false; // Add this line to make it read-only and non-interactive
+		this->Controls->Add(this->infoPanel4);
+		//this->infoPanel4->Font = gcnew System::Drawing::Font(this->infoPanel4->Font, System::Drawing::FontStyle::Bold);
+		this->infoPanel4->ForeColor = System::Drawing::Color::Black;
+		this->infoPanel4->Text = "Group_09\r\nBui Tran Tan Phat_23110052\r\nNguyen Nhat Phat_23110053\r\nTran Huynh Xuan Thanh_23110060";
 		//CLick timer (for diff between single and double click)
 		this->clickTimer = (gcnew System::Windows::Forms::Timer());
 		this->clickTimer->Interval = SystemInformation::DoubleClickTime;
@@ -267,7 +281,7 @@ namespace Project2 {
 		okButton->Top = 80;
 		okButton->DialogResult = System::Windows::Forms::DialogResult::OK;
 
-		Button^ cancelButton = gcnew Button();
+		Button^ cancelButton = gcnew Button();	
 		cancelButton->Text = "Cancel";
 		cancelButton->Left = 90;
 		cancelButton->Top = 80;
@@ -296,14 +310,75 @@ namespace Project2 {
 	// FindEdgeAtPoint: Finds an edge near the given coordinates (x, y)
 	Edge^ MyForm::FindEdgeAtPoint(int x, int y) {
 		for each (Edge ^ e in graph->Edges) {
-			float x1 = e->Start->X, y1 = e->Start->Y, x2 = e->End->X, y2 = e->End->Y;
-			double distance = Math::Abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1) /
-				Math::Sqrt(Math::Pow(y2 - y1, 2) + Math::Pow(x2 - x1, 2));
-			if (distance < 5) {
-				return e;
+			//float x1 = e->Start->X, y1 = e->Start->Y, x2 = e->End->X, y2 = e->End->Y;
+			//double distance = Math::Abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1) /
+			//	Math::Sqrt(Math::Pow(y2 - y1, 2) + Math::Pow(x2 - x1, 2));
+			//if (distance < 5) {
+			//	return e;
+			//}
+			if (e->IsCoincideEdge) {
+				//// Handle curved edge (quadratic Bezier curve)
+				//float midX = (e->Start->X + e->End->X) / 2;
+				//float midY = (e->Start->Y + e->End->Y) / 2;
+				//float dx = e->End->X - e->Start->X;
+				//float dy = e->End->Y - e->Start->Y;
+				//float edgeIndex = e->GetEdgeIndex();
+				//float curveFactor = 30 + (edgeIndex * 10); // Adjust curvature based on edge index
+				//float controlX = midX - dy * (curveFactor / std::sqrt(dx * dx + dy * dy));
+				//float controlY = midY + dx * (curveFactor / std::sqrt(dx * dx + dy * dy));
+				//float x1 = e->Start->X, y1 = e->Start->Y;
+				//float x2 = controlX, y2 = controlY; // Control point for the curve
+				//float x3 = e->End->X, y3 = e->End->Y;
+
+				//// Check distance from point (x, y) to the Bezier curve
+				//for (float t = 0; t <= 1; t += 0.01f) {
+				//	float xt = (1 - t) * (1 - t) * x1 + 2 * (1 - t) * t * x2 + t * t * x3;
+				//	float yt = (1 - t) * (1 - t) * y1 + 2 * (1 - t) * t * y2 + t * t * y3;
+				//	float distance = std::sqrt(std::pow(xt - x, 2) + std::pow(yt - y, 2));
+				//	if (distance < 5) {
+				//		return e;
+				//	}
+				//}
+				// Handle curved edge (quadratic Bezier curve)
+				float midX = (e->Start->X + e->End->X) / 2;
+				float midY = (e->Start->Y + e->End->Y) / 2;
+				float dx = e->End->X - e->Start->X;
+				float dy = e->End->Y - e->Start->Y;
+				float edgeIndex = e->GetEdgeIndex();
+				float curveFactor = 30 + (edgeIndex * 10); // Adjust curvature based on edge index
+				float controlX = midX - dy * (curveFactor / std::sqrt(dx * dx + dy * dy));
+				float controlY = midY + dx * (curveFactor / std::sqrt(dx * dx + dy * dy));
+				array<PointF>^ curvePoints = { PointF(e->Start->X, e->Start->Y),
+											   PointF(controlX, controlY),
+											   PointF(e->End->X, e->End->Y) };
+
+				// Iterate over the curve points to check the distance
+				for (int i = 0; i < curvePoints->Length - 1; i++) {
+					PointF p1 = curvePoints[i];
+					PointF p2 = curvePoints[i + 1];
+					for (float t = 0; t <= 1; t += 0.001f) { // Smaller step size for better precision
+						float xt = p1.X + t * (p2.X - p1.X);
+						float yt = p1.Y + t * (p2.Y - p1.Y);
+						float distance = std::sqrt(std::pow(xt - x, 2) + std::pow(yt - y, 2));
+						if (distance < 5) {
+							return e;
+						}
+					}
+				}
+			}
+			else {
+				// Handle straight edge
+				float x1 = e->Start->X, y1 = e->Start->Y, x2 = e->End->X, y2 = e->End->Y;
+				double distance = Math::Abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1) /
+					Math::Sqrt(Math::Pow(y2 - y1, 2) + Math::Pow(x2 - x1, 2));
+				if (distance < 5) {
+					return e;
+				}
 			}
 		}
 		return nullptr;
+		//Find edge at point
+
 	}
 
 
@@ -334,10 +409,16 @@ namespace Project2 {
 		int edgeCount = graph->Edges->Count;
 		this->infoPanel3->Text = "Vertices: " + vertexCount + "\r\nEdges: " + edgeCount + "\n";
 		this->infoPanel3->Text += shortpath;
-		shortpath = "";
 		//this->Invalidate();
 		pictureBox1->Invalidate();
 	}
+	//void MyForm::UpdateInfoPanel4()
+	//{
+	//	this->infoPanel4->Text = "Bui Tran Tan Phat - 23110052\nNguyen Nhat Phat - 23110053\nTran Huynh Xuan Thanh - 23110060";
+	//	//shortpath = "";
+	//	////this->Invalidate();
+	//	pictureBox1->Invalidate();
+	//}
 	// pictureBox1_Paint: Handles the painting of the graph on the picture box
 	bool flag = nullptr;
 	System::Void MyForm::pictureBox1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e)
@@ -559,13 +640,11 @@ namespace Project2 {
 					{
 						flag = true;
 					}
-
 					if (edge->Directed && directedRadioButton->Checked)
 					{
 						flag = false;
 						DrawArrow(g, edge->Start, edge->End);
 					}
-
 					if (edge->Directed && defaultRadioButton->Checked)
 					{
 						if (flag)
@@ -660,7 +739,7 @@ namespace Project2 {
 						g->DrawPolygon(boundaryPen, arrowPoints);
 					}
 				}
-				this->pictureBox1->Invalidate();
+				//this->pictureBox1->Invalidate();
 			}
 
 
@@ -730,7 +809,7 @@ namespace Project2 {
 		// Reset transformations
 		g->ResetTransform();
 
-
+		
 	}
 	void MyForm::AdjustVerticesToGrid()
 	{
@@ -760,15 +839,15 @@ namespace Project2 {
 				return; // Don't add a new vertex if one already exists here
 			}
 		}
-		if (directedRadioButton->Checked || undirectedRadioButton->Checked)//XuanThanh
-		{
-			String^ vertexName = PromptForVertexName();
-			if (!String::IsNullOrEmpty(vertexName)) {
-				Vertex^ newVertex = gcnew Vertex(graph->Vertices->Count + 1, vertexName, adjustedX, adjustedY);
-				graph->AddVertex(newVertex);
-				pictureBox1->Invalidate();
-			}
-		}
+		//if (directedRadioButton->Checked || undirectedRadioButton->Checked)//XuanThanh fix PromptForVertexName reopen when closed
+		//{
+		//	String^ vertexName = PromptForVertexName();
+		//	if (!String::IsNullOrEmpty(vertexName)) {
+		//		Vertex^ newVertex = gcnew Vertex(graph->Vertices->Count + 1, vertexName, adjustedX, adjustedY);
+		//		graph->AddVertex(newVertex);
+		//		pictureBox1->Invalidate();
+		//	}
+		//}
 		UpdateInfoPanel3();
 	}
 	System::Void MyForm::RunDijkstraButton_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -903,12 +982,10 @@ namespace Project2 {
 
 		// Add the starting vertex to the path string
 		path = start->Name + " -> " + path;
-
 		// Remove the trailing arrow " -> " if present
 		if (path->EndsWith(" -> ")) {
 			path = path->Substring(0, path->Length - 4);
 		}
-
 		// Display the path or an error message
 		if (!pathExists) {
 			MessageBox::Show("No path found from start to end vertex. Please check the direction of the edges.",
@@ -1414,68 +1491,11 @@ namespace Project2 {
 				Vertex^ clickedVertex = FindVertexAtPoint(adjustedX, adjustedY);
 				if (clickedVertex != nullptr)
 				{
-					/*String^ newVertexName = PromptForVertexName();
-					if (!String::IsNullOrEmpty(newVertexName))
-					{
-						if (newVertexName->Length > 10)
-						{
-							MessageBox::Show("The name is too long. Please choose a name with fewer than 10 characters.",
-								"Name Too Long", MessageBoxButtons::OK, MessageBoxIcon::Error);
-							return;
-						}
-
-						bool isNameExist = false;
-						for each (Vertex ^ v in graph->Vertices)
-						{
-							if (v->Name == newVertexName)
-							{
-								isNameExist = true;
-								break;
-							}
-						}
-
-						if (isNameExist)
-						{
-							MessageBox::Show("The name already exists. Please choose another name.",
-								"Duplicate Name", MessageBoxButtons::OK, MessageBoxIcon::Error);
-						}
-					}*/
+					//
 				}
 				else if (draggingVertex == nullptr && (directedRadioButton->Checked || undirectedRadioButton->Checked)) //XuanThanh
 				{
-					/*String^ vertexName = PromptForVertexName();
-					if (!String::IsNullOrEmpty(vertexName))
-					{
-						if (vertexName->Length > 10)
-						{
-							MessageBox::Show("The name is too long. Please choose a name with fewer than 10 characters.",
-								"Name Too Long", MessageBoxButtons::OK, MessageBoxIcon::Error);
-							return;
-						}
-
-						bool isNameExist = false;
-						for each (Vertex ^ v in graph->Vertices)
-						{
-							if (v->Name == vertexName)
-							{
-								isNameExist = true;
-								break;
-							}
-						}
-
-						if (isNameExist)
-						{
-							MessageBox::Show("The name already exists. Please choose another name.",
-								"Duplicate Name", MessageBoxButtons::OK, MessageBoxIcon::Error);
-						}
-						else
-						{
-							int newId = graph->Vertices->Count + 1;
-							Vertex^ newVertex = gcnew Vertex(newId, vertexName, adjustedX, adjustedY);
-							graph->AddVertex(newVertex);
-							pictureBox1->Invalidate();
-						}
-					}*/
+					//
 				}
 			}
 			else if (this->mouseButtonClicked == System::Windows::Forms::MouseButtons::Right)
@@ -1617,7 +1637,7 @@ namespace Project2 {
 		{
 			pictureBox1->Cursor = Cursors::Cross;
 		}
-		if (isDragging) {//add
+		if (isDragging && draggedVertex==nullptr) {//add
 			Vertex^ vertex = graph->FindVertexAt(e->X / zoomFactor, e->Y / zoomFactor);
 			if (vertex != nullptr) {
 				vertex->X = e->X / zoomFactor;
@@ -1865,6 +1885,7 @@ namespace Project2 {
 		for each (Edge ^ edge in graph->Edges) {
 			edge->Color = Color::Black;
 		}
+		shortpath = "";
 		UpdateInfoPanel3();
 	}
 
@@ -1973,15 +1994,27 @@ namespace Project2 {
 			graph->Undo();
 			//this->pictureBox1->Invalidate();
 		}
+		else if (e->Control && e->KeyCode == System::Windows::Forms::Keys::A) {//default
+			//graph->Undo();
+			this->defaultRadioButton->Checked = true;
+			defaultRadioButton_CheckedChanged(sender, e);
+			//this->pictureBox1->Invalidate();
+			
+		}
+		else if (e->Control && e->KeyCode == System::Windows::Forms::Keys::Q) {//directed
+			//graph->Undo();
+			//this->pictureBox1->Invalidate();
+			this->directedRadioButton->Checked = true;
+			directedRadioButton_CheckedChanged(sender, e);
+
+		}
+		else if (e->Control && e->KeyCode == System::Windows::Forms::Keys::W) {//undirected
+			//graph->Undo();
+			//this->pictureBox1->Invalidate();
+			this->undirectedRadioButton->Checked = true;
+			undirectedRadioButton_CheckedChanged(sender, e);
+		}
 		//pictureBox1->Invalidate();
 		UpdateInfoPanel3();
 	}
 }
-
-
-
-
-
-
-
-

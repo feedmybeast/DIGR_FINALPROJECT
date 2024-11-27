@@ -139,7 +139,9 @@ namespace Project2 {
 		System::Void RunDijkstraButton_Click(System::Object^ sender, System::EventArgs^ e);
 		void RunDijkstra(Vertex^ start, Vertex^ end);
 		System::Windows::Forms::TextBox^ infoPanel3;
+		System::Windows::Forms::TextBox^ infoPanel4;
 		void MyForm::UpdateInfoPanel3();
+		//void MyForm::UpdateInfoPanel4();
 	protected:
 		~MyForm()
 		{
