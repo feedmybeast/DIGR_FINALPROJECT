@@ -307,7 +307,9 @@ void Graph::Undo() {
             vertices->Add(lastActionVertex);
         }
         else if (lastActionType == "AddEdge") {
-            edges->Remove(lastActionEdge);
+            RemoveEdge(lastActionEdge);
+            //edges->Remove(lastActionEdge);
+
         }
         else if (lastActionType == "RemoveEdge") {
             bool isCoincideEdge = false;
